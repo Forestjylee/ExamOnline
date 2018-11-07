@@ -10,9 +10,10 @@ class User(AbstractUser):
     用户类模型
     """
     uid = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=30, verbose_name="学号", unique=True)
     real_name = models.CharField(max_length=30, verbose_name="姓名")
-    class_name = models.CharField(max_length=50, verbose_name="班级")
+    is_teacher=models.BooleanField(verbose_name="是否为老师", default=False)
+    username = models.CharField(max_length=30, verbose_name="学号", unique=True)
+    class_name = models.CharField(max_length=50, verbose_name="班级", null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):

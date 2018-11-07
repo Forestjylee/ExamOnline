@@ -85,6 +85,7 @@ DATABASES = {
         'NAME': 'exam_system',
         'USER': 'root',
         'PASSWORD': 'appLe599',
+        # 'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306',
     }
