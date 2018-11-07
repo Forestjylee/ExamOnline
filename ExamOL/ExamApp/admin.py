@@ -1,8 +1,12 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import (User, ChoiceProblem, JudgeProblem,
                      FillBlankProblem, QAProblem, OperateProblem)
 
 # Register your models here.
+
+admin.site.site_header="考试平台管理系统"
+admin.site.site_title="考试平台运维"
 
 
 @admin.register(User)
@@ -23,9 +27,13 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
         if self.is_delete:
-            return "存在"
+            color_code = 'green'
+            text = '存在'
         else:
-            return "不存在"
+            color_code = 'red'
+            text =  "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
@@ -39,7 +47,7 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
     fieldsets = [
         ("题目信息", {"fields": ['content', 'level', 'option_A',
                                 'option_B', 'option_C', 'option_D', 'answer']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag']}),
+        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
     ]
 
 
@@ -48,9 +56,13 @@ class JudgeProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
         if self.is_delete:
-            return "存在"
+            color_code = 'green'
+            text = '存在'
         else:
-            return "不存在"
+            color_code = 'red'
+            text =  "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
@@ -63,7 +75,7 @@ class JudgeProblemAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("题目信息", {"fields": ['content', 'level', 'answer']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag']}),
+        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
     ]
 
 
@@ -72,9 +84,13 @@ class FillBlankProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
         if self.is_delete:
-            return "存在"
+            color_code = 'green'
+            text = '存在'
         else:
-            return "不存在"
+            color_code = 'red'
+            text =  "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
@@ -87,7 +103,7 @@ class FillBlankProblemAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("题目信息", {"fields": ['content', 'level', 'answer']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag']}),
+        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
     ]
 
 
@@ -96,9 +112,13 @@ class QAProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
         if self.is_delete:
-            return "存在"
+            color_code = 'green'
+            text = '存在'
         else:
-            return "不存在"
+            color_code = 'red'
+            text =  "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
@@ -111,7 +131,7 @@ class QAProblemAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("题目信息", {"fields": ['content', 'level', 'answer']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag']}),
+        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
     ]
 
 
@@ -120,9 +140,13 @@ class OperateProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
         if self.is_delete:
-            return "存在"
+            color_code = 'green'
+            text = '存在'
         else:
-            return "不存在"
+            color_code = 'red'
+            text =  "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
@@ -135,5 +159,5 @@ class OperateProblemAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("题目信息", {"fields": ['content', 'level', 'answer']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag']}),
+        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
     ]

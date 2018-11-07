@@ -19,6 +19,7 @@ class User(AbstractUser):
         return self.username
 
     class Meta:
+        verbose_name_plural = '用户'    # 在管理界面中表的名字
         ordering = ['class_name']       # 在管理界面按照班级名称排序
 
 
@@ -34,7 +35,7 @@ class ChoiceProblem(models.Model):
     option_B = models.CharField(max_length=50, verbose_name="B选项")
     option_C = models.CharField(max_length=50, verbose_name="C选项")
     option_D = models.CharField(max_length=50, verbose_name="D选项")
-    answer = models.CharField(max_length=5, verbose_name="参考答案",
+    answer = models.CharField(max_length=40, verbose_name="参考答案",
                               choices=(('option_A', 'A'), ('option_B', 'B'),
                                        ('option_C', 'C'), ('option_D', 'D')))
     is_delete = models.BooleanField(verbose_name="是否存在", default=True)
@@ -44,7 +45,8 @@ class ChoiceProblem(models.Model):
         return self.content[:10]
 
     class Meta:
-        db_table = 'ChoiceProblem'      # 在MySQL数据库中表的名字
+        verbose_name_plural = '选择题'   # 在管理界面中表的名字
+        db_table = 'ChoiceProblem'      # 在MySQL中表的名字
         ordering = ['create_time']      # 在管理界面按照创建时间排序
 
 
@@ -64,7 +66,8 @@ class JudgeProblem(models.Model):
         return self.content[:10]
 
     class Meta:
-        db_table = 'JudgeProblem'       # 在MySQL数据库中表的名字
+        verbose_name_plural = '判断题'   # 在管理界面中表的名字
+        db_table = 'JudgeProblem'       # 在MySQL中表的名字
         ordering = ['create_time']      # 在管理界面按照创建时间排序
 
 
@@ -84,7 +87,8 @@ class FillBlankProblem(models.Model):
         return self.content[:10]
 
     class Meta:
-        db_table = 'FillBlankProblem'   # 在MySQL数据库中表的名字
+        verbose_name_plural = '填空题'   # 在管理界面中表的名字
+        db_table = 'FillBlankProblem'   # 在MySQL中表的名字
         ordering = ['create_time']      # 在管理界面按照创建时间排序
 
 
@@ -104,7 +108,8 @@ class QAProblem(models.Model):
         return self.content[:10]
 
     class Meta:
-        db_table = 'QAProblem'          # 在MySQL数据库中表的名字
+        verbose_name_plural = '问答题'   # 在管理界面中表的名字
+        db_table = 'QAProblem'          # 在MySQL中表的名字
         ordering = ['create_time']      # 在管理界面按照创建时间排序
 
 
@@ -124,5 +129,6 @@ class OperateProblem(models.Model):
         return self.content[:10]
 
     class Meta:
-        db_table = 'OperateProblem'     # 在MySQL数据库中表的名字
-        ordering = ['create_time']      # 在管理界面按照创建时间排序
+        verbose_name_plural = '实际操作题'# 在管理界面中表的名字
+        db_table = 'OperateProblem'      # 在MySQL数据库中表的名字
+        ordering = ['create_time']       # 在管理界面按照创建时间排序
