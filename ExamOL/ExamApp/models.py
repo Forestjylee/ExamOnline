@@ -29,7 +29,7 @@ class ChoiceProblem(models.Model):
     选择题模型
     """
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level=models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     option_A = models.CharField(max_length=50, verbose_name="A选项")
@@ -39,7 +39,7 @@ class ChoiceProblem(models.Model):
     answer = models.CharField(max_length=40, verbose_name="参考答案",
                               choices=(('option_A', 'A'), ('option_B', 'B'),
                                        ('option_C', 'C'), ('option_D', 'D')))
-    is_delete = models.BooleanField(verbose_name="是否存在", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -56,11 +56,11 @@ class JudgeProblem(models.Model):
     判断题模型
     """
     content = models.CharField(max_length=100, verbose_name="题目内容")
-    level=models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.BooleanField(verbose_name="是否正确")
-    is_delete = models.BooleanField(verbose_name="是否存在", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -77,11 +77,11 @@ class FillBlankProblem(models.Model):
     填空题模型
     """
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level=models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.CharField(max_length=200, verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否存在", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -98,11 +98,11 @@ class QAProblem(models.Model):
     问答题模型
     """
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level=models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.TextField(verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否存在", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -119,11 +119,11 @@ class OperateProblem(models.Model):
     世家操作题模型
     """
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level=models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.TextField(verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否存在", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
