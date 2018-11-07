@@ -71,6 +71,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ExamOL.wsgi.application'
 
 
+# login url(配置登陆页面的url)
+
+LOGIN_URL = '/login/'
+
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
