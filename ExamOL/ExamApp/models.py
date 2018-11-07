@@ -24,6 +24,29 @@ class User(AbstractUser):
         ordering = ['class_name']       # 在管理界面按照班级名称排序
 
 
+class Paper(models.Model):
+    """
+    试卷表模型
+    """
+    paper_id = models.AutoField(primary_key=True, verbose_name="试卷编号")
+    level = models.IntegerField(verbose_name="难度系数")
+    paper_name = models.CharField(max_length=50, verbose_name="试卷名称")
+    tag = models.CharField(max_length=50, verbose_name="试卷标签", null=True, blank=True)
+    author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
+    start_time = models.DateTimeField(verbose_name="开始时间", null=True, blank=True)
+    end_time = models.DateTimeField(verbose_name="结束时间", null=True, blank=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    def __str__(self):
+        return self.paper_name[:10]
+
+    class Meta:
+        verbose_name_plural = '试卷'    # 在管理界面中表的名字
+        db_table = 'Paper'              # 在MySQL中表的名字
+        ordering = ['level']            # 在管理界面按照创建时间排序
+
+
 class ChoiceProblem(models.Model):
     """
     选择题模型
@@ -133,3 +156,59 @@ class OperateProblem(models.Model):
         verbose_name_plural = '实际操作题'# 在管理界面中表的名字
         db_table = 'OperateProblem'      # 在MySQL数据库中表的名字
         ordering = ['create_time']       # 在管理界面按照创建时间排序
+
+
+class PaperProblem(models.Model):
+    """
+    试卷与试题关系表
+    """
+    paper_id = models.IntegerField(verbose_name="试卷编号")
+    problem_type = models.CharField(max_length=20, verbose_name="题目类型")
+    problem_id = models.IntegerField(verbose_name="题目编号")
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
+    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.paper_id}--{self.problem_id}"
+
+    class Meta:
+        verbose_name_plural = '试卷与试题关系'    # 在管理界面中表的名字
+        db_table = 'Paper_Problem'               # 在MySQL中表的名字
+        ordering = ['paper_id']                  # 在管理界面按照创建时间排序
+
+
+class PaperUser(models.Model):
+    """
+    试卷与用户关系
+    """
+    paper_id = models.IntegerField(verbose_name="试卷编号")
+    uid = models.IntegerField(verbose_name="用户编号")
+    is_owner = models.BooleanField(verbose_name="是否拥有修改权", default=False)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
+    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.paper_id}--{self.uid}"
+
+    class Meta:
+        verbose_name_plural = '试卷与用户关系'    # 在管理界面中表的名字
+        db_table = 'Paper_User'                  # 在MySQL中表的名字
+        ordering = ['paper_id']                  # 在管理界面按照创建时间排序
+
+
+class TeacherStudent(models.Model):
+    """
+    老师与学生关系
+    """
+    teacher_id = models.IntegerField(verbose_name="老师编号")
+    student_id = models.IntegerField(verbose_name="学生编号")
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
+    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.teacher_id}--{self.student_id}"
+
+    class Meta:
+        verbose_name_plural = '老师与学生关系'    # 在管理界面中表的名字
+        db_table = 'Tea_Stu'                     # 在MySQL中表的名字
+        ordering = ['teacher_id']                  # 在管理界面按照创建时间排序

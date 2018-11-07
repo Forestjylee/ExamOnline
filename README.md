@@ -20,7 +20,7 @@
 
 #### 数据库名称：exam_system
 
-#### 数据库中的表：User，ChoiceProblem，JudgeProblem， FillBlankProblem，QAProblem，OperateProblem
+#### 数据库中的表：
 
 ##### （1）User（用户表）✅已实现
 
@@ -28,27 +28,27 @@
 
 ##### （2）ChoiceProblem（选择题表）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），option_A（A选项内容），option_B（B选项内容），option_C（C选项内容），option_D（D选项内容），answer（答案【支持多选】），is_delete（是否被删除），create_time（创建时间）
+属性：主键problem_id，content（题目内容），level（题目难度），tag（题目标签），author（作者），option_A（A选项内容），option_B（B选项内容），option_C（C选项内容），option_D（D选项内容），answer（答案【支持多选】），is_delete（是否被删除），create_time（创建时间）
 
 ##### （3）JudgeProblem（判断题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
+属性：主键problem_id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
 
 ##### （4）FillBlankProblem（填空题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
+属性：主键problem_id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
 
 ##### （5）QAProblem（问答题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
+属性：主键problem_id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
 
 ##### （6）OperateProblem（实际操作题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
+属性：主键problem_id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
 
 ##### （7）Paper（试卷表）⭕【待实现】
 
-属性：主键id，paper_id，paper_name（试卷名），paper_tag（试卷标签），author（作者），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间）
+属性：主键paper_id，paper_name（试卷名），level（难度系数），paper_tag（试卷标签），author（作者），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间）
 
 ##### （8）Paper_Problem（试卷和试题关系表）⭕【待实现】
 
@@ -56,7 +56,11 @@
 
 ##### （9）Paper_User（试卷和用户关系表）⭕【待实现】
 
-属性：主键id， paper_id，user（外键），is_delete（是否被删除），create_time（创建时间）
+属性：主键id， paper_id，user（外键），is_owner（是否拥有修改权）, is_delete（是否被删除），create_time（创建时间）
+
+##### （10）Teacher_Student（老师和学生关系表）⭕【待实现】
+
+属性：主键id， teacher_id，student_id，is_delete（是否被删除），create_time（创建时间）
 
 
 
