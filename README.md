@@ -42,7 +42,7 @@
 
 属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
 
-##### （6）JudgeProblem（判断题）✅已实现
+##### （6）OperateProblem（实际操作题）✅已实现
 
 属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
 
