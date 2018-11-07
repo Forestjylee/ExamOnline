@@ -35,7 +35,7 @@ class UserAdmin(admin.ModelAdmin):
 class ChoiceProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
-        if self.is_delete:
+        if not self.is_delete:
             color_code = 'green'
             text = '存在'
         else:
@@ -64,7 +64,7 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
 class JudgeProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
-        if self.is_delete:
+        if not self.is_delete:
             color_code = 'green'
             text = '存在'
         else:
@@ -92,7 +92,7 @@ class JudgeProblemAdmin(admin.ModelAdmin):
 class FillBlankProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
-        if self.is_delete:
+        if not self.is_delete:
             color_code = 'green'
             text = '存在'
         else:
@@ -120,7 +120,7 @@ class FillBlankProblemAdmin(admin.ModelAdmin):
 class QAProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
-        if self.is_delete:
+        if not self.is_delete:
             color_code = 'green'
             text = '存在'
         else:
@@ -148,7 +148,7 @@ class QAProblemAdmin(admin.ModelAdmin):
 class OperateProblemAdmin(admin.ModelAdmin):
 
     def is_delete(self):
-        if self.is_delete:
+        if not self.is_delete:
             color_code = 'green'
             text = '存在'
         else:

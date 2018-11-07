@@ -39,7 +39,7 @@ class ChoiceProblem(models.Model):
     answer = models.CharField(max_length=40, verbose_name="参考答案",
                               choices=(('option_A', 'A'), ('option_B', 'B'),
                                        ('option_C', 'C'), ('option_D', 'D')))
-    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -60,7 +60,7 @@ class JudgeProblem(models.Model):
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.BooleanField(verbose_name="是否正确")
-    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -81,7 +81,7 @@ class FillBlankProblem(models.Model):
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.CharField(max_length=200, verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -102,7 +102,7 @@ class QAProblem(models.Model):
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.TextField(verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -123,7 +123,7 @@ class OperateProblem(models.Model):
     tag = models.CharField(max_length=50, verbose_name="标签", null=True, blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", null=True, blank=True)
     answer = models.TextField(verbose_name="参考答案")
-    is_delete = models.BooleanField(verbose_name="是否被删除", default=True)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
