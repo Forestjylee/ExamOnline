@@ -6,6 +6,7 @@ ExamApp的url分发
 Created by Junyi.
 """
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
 
 app_name = 'ExamApp'
@@ -15,3 +16,4 @@ urlpatterns = [
     path('login/', views.user_login, name='登录'),
 ]
 
+urlpatterns += staticfiles_urlpatterns()
