@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.text import capfirst
 from django.utils.html import format_html
+from django.contrib.auth.admin import UserAdmin
 from .models import (User, ChoiceProblem, JudgeProblem, FillBlankProblem,
                      QAProblem, OperateProblem, Paper, PaperProblem,
                      PaperUser, TeacherStudent)
@@ -34,7 +35,7 @@ admin.site.site_title="考试平台运维"
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):
 
     def is_teacher(self):
         if self.is_teacher:
@@ -51,7 +52,7 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ("用户信息", {"fields": ['real_name', 'username', 'password',
-                                'class_name', 'is_teacher']}),
+                                'class_name', 'is_superuser', 'is_teacher']}),
     ]
 
 

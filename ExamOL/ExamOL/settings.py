@@ -26,12 +26,13 @@ SECRET_KEY = 'l$xxuu&in^+64ao!zkm9r6qud+yp-5yjw9djmly)-@2%hd^ypf'
 DEBUG = True
 
 # Produce
+# ALLOWED_HOSTS = ['47.104.220.233']
 
-# ALLOWED_HOSTS = []
-
-# Debug
-
+# Debug(area network)
 ALLOWED_HOSTS = ['125.216.246.246']
+
+# Local(Default)
+# ALLOWED_HOSTS = []
 
 
 # Application definition
