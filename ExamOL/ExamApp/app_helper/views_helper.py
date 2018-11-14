@@ -40,7 +40,7 @@ def get_user_or_none(request):
     return user
 
 
-def sign_in_user_or_none(request):
+def sign_up_user_or_none(request):
     """
     用户注册
     :return: user | None
@@ -58,7 +58,11 @@ def sign_in_user_or_none(request):
 def __is_password_valid(password):
     """
     判断密码是否符合规范
+    1. 长度大于等于6位
     :param password: 用户输入的密码
     :return: -> True | False
     """
-    pass
+    if len(password) >= 6:
+        return True
+    else:
+        return False
