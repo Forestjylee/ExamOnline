@@ -28,37 +28,37 @@
 
 ##### （2）ChoiceProblem（选择题表）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），option_A（A选项内容），option_B（B选项内容），option_C（C选项内容），option_D（D选项内容），answer（答案【支持多选】），is_delete（是否被删除），create_time（创建时间）
+属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），option_A（A选项内容），option_B（B选项内容），option_C（C选项内容），option_D（D选项内容），answer（答案【支持多选】），is_delete（是否被删除），create_time（创建时间），last_updated_time(最后修改时间)
 
 ##### （3）JudgeProblem（判断题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
+属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间），last_updated_time(最后修改时间)
 
 ##### （4）FillBlankProblem（填空题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间）
+属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案），is_delete（是否被删除）， create_time（创建时间），last_updated_time(最后修改时间)
 
 ##### （5）QAProblem（问答题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
+属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间），last_updated_time(最后修改时间)
 
 ##### （6）OperateProblem（实际操作题）✅已实现
 
-属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间）
+属性：主键id，content（题目内容），level（题目难度），tag（题目标签），author（作者），answer（答案【text类型】），is_delete（是否被删除）， create_time（创建时间），last_updated_time(最后修改时间)
 
-##### （7）Paper（试卷表）⭕【待实现】
+##### （7）Paper（试卷表）✅已实现
 
-属性：主键paper_id，paper_name（试卷名），level（难度系数），tag（试卷标签），author（作者），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间）
+属性：主键paper_id，paper_name（试卷名），level（难度系数），tag（试卷标签），author（作者），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间），last_updated_time(最后修改时间)
 
-##### （8）Paper_Problem（试卷和试题关系表）⭕【待实现】
+##### （8）Paper_Problem（试卷和试题关系表）✅已实现
 
 属性：主键id，paper_id，problem_type（题目类型），problem_id（题目的id），is_delete（是否被删除），create_time（创建时间）
 
-##### （9）Paper_User（试卷和用户关系表）⭕【待实现】
+##### （9）Paper_User（试卷和用户关系表）✅已实现
 
 属性：主键id， paper_id，uid（用户编号），is_owner（是否拥有修改权）, is_delete（是否被删除），create_time（创建时间）
 
-##### （10）Teacher_Student（老师和学生关系表）⭕【待实现】
+##### （10）Teacher_Student（老师和学生关系表）✅已实现
 
 属性：主键id， teacher_id，student_id，is_delete（是否被删除），create_time（创建时间）
 
@@ -106,7 +106,7 @@
 
 #### （1）选择题（支持多选，自动评分，题目字数小于200字）
 
-#### （2）判断题（自动评分，题目字数小于100字）【选做】
+#### （2）判断题（自动评分，题目字数小于100字）
 
 #### （3）填空题（题目字数小于200字【包括下划线】）
 
@@ -122,7 +122,7 @@
 
 #### 操作系统：Windows 10 (64bit)
 
-#### 数据库：MySQL 5.7.22 community
+#### 数据库：MySQL 5.7.22 (community)
 
 #### 编程语言：Python，Html，CSS，JavaScript
 
