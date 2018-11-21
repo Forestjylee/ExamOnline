@@ -75,7 +75,7 @@ class PaperAdmin(admin.ModelAdmin):
     is_delete.short_description = '是否存在'
     list_display = ['paper_name', 'level', 'tag',
                     'author', 'start_time', 'end_time',
-                    'last_updated_time', is_delete]              # 显示在管理界面的列
+                    'create_time', is_delete]                    # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
     list_per_page = 20
@@ -244,7 +244,7 @@ class PaperProblemAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'problem_type', 'problem_id',
-                    'last_updated_time', is_delete]              # 显示在管理界面的列
+                    'create_time', is_delete]                    # 显示在管理界面的列
     list_filter = ['paper_id', 'is_delete']                      # 数据过滤字段
     search_fields = ['paper_id']                                 # 数据搜索字段
     list_per_page = 20
@@ -272,7 +272,7 @@ class PaperUserAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'uid', 'is_owner',
-                    'last_updated_time', is_delete]              # 显示在管理界面的列
+                    'create_time', is_delete]                    # 显示在管理界面的列
     list_filter = ['paper_id', 'is_delete']                      # 数据过滤字段
     search_fields = ['paper_id']                                 # 数据搜索字段
     list_per_page = 20
@@ -300,7 +300,7 @@ class TeacherStudentAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['teacher_id', 'student_id',
-                    'last_updated_time', is_delete]              # 显示在管理界面的列
+                    'create_time', is_delete]                    # 显示在管理界面的列
     list_filter = ['teacher_id', 'is_delete']                    # 数据过滤字段
     search_fields = ['teacher_id']                               # 数据搜索字段
     list_per_page = 20

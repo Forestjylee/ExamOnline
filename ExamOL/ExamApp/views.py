@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render_to_response
 from django.contrib.auth import login, logout
 from .app_helper.views_helper import is_post_or_get, get_user_or_none, sign_up_user_or_none
 
@@ -22,10 +22,11 @@ def user_login(request):
     user = get_user_or_none(request)
     if user is not None:
         login(request, user)
-        return HttpResponse(f"{user.real_name}{'老师' if user.is_teacher else '同学'}登录成功!")
+        # return HttpResponse(f"{user.real_name}{'老师' if user.is_teacher else '同学'}登录成功!")
+        return redirect("ExamApp:404")
         #TODO 跳转到登陆成功之后的界面(判断是老师还是学生)
     else:
-        return render(request, 'login.html', {'error':'密码错误'})
+        return render_to_response('login.html', {'error': '密码错误'})
 
 
 def user_logout(request):
@@ -55,3 +56,8 @@ def create_user(request):
         pass
 
 
+def page_404(request):
+    """
+    404页面
+    """
+    return render_to_response('404.html')

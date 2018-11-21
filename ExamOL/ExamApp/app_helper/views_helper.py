@@ -27,6 +27,22 @@ def is_post_or_get(get_render_html):
     return swapper
 
 
+def deal_exceptions(return_when_exceptions=None):
+    """
+    :param return_when_exceptions: 当函数发生异常时返回的值
+    :return:
+    """
+    def swapper(func):
+        def _swapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except:
+                return return_when_exceptions
+        return _swapper
+    return swapper
+
+
+@deal_exceptions(return_when_exceptions=None)
 def get_user_or_none(request):
     """
     验证用户是否存在
@@ -48,8 +64,8 @@ def sign_up_user_or_none(request):
     if __is_password_valid(request.POST['password']):
         user = User.objects.create_user(username=request.POST['username'],
                                         password=request.POST['password'],
-                                        real_name = request.POST['real_name'],
-                                        class_name = request.POST['class_name'])
+                                        real_name=request.POST['real_name'],
+                                        class_name=request.POST['class_name'])
         return user
     else:
         return None
