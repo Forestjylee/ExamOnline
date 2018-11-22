@@ -33,6 +33,8 @@ class Paper(models.Model):
     paper_name = models.CharField(max_length=50, verbose_name="试卷名称")
     tag = models.CharField(max_length=50, verbose_name="试卷标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
+    each_choice_problem_score = models.FloatField(verbose_name="每道选择题分数", default=0)
+    each_judge_problem_score = models.FloatField(verbose_name="每道判断题分数", default=0)
     start_time = models.DateTimeField(verbose_name="开始时间", default='', blank=True)
     end_time = models.DateTimeField(verbose_name="结束时间", default='', blank=True)
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
@@ -176,7 +178,7 @@ class PaperProblem(models.Model):
     last_updated_time = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
 
     def __str__(self):
-        return f"{self.paper_id}--{self.problem_id}"
+        return f"{self.paper_id}-{self.problem_id}"
 
     class Meta:
         verbose_name_plural = '试卷与试题关系'    # 在管理界面中表的名字
@@ -195,12 +197,34 @@ class PaperUser(models.Model):
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
 
     def __str__(self):
-        return f"{self.paper_id}--{self.uid}"
+        return f"{self.paper_id}-{self.uid}"
 
     class Meta:
         verbose_name_plural = '试卷与用户关系'    # 在管理界面中表的名字
         db_table = 'Paper_User'                  # 在MySQL中表的名字
         ordering = ['paper_id']                  # 在管理界面按照创建时间排序
+
+
+class UserAnswerSituation(models.Model):
+    """
+    用户答题情况
+    """
+    paper_id = models.IntegerField(verbose_name="试卷编号")
+    uid = models.IntegerField(verbose_name="用户编号")
+    correct_choice_problem_amount = models.IntegerField(verbose_name="用户答对的选择题数", default=0)
+    correct_judge_problem_amount = models.IntegerField(verbose_name="用户答对的判断题数", default=0)
+    fill_blank_problem_scores = models.FloatField(verbose_name="用户填空题总得分", default=0)
+    QA_problem_scores = models.FloatField(verbose_name="用户问答题总得分", default=0)
+    operate_problem_scores = models.FloatField(verbose_name="用户操作题总得分", default=0)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
+
+    def __str__(self):
+        return f"{self.paper_id}-{self.uid}-ans_situation"
+
+    class Meta:
+        verbose_name_plural = '用户答题与得分情况'# 在管理界面中表的名字
+        db_table = 'User_Answer_Situation'      # 在MySQL中表的名字
+        ordering = ['last_updated_time']        # 在管理界面按照创建时间排序
 
 
 class TeacherStudent(models.Model):
@@ -213,7 +237,7 @@ class TeacherStudent(models.Model):
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
 
     def __str__(self):
-        return f"{self.teacher_id}--{self.student_id}"
+        return f"{self.teacher_id}-{self.student_id}"
 
     class Meta:
         verbose_name_plural = '老师与学生关系'    # 在管理界面中表的名字

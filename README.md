@@ -48,7 +48,7 @@
 
 ##### （7）Paper（试卷表）✅已实现
 
-属性：主键paper_id，paper_name（试卷名），level（难度系数），tag（试卷标签），author（作者），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间），last_updated_time(最后修改时间)
+属性：主键paper_id，paper_name（试卷名），level（难度系数），tag（试卷标签），author（作者），each_choice_problem_score（每道选择题分数），each_judge_problem_score（每道判断题分数），start_time（开始时间），end_time（结束时间），is_delete（是否被删除），create_time（创建时间），last_updated_time(最后修改时间)
 
 ##### （8）Paper_Problem（试卷和试题关系表）✅已实现
 
@@ -56,9 +56,13 @@
 
 ##### （9）Paper_User（试卷和用户关系表）✅已实现
 
+属性：主键id， paper_id，uid（用户编号），correct_choice_problem_amount（用户答对的选择题数）, correct_judge_problem_amount（用户答对的判断题数），fill_blank_problem_scores（用户填空题总得分），QA_problem_scores（用户问答题总得分），operate_problem_scores（用户操作题总得分），last_updated_time（最后修改时间）
+
+##### （10）Paper_User（试卷和用户关系表）✅已实现
+
 属性：主键id， paper_id，uid（用户编号），is_owner（是否拥有修改权）, is_delete（是否被删除），create_time（创建时间）
 
-##### （10）Teacher_Student（老师和学生关系表）✅已实现
+##### （11）Teacher_Student（老师和学生关系表）✅已实现
 
 属性：主键id， teacher_id，student_id，is_delete（是否被删除），create_time（创建时间）
 

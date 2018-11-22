@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from django.contrib.auth.admin import UserAdmin
 from .models import (User, ChoiceProblem, JudgeProblem, FillBlankProblem,
                      QAProblem, OperateProblem, Paper, PaperProblem,
-                     PaperUser, TeacherStudent)
+                     PaperUser, UserAnswerSituation, TeacherStudent)
 
 # 此段代码意在使在admin页面的Model列表按下面的注册顺序显示
 
@@ -47,7 +47,7 @@ class UserAdmin(UserAdmin):
 
     # 自定义管理界面
     is_teacher.short_description = '身份'
-    list_display = ['username', 'real_name','class_name', is_teacher]
+    list_display = ['username', 'real_name', 'class_name', is_teacher]
     list_filter = ['class_name', 'is_teacher']
     search_fields = ['class_name', 'username', 'real_name']
     list_per_page = 20
@@ -75,7 +75,7 @@ class PaperAdmin(admin.ModelAdmin):
     is_delete.short_description = '是否存在'
     list_display = ['paper_name', 'level', 'tag',
                     'author', 'start_time', 'end_time',
-                    'create_time', is_delete]                    # 显示在管理界面的列
+                    'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
     list_per_page = 20
@@ -252,7 +252,7 @@ class PaperProblemAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("试卷与题目的对应关系", {"fields": ['paper_id', 'problem_type',
-                                           'problem_id', 'is_delete']}),
+                                   'problem_id', 'is_delete']}),
     ]
 
 
@@ -273,7 +273,7 @@ class PaperUserAdmin(admin.ModelAdmin):
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'uid', 'is_owner',
                     'create_time', is_delete]                    # 显示在管理界面的列
-    list_filter = ['paper_id', 'is_delete']                      # 数据过滤字段
+    list_filter = ['paper_id', 'uid', 'is_delete']               # 数据过滤字段
     search_fields = ['paper_id']                                 # 数据搜索字段
     list_per_page = 20
 
@@ -281,6 +281,26 @@ class PaperUserAdmin(admin.ModelAdmin):
     fieldsets = [
         ("试卷与用户的对应关系", {"fields": ['paper_id', 'uid',
                                    'is_owner', 'is_delete']}),
+    ]
+
+
+@admin.register(UserAnswerSituation)
+class UserAnswerSituationAdmin(admin.ModelAdmin):
+
+    list_display = ['paper_id', 'uid', 'correct_choice_problem_amount',
+                    'correct_choice_problem_amount',
+                    'fill_blank_problem_scores',
+                    'QA_problem_scores', 'operate_problem_scores',
+                    'last_updated_time']                            # 显示在管理界面的列
+    list_filter = ['paper_id']                                      # 数据过滤字段
+    search_fields = ['paper_id']                                    # 数据搜索字段
+    list_per_page = 20
+
+    # 添加，修改数据项时有分栏目的效果
+    fieldsets = [
+        ("试卷与用户的对应关系", {"fields": ['paper_id', 'uid']}),
+        ("用户答题情况", {"fields": ['correct_choice_problem_amount', 'correct_judge_problem_amount',
+                               'fill_blank_problem_scores', 'QA_problem_scores', 'operate_problem_scores']})
     ]
 
 
@@ -307,5 +327,5 @@ class TeacherStudentAdmin(admin.ModelAdmin):
 
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
-        ("试卷与用户的对应关系", {"fields": ['teacher_id', 'student_id', 'is_delete']}),
+        ("老师与学生的对应关系", {"fields": ['teacher_id', 'student_id', 'is_delete']}),
     ]
