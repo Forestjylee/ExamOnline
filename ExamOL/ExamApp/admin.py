@@ -47,7 +47,7 @@ class UserAdmin(UserAdmin):
 
     # 自定义管理界面
     is_teacher.short_description = '身份'
-    list_display = ['username', 'real_name', 'class_name', is_teacher]
+    list_display = ['uid', 'username', 'real_name', 'class_name', is_teacher]
     list_filter = ['class_name', 'is_teacher']
     search_fields = ['class_name', 'username', 'real_name']
     list_per_page = 20
@@ -73,7 +73,7 @@ class PaperAdmin(admin.ModelAdmin):
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
-    list_display = ['paper_name', 'level', 'tag',
+    list_display = ['paper_id', 'paper_name', 'level', 'tag',
                     'author', 'start_time', 'end_time',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
@@ -119,6 +119,16 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
 @admin.register(JudgeProblem)
 class JudgeProblemAdmin(admin.ModelAdmin):
 
+    def answer(self):
+        if self.answer:
+            color_code = 'green'
+            text = '正确'
+        else:
+            color_code = 'red'
+            text = '错误'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -131,7 +141,8 @@ class JudgeProblemAdmin(admin.ModelAdmin):
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
-    list_display = ['tag', 'level', 'author',
+    answer.short_description = '参考答案'
+    list_display = ['tag', 'level', 'author', answer,
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
@@ -259,6 +270,16 @@ class PaperProblemAdmin(admin.ModelAdmin):
 @admin.register(PaperUser)
 class PaperUserAdmin(admin.ModelAdmin):
 
+    def is_finished(self):
+        if self.is_finished:
+            color_code = 'green'
+            text = '已完成'
+        else:
+            color_code = 'red'
+            text = "未完成"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -271,16 +292,17 @@ class PaperUserAdmin(admin.ModelAdmin):
 
     # 自定义管理界面
     is_delete.short_description = '是否存在'
-    list_display = ['paper_id', 'uid', 'is_owner',
-                    'create_time', is_delete]                    # 显示在管理界面的列
-    list_filter = ['paper_id', 'uid', 'is_delete']               # 数据过滤字段
+    list_display = ['paper_id', 'uid', is_finished,
+                    'is_owner', 'create_time', is_delete]        # 显示在管理界面的列
+    list_filter = ['paper_id', 'uid', 'is_finished', 'is_delete']# 数据过滤字段
     search_fields = ['paper_id']                                 # 数据搜索字段
     list_per_page = 20
 
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("试卷与用户的对应关系", {"fields": ['paper_id', 'uid',
-                                   'is_owner', 'is_delete']}),
+                                   'is_finished', 'is_owner',
+                                   'is_delete']}),
     ]
 
 

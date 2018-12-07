@@ -5,9 +5,25 @@
 @time: 2018/11/6 22:06
 Created by Junyi.
 """
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.contrib.auth import authenticate
-from ..models import User
+from ..models import User, Paper, PaperUser, TeacherStudent
+
+
+def get_object_or_none(model, *args, **kwargs):
+    """
+    重新封装get方法
+    获取一个对象或返回None
+    :param model: 模型对象
+    :param args: 传入的参数
+    :param kwargs: 传入的参数
+    :return: 一个对象或None
+    """
+    result = model.objects.filter(*args, **kwargs)
+    if result:
+        return result[0]
+    else:
+        return None
 
 
 def is_post_or_get(get_render_html):
@@ -18,9 +34,9 @@ def is_post_or_get(get_render_html):
     :return: -> render()
     """
     def swapper(func):
-        def _swapper(request):
+        def _swapper(request, *arg, **kwargs):
             if request.method == 'POST':
-                return func(request)
+                return func(request, *arg, **kwargs)
             else:
                 return render(request, get_render_html)
         return _swapper
@@ -82,3 +98,45 @@ def __is_password_valid(password):
         return True
     else:
         return False
+
+
+def get_user_do_and_undo_paper_list(user_id: str) -> tuple:
+    """
+    接收用户的id获取完成与未完成的考试列表
+    :param user_id: 用户的id
+    :return: 元组(已完成的考试列表，未完成的考试列表)
+    """
+    finished_paper_list = []
+    unfinished_paper_list = []
+    paper_user_list = PaperUser.objects.filter(uid=user_id, is_delete=False)
+    for paper_user in paper_user_list:
+        paper = get_object_or_none(Paper, paper_id=paper_user.paper_id, is_delete=False)
+        if paper:
+            if paper_user.is_finished:
+                finished_paper_list.append(paper)
+            else:
+                unfinished_paper_list.append(paper)
+    return finished_paper_list, unfinished_paper_list
+
+
+def get_student_list(user_id: str, class_name: str) -> list:
+    """
+    输入一个老师用户的id
+    返回他的学生列表
+    :param user_id: 老师用户的id
+    :param class_name: 需要展示的班级名
+    :return: 学生列表
+    """
+    student_list = []
+    relationship_list = TeacherStudent.objects.filter(teacher_id=user_id, is_delete=False)
+    if class_name == 'all':
+        for relationship in relationship_list:
+            student = get_object_or_none(User, uid=relationship.student_id)
+            if student:
+                student_list.append(student)
+    else:
+        for relationship in relationship_list:
+            student = get_object_or_none(User, uid=relationship.student_id, class_name=class_name)
+            if student:
+                student_list.append(student)
+    return student_list

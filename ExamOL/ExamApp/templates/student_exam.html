@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>考试</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootsnav.css">
+<link rel="stylesheet" type="text/css" href="css/search.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>               
+               
+
+<!--Header-->
+<div id="mainMenuBarAnchor"></div>
+<header class="white_header">
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="index6.html"><img src="images/logo.png" class="logo" alt=""></a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+              <li><a href="./student_examlist.html">试卷主页</a></li>
+			  <li><a href="./student_exam.html">考试</a></li>
+              <li><a href="./showgrade.html">成绩分析</a></li>
+            </ul>
+          </div></div> </div> </div>
+  </nav>
+</header>
+<!--Header Ends-->
+
+<!--Partners-->
+<div style="display:flex;">	
+<div class="grade_left">
+  <form class="callus">
+  <h2 class="text-uppercase t_white bottom20 text-center">试卷名字</h2>
+	
+	<ul>
+	<li><div class="problem">
+	题目内容（选择题）
+	</div>
+	<div class="student_answer">
+	<input type="radio" name="choice" class="gcs-radio" id="A" /><label for="A"></label>A
+    <input type="radio" name="choice" class="gcs-radio" id="B" /><label for="B"></label>B
+	<input type="radio" name="choice" class="gcs-radio" id="C" /><label for="C"></label>C
+    <input type="radio" name="choice" class="gcs-radio" id="D" /><label for="D"></label>D
+	</div></li>
+	
+	<li><div class="problem">
+	题目内容（判断题）
+	</div>
+	<div class="student_answer">
+	<input type="radio" name="judge" class="gcs-radio" id="对" /><label for="对"></label>对
+    <input type="radio" name="judge" class="gcs-radio" id="错" /><label for="错"></label>错
+	</div></li>
+	
+	<li><div class="problem">
+	题目内容（填空题）
+	</div>
+	<div class="student_answer">
+	<input type="text" class="keyword-input"> <input type="text" class="keyword-input">
+	</div>
+	</li>
+	
+	<li><div class="problem">
+	题目内容（其他题）
+	</div>
+	<textarea class="student_answer"  cols="80" rows="8"></textarea>
+	</li>
+	
+	</ul>
+	
+	
+	
+	
+    <div class="row">
+      <div class="text-right">
+        <button type="submit" class="border_radius btn-yellow text-uppercase">提交</button>
+      </div>
+    </div>
+  </form></div>		
+
+<div class="exam_right">
+<h4>学生试卷</h4>
+<ul class="">
+              <li><a href="#.">1</a></li>
+              <li><a href="#.">2</a></li>
+              <li><a href="#.">3</a></li>
+              <li><a href="#.">4</a></li>
+              <li><a href="#.">5</a></li>
+			  <li><a href="#.">6</a></li>
+			  <li><a href="#.">7</a></li>
+			  <li><a href="#.">8</a></li>
+			  <li><a href="#.">9</a></li>
+			  <li><a href="#.">10</a></li>
+            </ul>
+
+</div>
+            
+</div>
+<!--Partners Ends-->
+
+
+
+<!--Footer-->
+<footer class="footer_third">
+  <div class="container padding_top">
+    <!--CopyRight-->
+    <div class="copyright_simple">
+        <div class="col-md-6 col-sm-5 top20 bottom20">
+          <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
+		  <a href="./bug.html">
+		  <button type="submit" class="border_radius btn" style="left:200%;">试卷系统bug提交</button></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="js/jquery-2.1.4.js"></script> 
+<script src="js/masonry.pkgd.min.js"></script>
+<script src="js/zelect.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/functions.js"></script>
+
+</body>
+</html>

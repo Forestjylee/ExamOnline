@@ -9,7 +9,7 @@ class User(AbstractUser):
     """
     用户类模型
     """
-    uid = models.AutoField(primary_key=True)
+    uid = models.AutoField(primary_key=True, verbose_name="用户编号")
     real_name = models.CharField(max_length=30, verbose_name="姓名")
     is_teacher = models.BooleanField(verbose_name="是否为老师", default=False)
     username = models.CharField(max_length=30, verbose_name="学号", unique=True)
@@ -126,7 +126,7 @@ class QAProblem(models.Model):
     """
     问答题模型
     """
-    content = models.CharField(max_length=200, verbose_name="题目内容")
+    content = models.TextField(verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
@@ -148,7 +148,7 @@ class OperateProblem(models.Model):
     """
     世家操作题模型
     """
-    content = models.CharField(max_length=200, verbose_name="题目内容")
+    content = models.TextField(verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
@@ -192,6 +192,7 @@ class PaperUser(models.Model):
     """
     paper_id = models.IntegerField(verbose_name="试卷编号")
     uid = models.IntegerField(verbose_name="用户编号")
+    is_finished = models.BooleanField(verbose_name="是否已完成试卷", default=False)
     is_owner = models.BooleanField(verbose_name="是否拥有修改权", default=False)
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)

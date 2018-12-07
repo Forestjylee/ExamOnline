@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<!--加载静态文件-->
+{% load static %}
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>管理试题</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootsnav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/style.css' %}">
+</head>
+<body>               
+               
+
+<!--Header-->
+<div id="mainMenuBarAnchor"></div>
+<header class="white_header">
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="{% url 'ExamApp:老师主页' user.username 'all' %}"><img src="{% static 'others/images/logo.png' %}" class="logo" alt=""></a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+              <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
+              <li><a href="{% url 'ExamApp:管理试题' user.username %}">管理试题</a></li>
+              <li><a href="./T_create_paper.html">组卷</a></li>
+              <li><a href="./T_grade.html">评分 </a></li>
+              <li><a href="./T_analyze.html">统计成绩</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<!--Header Ends-->
+
+<!--Partners-->
+<div style="display:flex;">	
+
+<div class="paper_left">
+    <div>  
+ <button class="border_radius btn" onclick="remove()">删除题目</button>	
+		<h4>题目类型</h4><select id="type">
+              <option>选择题</option>
+              <option>判断题</option>
+              <option>填空题</option>
+              <option>问答题</option>
+              <option>实际操作题</option></select>  
+        <h4>题目难度</h4><select id="level">
+              <option>简单</option>
+              <option>中等</option>
+              <option>困难</option></select> 
+	    <h4>题目标签</h4>
+	    <input type="text" class="keyword-input" id="tag">  
+        <h4>题目内容</h4>			  
+		<textarea  cols="40" rows="4" id="content"></textarea>		
+		<h4>题目答案</h4>
+		<h5>选择题答案</h5>
+		<select>
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+			  <option>D</option></select> 
+	    <h5>判断题答案</h5>
+		<select>
+              <option>对</option>
+              <option>错</option></select>
+        <h5>其他题答案</h5>
+		<textarea  cols="40" rows="4"></textarea>
+		<button type="submit" class="border_radius btn" onclick="add()">编写题目</button>
+    </div>
+</div>
+
+<div class="student_center">
+  <form class="callus">
+  <h2 class="text-uppercase t_white bottom20 text-center">题目信息</h2>   
+<table id="student_message">
+<tr>
+<th>主键</th>
+<th>题目类型</th>
+<th>难度</th>
+<th>标签</th>
+</tr>
+
+<tr>
+
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>安全性，完整性</td>
+</tr>
+
+<tr>
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>关系数据库</td>
+</tr>
+
+<tr>
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>数据库编程</td>
+</tr>
+
+<tr>
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>并发控制</td>
+</tr>
+
+<tr>
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>恢复技术</td>
+</tr>
+
+<tr>
+<td><input name="in" type="checkbox">0000</td>
+<td>选择题</td>
+<td>简单</td>
+<td>标准语言SQL</td>
+</tr>
+
+</table>
+
+ </form></div>		
+
+<div class="grade_right">
+<h4>题目类型</h4>
+<ul class="">
+              <li><a href="#.">选择题</a></li>
+              <li><a href="#.">判断题</a></li>
+			  <li><a href="#.">填空题</a></li>
+			  <li><a href="#.">问答题</a></li>
+			  <li><a href="#.">实际操作题</a></li>
+            </ul>
+</div>
+            
+</div>
+<!--Partners Ends-->
+
+
+
+<!--Footer-->
+<footer class="footer_third">
+  <div class="container padding_top">
+    <!--CopyRight-->
+    <div class="copyright_simple">
+        <div class="col-md-6 col-sm-5 top20 bottom20">
+          <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
+		  <a href="{% url 'ExamApp:报告错误' user.username %}">
+              <button type="submit" class="border_radius btn" style="left:200%;" name="commit_bug">
+                  试卷系统bug提交
+              </button>
+          </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+function remove()
+{var boxes = document.getElementsByName("in");
+for(var k=boxes.length-1;k>=0;k--)
+if(boxes[k].checked){
+boxes[k].parentNode.parentNode.parentNode.removeChild(boxes[k].parentNode.parentNode);             
+	}
+}
+function add()
+{   var id = "0000";
+    var type = document.getElementById("type").value;
+	var level = document.getElementById("level").value;
+	var tag = document.getElementById("tag").value;
+    if (type&&level&&tag) {
+	var set=document.createElement("tr");
+	set.innerHTML='<td><input name="in" type="checkbox">'+id+'</td><td>'+type+'</td><td>'+level+'</td><td>'+tag+'</td>';
+	var newnew=document.getElementById('student_message');
+	newnew.appendChild(set);
+	}
+}
+    </script>
+<script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
+<script src="{% static 'others/js/zelect.js' %}"></script>
+<script src="{% static 'others/js/custom.js' %}"></script>
+<script src="{% static 'others/js/functions.js' %}"></script>
+
+</body>
+</html>
