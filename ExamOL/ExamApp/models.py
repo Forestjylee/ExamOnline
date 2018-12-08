@@ -13,7 +13,7 @@ class User(AbstractUser):
     real_name = models.CharField(max_length=30, verbose_name="姓名")
     is_teacher = models.BooleanField(verbose_name="是否为老师", default=False)
     username = models.CharField(max_length=30, verbose_name="学号", unique=True)
-    class_name = models.CharField(max_length=50, verbose_name="班级", blank=True)
+    class_name = models.CharField(max_length=50, verbose_name="班级", blank=True, default='未知')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     def __str__(self):
@@ -54,6 +54,7 @@ class ChoiceProblem(models.Model):
     """
     选择题模型
     """
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="选择题")
     content = models.CharField(max_length=200, verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
@@ -82,6 +83,7 @@ class JudgeProblem(models.Model):
     """
     判断题模型
     """
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="判断题")
     content = models.CharField(max_length=100, verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
@@ -104,6 +106,7 @@ class FillBlankProblem(models.Model):
     """
     填空题模型
     """
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="填空题")
     content = models.CharField(max_length=200, verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
@@ -126,6 +129,7 @@ class QAProblem(models.Model):
     """
     问答题模型
     """
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="问答题")
     content = models.TextField(verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
@@ -148,6 +152,7 @@ class OperateProblem(models.Model):
     """
     世家操作题模型
     """
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="实际操作题")
     content = models.TextField(verbose_name="题目内容")
     level = models.IntegerField(verbose_name="难度系数")
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
@@ -195,7 +200,7 @@ class PaperUser(models.Model):
     is_finished = models.BooleanField(verbose_name="是否已完成试卷", default=False)
     is_owner = models.BooleanField(verbose_name="是否拥有修改权", default=False)
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
-    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
         return f"{self.paper_id}-{self.uid}"
@@ -235,12 +240,30 @@ class TeacherStudent(models.Model):
     teacher_id = models.IntegerField(verbose_name="老师编号")
     student_id = models.IntegerField(verbose_name="学生编号")
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
-    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
         return f"{self.teacher_id}-{self.student_id}"
 
     class Meta:
-        verbose_name_plural = '老师与学生关系'    # 在管理界面中表的名字
+        verbose_name_plural = '老师与学生关系'     # 在管理界面中表的名字
         db_table = 'Tea_Stu'                     # 在MySQL中表的名字
-        ordering = ['teacher_id']                  # 在管理界面按照创建时间排序
+        ordering = ['teacher_id']                # 在管理界面按照创建时间排序
+
+
+class TeacherClass(models.Model):
+    """
+    老师与班级的关系
+    """
+    teacher_id = models.IntegerField(verbose_name="老师编号")
+    class_name = models.CharField(verbose_name="班级", max_length=50)
+    is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
+
+    def __str__(self):
+        return f"{self.teacher_id}-{self.class_name}"
+
+    class Meta:
+        verbose_name_plural = '老师与班级的关系'   # 在管理界面中表的名字
+        db_table = 'Tea_Class'                   # 在MySQL中表的名字
+        ordering = ['teacher_id']                # 在管理界面按照创建时间排序

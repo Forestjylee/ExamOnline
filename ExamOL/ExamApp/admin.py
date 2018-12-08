@@ -4,7 +4,8 @@ from django.utils.html import format_html
 from django.contrib.auth.admin import UserAdmin
 from .models import (User, ChoiceProblem, JudgeProblem, FillBlankProblem,
                      QAProblem, OperateProblem, Paper, PaperProblem,
-                     PaperUser, UserAnswerSituation, TeacherStudent)
+                     PaperUser, UserAnswerSituation, TeacherStudent,
+                     TeacherClass)
 
 # 此段代码意在使在admin页面的Model列表按下面的注册顺序显示
 
@@ -255,7 +256,7 @@ class PaperProblemAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'problem_type', 'problem_id',
-                    'create_time', is_delete]                    # 显示在管理界面的列
+                    'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['paper_id', 'is_delete']                      # 数据过滤字段
     search_fields = ['paper_id']                                 # 数据搜索字段
     list_per_page = 20
@@ -293,9 +294,9 @@ class PaperUserAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'uid', is_finished,
-                    'is_owner', 'create_time', is_delete]        # 显示在管理界面的列
-    list_filter = ['paper_id', 'uid', 'is_finished', 'is_delete']# 数据过滤字段
-    search_fields = ['paper_id']                                 # 数据搜索字段
+                    'is_owner', 'last_updated_time', is_delete]        # 显示在管理界面的列
+    list_filter = ['paper_id', 'uid', 'is_finished', 'is_delete']      # 数据过滤字段
+    search_fields = ['paper_id']                                       # 数据搜索字段
     list_per_page = 20
 
     # 添加，修改数据项时有分栏目的效果
@@ -342,7 +343,7 @@ class TeacherStudentAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['teacher_id', 'student_id',
-                    'create_time', is_delete]                    # 显示在管理界面的列
+                    'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['teacher_id', 'is_delete']                    # 数据过滤字段
     search_fields = ['teacher_id']                               # 数据搜索字段
     list_per_page = 20
@@ -350,4 +351,31 @@ class TeacherStudentAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("老师与学生的对应关系", {"fields": ['teacher_id', 'student_id', 'is_delete']}),
+    ]
+
+
+@admin.register(TeacherClass)
+class TeacherClassAdmin(admin.ModelAdmin):
+
+    def is_delete(self):
+        if not self.is_delete:
+            color_code = 'green'
+            text = '存在'
+        else:
+            color_code = 'red'
+            text = "不存在"
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
+    # 自定义管理界面
+    is_delete.short_description = '是否存在'
+    list_display = ['teacher_id', 'class_name',
+                    'last_updated_time', is_delete]              # 显示在管理界面的列
+    list_filter = ['teacher_id', 'class_name', 'is_delete']      # 数据过滤字段
+    search_fields = ['teacher_id', 'class_name']                 # 数据搜索字段
+    list_per_page = 20
+
+    # 添加，修改数据项时有分栏目的效果
+    fieldsets = [
+        ("老师与班级的对应关系", {"fields": ['teacher_id', 'class_name', 'is_delete']}),
     ]
