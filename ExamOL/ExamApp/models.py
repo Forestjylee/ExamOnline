@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 # 创建数据库时记得指定 CHARACTER SET UTF8；
 
+# level难度暂时分为3个（1->简单，2->中等，3->困难）
+
 
 class User(AbstractUser):
     """
@@ -29,7 +31,8 @@ class Paper(models.Model):
     试卷表模型
     """
     paper_id = models.AutoField(primary_key=True, verbose_name="试卷编号")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     paper_name = models.CharField(max_length=50, verbose_name="试卷名称")
     tag = models.CharField(max_length=50, verbose_name="试卷标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
@@ -56,7 +59,8 @@ class ChoiceProblem(models.Model):
     """
     problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="选择题")
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     option_A = models.CharField(max_length=50, verbose_name="A选项")
@@ -85,7 +89,8 @@ class JudgeProblem(models.Model):
     """
     problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="判断题")
     content = models.CharField(max_length=100, verbose_name="题目内容")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     answer = models.BooleanField(verbose_name="是否正确")
@@ -108,7 +113,8 @@ class FillBlankProblem(models.Model):
     """
     problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="填空题")
     content = models.CharField(max_length=200, verbose_name="题目内容")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     answer = models.CharField(max_length=200, verbose_name="参考答案")
@@ -131,7 +137,8 @@ class QAProblem(models.Model):
     """
     problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="问答题")
     content = models.TextField(verbose_name="题目内容")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     answer = models.TextField(verbose_name="参考答案")
@@ -154,7 +161,8 @@ class OperateProblem(models.Model):
     """
     problem_type = models.CharField(max_length=50, verbose_name="题目类型", default="实际操作题")
     content = models.TextField(verbose_name="题目内容")
-    level = models.IntegerField(verbose_name="难度系数")
+    level = models.IntegerField(verbose_name="难度系数", default=1,
+                                choices=((1, '简单'), (2, '中等'), (3, '困难')))
     tag = models.CharField(max_length=50, verbose_name="标签", default='数据库', blank=True)
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     answer = models.TextField(verbose_name="参考答案")

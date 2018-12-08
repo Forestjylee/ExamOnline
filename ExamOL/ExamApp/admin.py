@@ -62,6 +62,19 @@ class UserAdmin(UserAdmin):
 @admin.register(Paper)
 class PaperAdmin(admin.ModelAdmin):
 
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -73,8 +86,9 @@ class PaperAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['paper_id', 'paper_name', 'level', 'tag',
+    list_display = ['paper_id', 'paper_name', color_level, 'tag',
                     'author', 'start_time', 'end_time',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
@@ -91,6 +105,19 @@ class PaperAdmin(admin.ModelAdmin):
 @admin.register(ChoiceProblem)
 class ChoiceProblemAdmin(admin.ModelAdmin):
 
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -102,8 +129,9 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['tag', 'level', 'author',
+    list_display = ['tag', color_level, 'author',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
@@ -119,6 +147,19 @@ class ChoiceProblemAdmin(admin.ModelAdmin):
 
 @admin.register(JudgeProblem)
 class JudgeProblemAdmin(admin.ModelAdmin):
+
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
 
     def answer(self):
         if self.answer:
@@ -141,9 +182,10 @@ class JudgeProblemAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
     answer.short_description = '参考答案'
-    list_display = ['tag', 'level', 'author', answer,
+    list_display = ['tag', color_level, 'author', answer,
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
@@ -159,6 +201,19 @@ class JudgeProblemAdmin(admin.ModelAdmin):
 @admin.register(FillBlankProblem)
 class FillBlankProblemAdmin(admin.ModelAdmin):
 
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -170,8 +225,9 @@ class FillBlankProblemAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['tag', 'level', 'author',
+    list_display = ['tag', color_level, 'author',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
@@ -187,6 +243,19 @@ class FillBlankProblemAdmin(admin.ModelAdmin):
 @admin.register(QAProblem)
 class QAProblemAdmin(admin.ModelAdmin):
 
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -198,8 +267,9 @@ class QAProblemAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['tag', 'level', 'author',
+    list_display = ['tag', color_level, 'author',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
@@ -215,6 +285,19 @@ class QAProblemAdmin(admin.ModelAdmin):
 @admin.register(OperateProblem)
 class OperateProblemAdmin(admin.ModelAdmin):
 
+    def color_level(self):
+        if self.level == 1:
+            color_code = 'green'
+            text = '简单'
+        elif self.level == 2:
+            color_code = 'orange'
+            text = '中等'
+        else:
+            color_code = 'red'
+            text = '困难'
+        return format_html('<span style="color: {};">{}</span>',
+                           color_code, text)
+
     def is_delete(self):
         if not self.is_delete:
             color_code = 'green'
@@ -226,8 +309,9 @@ class OperateProblemAdmin(admin.ModelAdmin):
                            color_code, text)
 
     # 自定义管理界面
+    color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['tag', 'level', 'author',
+    list_display = ['tag', color_level, 'author',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
     list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
