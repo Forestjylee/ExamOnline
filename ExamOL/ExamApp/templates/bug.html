@@ -45,12 +45,6 @@
                 <button type="submit" class="border_radius btn-yellow text-uppercase" name="commit">提交</button>
             </div>
         </div>
-        {% if commit_result is True %}
-            <p style="text-align: center; color: greenyellow; font-size: 16px">提交成功!我们将尽快修复该问题，感谢您的反馈！</p>
-        {% elif commit_result is False %}
-            <p style="text-align: center; color: red; font-size: 16px">糟糕！提交失败了!</p>
-        {% else  %}
-        {% endif %}
   </form>
 </div>
             
@@ -72,7 +66,14 @@
 </footer>
 
 
-
+<script>
+    {% if commit_result is True %}
+        alert("提交成功!我们将尽快修复该问题，感谢您的反馈！");
+    {% elif commit_result is False %}
+        alert("糟糕！提交失败了!");
+    {% else  %}
+    {% endif %}
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>

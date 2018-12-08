@@ -50,148 +50,103 @@
 <!--Partners-->
 <section id="logos">  	
 <div class="tp_overlay">
-  <form class="callus">
-  <h2 class="text-uppercase t_white bottom20 text-center">组卷</h2>
-  
-    <div class="row">
-	<h3>试卷名</h3>
-      <div class="col-sm-6">
-        <div class="single-query bottom15">
-          <input id="paper_name" type="text" class="keyword-input" >
-        </div> </div> </div>
-	
-	<div class="row">
-	<h3>考试开始时间(年/月/日/时/分)</h3>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="start_time_year"  class="keyword-input" oninput="value=value.replace(/[^\d]/g,'')" placeholder="年"></div> </div>
-      <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <div class="intro">
-            <select id="start_time_month">
-              <option class="active">1</option>
-              <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
-			  <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
-            </select>
-          </div></div> </div>
-	  <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <div class="intro">
-            <select id="start_time_day">
-              <option class="active">1</option>
-              <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
-			  <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option>
-			  <option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option>
-			  <option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
-			  <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>
-            </select>
-          </div></div> </div>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="start_time_hour" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="时"></div> </div>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="start_time_minute" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="分"></div> </div> </div>
-	
-	<div class="row">
-	<h3>考试结束时间(年/月/日/时/分)</h3>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="end_time_year"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="年"></div> </div>
-      <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <div class="intro">
-            <select id="end_time_month">
-              <option class="active">1</option>
-              <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
-			  <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
-            </select>
-          </div></div> </div>
-	  <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <div class="intro">
-            <select id="end_time_day">
-              <option class="active">1</option>
-              <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option>
-			  <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option>
-			  <option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option>
-			  <option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
-			  <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>
-            </select>
-          </div></div> </div>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="end_time_hour" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="时"></div> </div>
-	 <div class="col-sm-2">
-        <div class="single-query bottom15">
-          <input id="end_time_minute" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="分"></div> </div> </div>
-	
-    <div class="row">
-	<h3>选择题</h3>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="ChoiceProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（简单）"></div> </div>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="ChoiceProblem_middle" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（中等）"></div> </div>
-	  <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="ChoiceProblem_hard" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（困难）"></div> </div>
-	  <div class="col-sm-4">
-        <div class="single-query bottom15">
-          <input id="ChoiceProblem_grade" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="每题分值"></div> </div> </div>
-	
-	<div class="row">
-	<h3>判断题</h3>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="JudgeProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（简单）"></div> </div>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="JudgeProblem_middle" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（中等）"></div> </div>
-	  <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="JudgeProblem_hard" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（困难）"></div> </div>
-	  <div class="col-sm-4">
-        <div class="single-query bottom15">
-          <input id="JudgeProblem_grade" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="每题分值"></div> </div> </div>
-	
-	<div class="row">
-	<h3>填空题</h3>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="FillBlankProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（简单）"></div> </div>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="FillBlankProblem_middle" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（中等）"></div> </div>
-	  <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="FillBlankProblem_hard" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（困难）"></div> </div>
-	  <div class="col-sm-4">
-        <div class="single-query bottom15">
-          <input id="FillBlankProblem_grade" type="number" oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="每题分值"></div> </div> </div>
-	
-	<div class="row">
-	<h3>问答题</h3>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="QAProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（简单）"></div> </div>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="QAProblem_middle" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（中等）"></div> </div>
-	  <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="QAProblem_hard" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（困难）"></div> </div>
-	  <div class="col-sm-4">
-        <div class="single-query bottom15">
-          <input id="QAProblem_grade" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="每题分值"></div> </div> </div>
-	
-	<div class="row">
-	<h3>实际操作题</h3>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="OperateProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（简单）"></div> </div>
-      <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="OperateProblem_middle" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（中等）"></div> </div>
-	  <div class="col-sm-4 col-xs-6"> <div class="single-query bottom15">
-          <input id="OperateProblem_hard" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="题目数量（困难）"></div> </div>
-	  <div class="col-sm-4">
-        <div class="single-query bottom15">
-          <input id="OperateProblem_grade" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="每题分值"></div> </div> </div>
-	
-    <div class="row">
-      <div class="text-right ">
-        <button type="submit" class="border_radius btn-yellow text-uppercase">生成试卷</button>
-      </div>
-    </div>
-  </form></div>		
+  <form class="callus" method="post">
+      {% csrf_token %}
+      <h2 class="text-uppercase t_white bottom20 text-center">组卷</h2>
+
+        <div class="row">
+            <h3>试卷名</h3>
+              <div class="col-sm-6">
+                <div class="single-query bottom15">
+                  <input id="paper_name" type="text" class="keyword-input" name="paper_name">
+                </div>
+              </div>
+        </div>
+
+        <div class="row">
+            <h3>试卷难度</h3>
+              <div class="col-sm-6">
+                <div class="single-query bottom15">
+                    <select name="paper_level">
+                      <option value="1">简单</option>
+                      <option value="2">中等</option>
+                      <option value="3">困难</option>
+                    </select>
+                </div>
+              </div>
+        </div>
+
+        <div class="row">
+            <h3>考试开始时间(年/月/日/时/分)</h3>
+             <div class="col-sm-2">
+                 <div class="single-query bottom15">
+                    <input id="start_time_date" class="keyword-input" type="date" name="start_date">
+                 </div>
+             </div>
+             <div class="col-sm-2">
+                <div class="single-query bottom15">
+                    <input id="start_time_hour" type="number" value="0" name="start_hour" max="23" min="0" class="keyword-input" placeholder="时">
+                </div>
+             </div>
+             <div class="col-sm-2">
+                <div class="single-query bottom15">
+                    <input id="start_time_minute" type="number" value="0" name="start_minute" max="23" min="0" class="keyword-input" placeholder="分">
+                </div>
+             </div>
+        </div>
+
+        <div class="row">
+            <h3>考试结束时间(年/月/日/时/分)</h3>
+             <div class="col-sm-2">
+                <div class="single-query bottom15">
+                    <input id="end_time_date" class="keyword-input" type="date" name="end_date">
+                </div>
+             </div>
+             <div class="col-sm-2">
+                <div class="single-query bottom15">
+                  <input id="end_time_hour" type="number" value="0" name="end_hour" max="23" min="0" class="keyword-input" placeholder="时">
+                </div>
+             </div>
+             <div class="col-sm-2">
+                <div class="single-query bottom15">
+                  <input id="end_time_minute" type="number" value="0" name="end_minute" max="23" min="0" class="keyword-input" placeholder="分">
+                </div>
+             </div>
+        </div>
+
+      {% for problem_name in problem_names %}
+      <div class="row">
+        <h3>{{ problem_name }}</h3>
+          <div class="col-sm-4 col-xs-6">
+              <div class="single-query bottom15">
+                <input id="ChoiceProblem_simple" type="number" name="{{ problem_name }}_simple" max="50" min="0"  class="keyword-input" placeholder="题目数量（简单）">
+              </div>
+          </div>
+          <div class="col-sm-4 col-xs-6">
+              <div class="single-query bottom15">
+                <input id="ChoiceProblem_middle" type="number" name="{{ problem_name }}_middle" max="50" min="0" class="keyword-input" placeholder="题目数量（中等）">
+              </div>
+          </div>
+          <div class="col-sm-4 col-xs-6">
+              <div class="single-query bottom15">
+                <input id="ChoiceProblem_hard" type="number" name="{{ problem_name }}_difficult" max="50" min="0" class="keyword-input" placeholder="题目数量（困难）">
+              </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="single-query bottom15">
+              <input id="ChoiceProblem_grade" type="number" name="{{ problem_name }}_point" min="1" class="keyword-input" placeholder="每题分值">
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+        <div class="row">
+          <div class="text-right ">
+            <button type="submit" class="border_radius btn-yellow text-uppercase">生成试卷</button>
+          </div>
+        </div>
+  </form>
+</div>
 
 </section>
 <!--Partners Ends-->
@@ -216,7 +171,13 @@
 </footer>
 
 
-
+<script>
+    {% if result is True %}
+        alert("生成试卷成功!");
+    {% elif result is False %}
+        alert("生成试卷失败!");
+    {% endif %}
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>
