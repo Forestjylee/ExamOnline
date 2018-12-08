@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 
 # Create your models here.
 # 创建数据库时记得指定 CHARACTER SET UTF8；
@@ -31,6 +32,7 @@ class Paper(models.Model):
     试卷表模型
     """
     paper_id = models.AutoField(primary_key=True, verbose_name="试卷编号")
+    owner_id = models.IntegerField(verbose_name="试卷管理员id", default=0)
     level = models.IntegerField(verbose_name="难度系数", default=1,
                                 choices=((1, '简单'), (2, '中等'), (3, '困难')))
     paper_name = models.CharField(max_length=50, verbose_name="试卷名称")
@@ -38,8 +40,8 @@ class Paper(models.Model):
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     each_choice_problem_score = models.FloatField(verbose_name="每道选择题分数", default=0)
     each_judge_problem_score = models.FloatField(verbose_name="每道判断题分数", default=0)
-    start_time = models.DateTimeField(verbose_name="开始时间", default='', blank=True)
-    end_time = models.DateTimeField(verbose_name="结束时间", default='', blank=True)
+    start_time = models.DateTimeField(verbose_name="开始时间", auto_now_add=True, blank=True)
+    end_time = models.DateTimeField(verbose_name="结束时间", blank=True, default=datetime(year=2099, month=1, day=1))
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     last_updated_time = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
@@ -206,7 +208,6 @@ class PaperUser(models.Model):
     paper_id = models.IntegerField(verbose_name="试卷编号")
     uid = models.IntegerField(verbose_name="用户编号")
     is_finished = models.BooleanField(verbose_name="是否已完成试卷", default=False)
-    is_owner = models.BooleanField(verbose_name="是否拥有修改权", default=False)
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 

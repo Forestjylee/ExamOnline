@@ -88,17 +88,17 @@ class PaperAdmin(admin.ModelAdmin):
     # 自定义管理界面
     color_level.short_description = '难度'
     is_delete.short_description = '是否存在'
-    list_display = ['paper_id', 'paper_name', color_level, 'tag',
+    list_display = ['paper_id', 'paper_name', color_level, 'owner_id',
                     'author', 'start_time', 'end_time',
                     'last_updated_time', is_delete]              # 显示在管理界面的列
-    list_filter = ['level', 'tag', 'is_delete']                  # 数据过滤字段
+    list_filter = ['level', 'is_delete', 'last_updated_time']    # 数据过滤字段
     search_fields = ['tag', 'level', 'author']                   # 数据搜索字段
     list_per_page = 20
 
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("试卷信息", {"fields": ['paper_name', 'level', 'start_time', 'end_time']}),
-        ("其他信息(选填)", {"fields": ['author', 'tag', 'is_delete']}),
+        ("其他信息(选填)", {"fields": ['owner_id', 'author', 'tag', 'is_delete']}),
     ]
 
 
@@ -378,7 +378,7 @@ class PaperUserAdmin(admin.ModelAdmin):
     # 自定义管理界面
     is_delete.short_description = '是否存在'
     list_display = ['paper_id', 'uid', is_finished,
-                    'is_owner', 'last_updated_time', is_delete]        # 显示在管理界面的列
+                    'last_updated_time', is_delete]                    # 显示在管理界面的列
     list_filter = ['paper_id', 'uid', 'is_finished', 'is_delete']      # 数据过滤字段
     search_fields = ['paper_id']                                       # 数据搜索字段
     list_per_page = 20
@@ -386,8 +386,7 @@ class PaperUserAdmin(admin.ModelAdmin):
     # 添加，修改数据项时有分栏目的效果
     fieldsets = [
         ("试卷与用户的对应关系", {"fields": ['paper_id', 'uid',
-                                   'is_finished', 'is_owner',
-                                   'is_delete']}),
+                                   'is_finished', 'is_delete']}),
     ]
 
 
