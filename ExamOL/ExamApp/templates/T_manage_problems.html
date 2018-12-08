@@ -31,10 +31,10 @@
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
-              <li><a href="{% url 'ExamApp:管理试题' user.username %}">管理试题</a></li>
-              <li><a href="./T_create_paper.html">组卷</a></li>
-              <li><a href="./T_grade.html">评分 </a></li>
-              <li><a href="./T_analyze.html">统计成绩</a></li>
+              <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
+              <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
             </ul>
           </div>
         </div>
@@ -47,108 +47,55 @@
 <!--Partners-->
 <div style="display:flex;">	
 
-<div class="paper_left">
-    <div>  
- <button class="border_radius btn" onclick="remove()">删除题目</button>	
-		<h4>题目类型</h4><select id="type">
-              <option>选择题</option>
-              <option>判断题</option>
-              <option>填空题</option>
-              <option>问答题</option>
-              <option>实际操作题</option></select>  
-        <h4>题目难度</h4><select id="level">
-              <option>简单</option>
-              <option>中等</option>
-              <option>困难</option></select> 
-	    <h4>题目标签</h4>
-	    <input type="text" class="keyword-input" id="tag">  
-        <h4>题目内容</h4>			  
-		<textarea  cols="40" rows="4" id="content"></textarea>		
-		<h4>题目答案</h4>
-		<h5>选择题答案</h5>
-		<select>
-              <option>A</option>
-              <option>B</option>
-              <option>C</option>
-			  <option>D</option></select> 
-	    <h5>判断题答案</h5>
-		<select>
-              <option>对</option>
-              <option>错</option></select>
-        <h5>其他题答案</h5>
-		<textarea  cols="40" rows="4"></textarea>
-		<button type="submit" class="border_radius btn" onclick="add()">编写题目</button>
+    <div class="student_center">
+      <form class="callus">
+      <h2 class="text-uppercase t_white bottom20 text-center">题目信息</h2>
+        <table id="student_message">
+            <tr>
+                <th>题目类型</th>
+                <th>难度系数</th>
+                <th>题目内容</th>
+                <th>标签</th>
+            </tr>
+
+            {% for problem in problem_list %}
+                <tr>
+                    <td><input name="in" type="checkbox">{{ problem.problem_type }}</td>
+                    <td>{{ problem.level }}</td>
+                    <td>{{ problem.content|truncatechars:20 }}</td>
+                    <td>{{ problem.tag }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+          <p style="font-size: 18px;font-family: Consolas;color: #02b2e1;text-align: right;margin-top: 3%">
+              题库中一共有
+              <strong>{{ problem_list|length }}</strong>
+              道{{ complete_type }}
+          </p>
+
+      </form>
     </div>
-</div>
 
-<div class="student_center">
-  <form class="callus">
-  <h2 class="text-uppercase t_white bottom20 text-center">题目信息</h2>   
-<table id="student_message">
-<tr>
-<th>主键</th>
-<th>题目类型</th>
-<th>难度</th>
-<th>标签</th>
-</tr>
-
-<tr>
-
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>安全性，完整性</td>
-</tr>
-
-<tr>
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>关系数据库</td>
-</tr>
-
-<tr>
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>数据库编程</td>
-</tr>
-
-<tr>
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>并发控制</td>
-</tr>
-
-<tr>
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>恢复技术</td>
-</tr>
-
-<tr>
-<td><input name="in" type="checkbox">0000</td>
-<td>选择题</td>
-<td>简单</td>
-<td>标准语言SQL</td>
-</tr>
-
-</table>
-
- </form></div>		
-
-<div class="grade_right">
-<h4>题目类型</h4>
-<ul class="">
-              <li><a href="#.">选择题</a></li>
-              <li><a href="#.">判断题</a></li>
-			  <li><a href="#.">填空题</a></li>
-			  <li><a href="#.">问答题</a></li>
-			  <li><a href="#.">实际操作题</a></li>
-            </ul>
-</div>
+    <div class="grade_right">
+    <h4>题目类型</h4>
+        <ul class="">
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:管理试题' user.username 'choice' %}">选择题</a>
+            </li>
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:管理试题' user.username 'judge' %}">判断题</a>
+            </li>
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:管理试题' user.username 'fillblank' %}">填空题</a>
+            </li>
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:管理试题' user.username 'QA' %}">问答题</a>
+            </li>
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:管理试题' user.username 'operate' %}">实际操作题</a>
+            </li>
+        </ul>
+    </div>
             
 </div>
 <!--Partners Ends-->
@@ -173,27 +120,7 @@
 </footer>
 
 
-<script>
-function remove()
-{var boxes = document.getElementsByName("in");
-for(var k=boxes.length-1;k>=0;k--)
-if(boxes[k].checked){
-boxes[k].parentNode.parentNode.parentNode.removeChild(boxes[k].parentNode.parentNode);             
-	}
-}
-function add()
-{   var id = "0000";
-    var type = document.getElementById("type").value;
-	var level = document.getElementById("level").value;
-	var tag = document.getElementById("tag").value;
-    if (type&&level&&tag) {
-	var set=document.createElement("tr");
-	set.innerHTML='<td><input name="in" type="checkbox">'+id+'</td><td>'+type+'</td><td>'+level+'</td><td>'+tag+'</td>';
-	var newnew=document.getElementById('student_message');
-	newnew.appendChild(set);
-	}
-}
-    </script>
+
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>

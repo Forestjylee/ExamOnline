@@ -7,7 +7,9 @@ Created by Junyi.
 """
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.contrib.auth import authenticate
-from ..models import User, Paper, PaperUser, TeacherStudent
+from ..models import (User, Paper, PaperUser, TeacherStudent, TeacherClass,
+                      ChoiceProblem, JudgeProblem, FillBlankProblem,
+                      QAProblem, OperateProblem)
 
 
 def get_object_or_none(model, *args, **kwargs):
@@ -119,6 +121,16 @@ def get_user_do_and_undo_paper_list(user_id: str) -> tuple:
     return finished_paper_list, unfinished_paper_list
 
 
+def get_class_list(teacher_id: str) -> list:
+    """
+    输入一个老师id
+    返回他的班级列表
+    :param teacher_id: 老师用户的id
+    :return: 班级列表
+    """
+    return TeacherClass.objects.filter(teacher_id=teacher_id, is_delete=False)
+
+
 def get_student_list(user_id: str, class_name: str) -> list:
     """
     输入一个老师用户的id
@@ -140,3 +152,24 @@ def get_student_list(user_id: str, class_name: str) -> list:
             if student:
                 student_list.append(student)
     return student_list
+
+
+def get_problem_list(problem_type: str) -> tuple:
+    """
+    输入一个题目类型
+    返回题库中本类型的题目
+    :param problem_type: 问题的类型
+    :return: 题目列表
+    """
+    if problem_type == 'choice':
+        return '选择题', ChoiceProblem.objects.all()
+    elif problem_type == 'judge':
+        return '判断题', JudgeProblem.objects.all()
+    elif problem_type == 'fillblank':
+        return '填空题', FillBlankProblem.objects.all()
+    elif problem_type == 'QA':
+        return '问答题', QAProblem.objects.all()
+    elif problem_type == 'operate':
+        return '实际操作题', OperateProblem.objects.all()
+    else:
+        return '选择题', ChoiceProblem.objects.all()

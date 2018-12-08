@@ -32,11 +32,11 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
-              <li><a href="{% url 'ExamApp:老师主页' user.username class_name %}">管理学生</a></li>
-              <li><a href="{% url 'ExamApp:管理试题' user.username %}">管理试题</a></li>
+              <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
+              <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
-              <li><a href="./T_grade.html">评分 </a></li>
-              <li><a href="./T_analyze.html">统计成绩</a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
             </ul>
           </div></div> </div> </div>
   </nav>
@@ -44,19 +44,7 @@
 <!--Header Ends-->
 
 <!--Partners-->
-<div style="display:flex;">	
-
-<div class="student_left">
-    <div>   
-        <button type="submit" class="border_radius btn" onclick="remove()">删除学生</button>
-		<input id="student_id" oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="学号">
-		<input id="student_name" type="text" class="keyword-input" placeholder="姓名">
-		<button type="submit" class="border_radius btn" onclick="modify()">修改学生</button>	
-        <button type="submit" class="border_radius btn" onclick="add()">增加学生</button>    	
-        <input type="text" class="keyword-input" placeholder="按姓名查询学生">
-        <button type="submit" class="border_radius btn">查询学生</button>	
-    </div>
-</div>
+<div style="display:flex;">
 
 <div class="student_center">
   <form class="callus">
@@ -78,15 +66,28 @@
             {% endfor %}
 
         </table>
- </form></div>		
+        <p style="font-size: 18px;font-family: Consolas;color: #02b2e1;text-align: right;margin-top: 3%">
+            {% if class_name != 'all' %}
+            {{ class_name }}
+            {% endif %}
+            一共有
+            <strong>{{ student_list|length }}</strong>
+            个学生
+        </p>
+ </form>
+</div>
 
 <div class="grade_right">
-<h4>班级</h4>
-<ul class="">
-              <li><a href="{% url 'ExamApp:老师主页' user.username '16网工' %}">网络工程</a></li>
-              <li><a href="{% url 'ExamApp:老师主页' user.username '16信安' %}">信息安全</a></li>
-
-            </ul>
+    <h4>班级</h4>
+    <ul class="">
+        {% for class in class_list %}
+            <li style="margin-bottom: 3%;font-family: Consolas">
+                <a href="{% url 'ExamApp:老师主页' user.username class.class_name %}">
+                    {{ class.class_name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 
 </div>
             

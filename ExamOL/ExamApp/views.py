@@ -3,8 +3,7 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404, ge
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .app_helper.views_helper import (is_post_or_get, get_user_or_none, sign_up_user_or_none,
-                                      get_user_do_and_undo_paper_list, get_student_list)
+from .app_helper import views_helper
 from .models import User
 
 
@@ -18,12 +17,12 @@ def start_page(request):
     return redirect('ExamApp:登录')
 
 
-@is_post_or_get(get_render_html='login.html')
+@views_helper.is_post_or_get(get_render_html='login.html')
 def user_login(request):
     """
     用户登陆页面
     """
-    user = get_user_or_none(request)
+    user = views_helper.get_user_or_none(request)
     if user is not None:
         login(request, user)
         if not user.is_teacher:
@@ -42,14 +41,14 @@ def user_logout(request):
     return redirect('ExamApp:登录')
 
 
-@is_post_or_get(get_render_html='create_user.html')
+@views_helper.is_post_or_get(get_render_html='create_user.html')
 def create_user(request):
     """
     创建用户界面
     用户(姓名, 学号(用户名)，密码，班级名)
     """
     try:
-        user = sign_up_user_or_none(request)
+        user = views_helper.sign_up_user_or_none(request)
         if user is not None:
             #TODO 弹出页面显示:创建用户成功，5秒之后去往主界面
             pass
@@ -94,7 +93,7 @@ def student_home_page(request, username):
     :return:
     """
     user = get_object_or_404(User, username=username)
-    finished_paper_list, unfinished_paper_list = get_user_do_and_undo_paper_list(user.uid)
+    finished_paper_list, unfinished_paper_list = views_helper.get_user_do_and_undo_paper_list(user.uid)
     return render_to_response(
         'student_examlist.html',
         {
@@ -113,28 +112,34 @@ def teacher_home_page(request, username: str, class_name: str):
     :param class_name: 展示信息班级名
     """
     user = get_object_or_404(User, username=username)
-    student_list = get_student_list(user_id=user.uid, class_name=class_name)
+    class_list = views_helper.get_class_list(teacher_id=user.uid)
+    student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
     return render_to_response(
         'T_manage_student.html',
         {
             'user': user,
             'student_list': student_list,
+            'class_list': class_list,
             'class_name': class_name,
         })
 
 
 @login_required
-def admin_problems(request, username: str):
+def admin_problems(request, username: str, problem_type: str):
     """
     老师管理题库页面
     :param request:
     :param username: 老师的工号
+    :param problem_type: 问题的类型(all|choice|judge|fillblank|QA|operate)
     """
     user = get_object_or_404(User, username=username)
+    complete_type, problem_list = views_helper.get_problem_list(problem_type)
     return render_to_response(
         'T_manage_problems.html',
         {
             'user': user,
+            'problem_list': problem_list,
+            'complete_type': complete_type,
         }
     )
 
@@ -149,6 +154,39 @@ def create_paper(request, username: str):
     user = get_object_or_404(User, username=username)
     return render_to_response(
         'T_create_paper.html',
+        {
+            'user': user,
+        }
+    )
+
+
+@login_required
+def mark_scores(request, username: str):
+    """
+    老师评分页面
+    :param request
+    :param username: 老师的工号
+    """
+    user = get_object_or_404(User, username=username)
+    return render_to_response(
+        'T_grade.html',
+        {
+            'user': user,
+        }
+    )
+
+
+@login_required
+def analyse(request, username: str, paper_id: str):
+    """
+    老师查看考试情况页面
+    :param request
+    :param username: 老师的工号
+    :param paper_id: 试卷id
+    """
+    user = get_object_or_404(User, username=username)
+    return render_to_response(
+        'T_analyze.html',
         {
             'user': user,
         }
