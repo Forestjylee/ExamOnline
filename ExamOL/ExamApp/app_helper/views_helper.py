@@ -190,21 +190,21 @@ def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
     :param paper_info: 试卷的各题目数量信息字典
     :return: (是否创建成功)True | False
     """
-    # try:
-    checked_paper_info = check_paper_info(paper_info)
-    selected_problems = select_problems(checked_paper_info)
-    student_list = get_student_list(teacher_id, class_name='all')
-    new_paper_id = create_or_replace_a_new_paper_in_db(
-        level=checked_paper_info['paper_level'],
-        paper_name=checked_paper_info['paper_name'],
-        choice_score=checked_paper_info['选择题_point'],
-        judge_score=checked_paper_info['判断题_point'],
-        start_time=checked_paper_info['start_datetime'],
-        end_time=checked_paper_info['end_datetime'],
-        owner_id=teacher_id,
-    )
-    save_to_paper_problems_db(paper_id=new_paper_id, selected_problems=selected_problems)
-    save_to_paper_user_db(paper_id=new_paper_id, user_list=student_list)
-    return True
-    # except:
-    #     return False
+    try:
+        checked_paper_info = check_paper_info(paper_info)
+        selected_problems = select_problems(checked_paper_info)
+        student_list = get_student_list(teacher_id, class_name='all')
+        new_paper_id = create_or_replace_a_new_paper_in_db(
+            level=checked_paper_info['paper_level'],
+            paper_name=checked_paper_info['paper_name'],
+            choice_score=checked_paper_info['选择题_point'],
+            judge_score=checked_paper_info['判断题_point'],
+            start_time=checked_paper_info['start_datetime'],
+            end_time=checked_paper_info['end_datetime'],
+            owner_id=teacher_id,
+        )
+        save_to_paper_problems_db(paper_id=new_paper_id, selected_problems=selected_problems)
+        save_to_paper_user_db(paper_id=new_paper_id, user_list=student_list)
+        return True
+    except:
+        return False
