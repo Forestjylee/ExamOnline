@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import datetime
 
 # Create your models here.
 # 创建数据库时记得指定 CHARACTER SET UTF8；
@@ -40,8 +39,8 @@ class Paper(models.Model):
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     each_choice_problem_score = models.FloatField(verbose_name="每道选择题分数", default=0)
     each_judge_problem_score = models.FloatField(verbose_name="每道判断题分数", default=0)
-    start_time = models.DateTimeField(verbose_name="开始时间", auto_now_add=True, blank=True)
-    end_time = models.DateTimeField(verbose_name="结束时间", blank=True, default=datetime(year=2099, month=1, day=1))
+    start_time = models.DateTimeField(verbose_name="开始时间", blank=True)
+    end_time = models.DateTimeField(verbose_name="结束时间", blank=True)
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     last_updated_time = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
@@ -186,7 +185,7 @@ class PaperProblem(models.Model):
     试卷与试题关系表
     """
     paper_id = models.IntegerField(verbose_name="试卷编号")
-    problem_type = models.CharField(max_length=20, verbose_name="题目类型")
+    problem_type = models.CharField(max_length=50, verbose_name="题目类型")
     problem_id = models.IntegerField(verbose_name="题目编号")
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
