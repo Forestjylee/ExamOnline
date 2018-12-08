@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate
 from ..models import (User, Paper, PaperUser, TeacherStudent, TeacherClass,
                       ChoiceProblem, JudgeProblem, FillBlankProblem,
                       QAProblem, OperateProblem)
+from .create_paper_helper import (check_paper_info, select_problems, create_or_replace_a_new_paper_in_db,
+                                  save_to_paper_problems_db, save_to_paper_user_db)
 
 
 def get_object_or_none(model, *args, **kwargs):
@@ -131,7 +133,7 @@ def get_class_list(teacher_id: str) -> list:
     return TeacherClass.objects.filter(teacher_id=teacher_id, is_delete=False)
 
 
-def get_student_list(user_id: str, class_name: str) -> list:
+def get_student_list(user_id: int, class_name: str) -> list:
     """
     输入一个老师用户的id
     返回他的学生列表
@@ -173,3 +175,36 @@ def get_problem_list(problem_type: str) -> tuple:
         return '实际操作题', OperateProblem.objects.all()
     else:
         return '选择题', ChoiceProblem.objects.all()
+
+
+def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
+    """
+    根据题目的数量信息和分值自动生成试卷
+    1.将信息读出到变量，判断是否有误
+    2.根据要求随机选择题目
+    3.在试卷表创建一张新的试卷
+    4.在题目-试卷关系表中保存关系
+    5.获取使用试卷的用户列表[get_student_list()]
+    6.在用户-试卷信息表中保存关系
+    :param teacher_id: 老师的id
+    :param paper_info: 试卷的各题目数量信息字典
+    :return: (是否创建成功)True | False
+    """
+    # try:
+    checked_paper_info = check_paper_info(paper_info)
+    selected_problems = select_problems(checked_paper_info)
+    student_list = get_student_list(teacher_id, class_name='all')
+    new_paper_id = create_or_replace_a_new_paper_in_db(
+        level=checked_paper_info['paper_level'],
+        paper_name=checked_paper_info['paper_name'],
+        choice_score=checked_paper_info['选择题_point'],
+        judge_score=checked_paper_info['判断题_point'],
+        start_time=checked_paper_info['start_datetime'],
+        end_time=checked_paper_info['end_datetime'],
+        owner_id=teacher_id,
+    )
+    save_to_paper_problems_db(paper_id=new_paper_id, selected_problems=selected_problems)
+    save_to_paper_user_db(paper_id=new_paper_id, user_list=student_list)
+    return True
+    # except:
+    #     return False

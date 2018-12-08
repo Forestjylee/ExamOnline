@@ -145,19 +145,36 @@ def admin_problems(request, username: str, problem_type: str):
 
 
 @login_required
+@csrf_exempt
 def create_paper(request, username: str):
     """
     老师创建试卷页面
-    :param request:
+    :param request
     :param username: 老师的工号
     """
     user = get_object_or_404(User, username=username)
-    return render_to_response(
-        'T_create_paper.html',
-        {
-            'user': user,
-        }
-    )
+    problem_names = ['选择题', '判断题', '填空题', '问答题', '实际操作题']
+    if request.method == 'POST':
+        if views_helper.use_info_to_create_paper(teacher_id=user.uid, paper_info=request.POST):
+            result = True
+        else:
+            result = False
+        return render_to_response(
+            'T_create_paper.html',
+            {
+                'user': user,
+                'problem_names': problem_names,
+                'result': result,
+            }
+        )
+    else:
+        return render_to_response(
+            'T_create_paper.html',
+            {
+                'user': user,
+                'problem_names': problem_names,
+            }
+        )
 
 
 @login_required
@@ -168,12 +185,15 @@ def mark_scores(request, username: str):
     :param username: 老师的工号
     """
     user = get_object_or_404(User, username=username)
-    return render_to_response(
-        'T_grade.html',
-        {
-            'user': user,
-        }
-    )
+    if request.method == 'POST':
+        pass
+    else:
+        return render_to_response(
+            'T_grade.html',
+            {
+                'user': user,
+            }
+        )
 
 
 @login_required
