@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate
 from ..models import (User, Paper, PaperUser, TeacherStudent, TeacherClass,
                       ChoiceProblem, JudgeProblem, FillBlankProblem,
                       QAProblem, OperateProblem)
-from .create_paper_helper import (check_paper_info, select_problems, create_or_replace_a_new_paper_in_db,
+from .create_paper_helper import (check_paper_info, select_problems, create_a_new_paper_in_db,
                                   save_to_paper_problems_db, save_to_paper_user_db)
 
 
@@ -194,7 +194,7 @@ def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
         checked_paper_info = check_paper_info(paper_info)
         selected_problems = select_problems(checked_paper_info)
         student_list = get_student_list(teacher_id, class_name='all')
-        new_paper_id = create_or_replace_a_new_paper_in_db(
+        new_paper_id = create_a_new_paper_in_db(
             level=checked_paper_info['paper_level'],
             paper_name=checked_paper_info['paper_name'],
             choice_score=checked_paper_info['选择题_point'],

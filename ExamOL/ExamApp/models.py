@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 # 创建数据库时记得指定 CHARACTER SET UTF8；
+# 若makemigrations出错,先执行`python manage.py makemigrations --empty ExamApp`
+# 然后再makemigrations和migrate
 
 # level难度暂时分为3个（1->简单，2->中等，3->困难）
 

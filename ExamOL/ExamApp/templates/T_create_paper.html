@@ -80,7 +80,7 @@
             <h3>考试开始时间(年/月/日/时/分)</h3>
              <div class="col-sm-2">
                  <div class="single-query bottom15">
-                    <input id="start_time_date" class="keyword-input" type="date" name="start_date">
+                    <input id="start_time_date" class="keyword-input" type="date" name="start_date" onblur="check_start_date(this.value);">
                  </div>
              </div>
              <div class="col-sm-2">
@@ -99,7 +99,7 @@
             <h3>考试结束时间(年/月/日/时/分)</h3>
              <div class="col-sm-2">
                 <div class="single-query bottom15">
-                    <input id="end_time_date" class="keyword-input" type="date" name="end_date">
+                    <input id="end_time_date" class="keyword-input" type="date" name="end_date" onblur="check_end_date(this.value);">
                 </div>
              </div>
              <div class="col-sm-2">
@@ -177,6 +177,18 @@
     {% elif result is False %}
         alert("生成试卷失败!");
     {% endif %}
+</script>
+<script>
+    function check_start_date(str){
+        if(str==''){
+            alert("考试开始日期不能为空！");
+        }
+    }
+    function check_end_date(str){
+        if(str==''){
+            alert("考试结束日期不能为空！");
+        }
+    }
 </script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>

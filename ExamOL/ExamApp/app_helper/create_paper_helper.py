@@ -18,7 +18,7 @@ from datetime import datetime
 from django.utils import timezone
 from ..models import (PaperUser, Paper, PaperProblem, ChoiceProblem,
                       JudgeProblem, FillBlankProblem, QAProblem,
-                      OperateProblem)
+                      OperateProblem, UserAnswerSituation)
 
 
 def _get_model_object(problem_type: str):
@@ -127,7 +127,7 @@ def select_problems(paper_info: dict) -> list:
     return selected_problems
 
 
-def create_or_replace_a_new_paper_in_db(
+def create_a_new_paper_in_db(
     level: str,
     paper_name: str,
     choice_score: int,
@@ -186,7 +186,10 @@ def save_to_paper_user_db(paper_id: int, user_list: list) -> None:
     :return: None
     """
     for user in user_list:
+        new_answer_situation = UserAnswerSituation()
+        new_answer_situation.save()
         new_paper_user = PaperUser()
         new_paper_user.paper_id = paper_id
         new_paper_user.uid = user.uid
+        new_paper_user.answer_situation = new_answer_situation
         new_paper_user.save()
