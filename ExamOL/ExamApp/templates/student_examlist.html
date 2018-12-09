@@ -26,7 +26,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
             <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="{% url 'ExamApp:老师主页' user.username 'all' %}">
+            <a class="navbar-brand" href="{% url 'ExamApp:学生主页' user.username %}">
                 <img src="{% static 'others/images/logo.png' %}" class="logo" alt="">
             </a>
           </div>
@@ -49,13 +49,14 @@
 <h5>已完成</h5>
     <ul class="">
         {% for paper in finished_paper_list %}
-            <li><a href="#">{{ paper.paper_name }}</a></li>
+            <li style="margin-bottom: 1%"><a href="#">{{ paper.paper_name }}</a></li>
         {% endfor %}
     </ul>
+    <hr>
 <h5>待考试</h5>
     <ul class="">
         {% for paper in unfinished_paper_list %}
-            <li>
+            <li style="margin-bottom: 1%">
                 <a href="{% url 'ExamApp:考试页面' user.username paper.paper_id %}">
                     {{ paper.paper_name }}
                 </a>
