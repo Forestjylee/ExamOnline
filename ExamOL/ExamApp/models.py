@@ -39,8 +39,8 @@ class Paper(models.Model):
     author = models.CharField(max_length=50, verbose_name="作者", default='未知', blank=True)
     each_choice_problem_score = models.FloatField(verbose_name="每道选择题分数", default=0)
     each_judge_problem_score = models.FloatField(verbose_name="每道判断题分数", default=0)
-    start_time = models.DateTimeField(verbose_name="开始时间", blank=True)
-    end_time = models.DateTimeField(verbose_name="结束时间", blank=True)
+    start_time = models.DateTimeField(verbose_name="开始时间")
+    end_time = models.DateTimeField(verbose_name="结束时间")
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     last_updated_time = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
@@ -68,9 +68,9 @@ class ChoiceProblem(models.Model):
     option_B = models.CharField(max_length=50, verbose_name="B选项")
     option_C = models.CharField(max_length=50, verbose_name="C选项")
     option_D = models.CharField(max_length=50, verbose_name="D选项")
-    answer = models.CharField(max_length=40, verbose_name="参考答案",
-                              choices=(('option_A', 'A'), ('option_B', 'B'),
-                                       ('option_C', 'C'), ('option_D', 'D')))
+    answer = models.IntegerField(verbose_name="参考答案",
+                                 choices=((1, 'A'), (2, 'B'),
+                                          (3, 'C'), (4, 'D')))
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     last_updated_time = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
@@ -180,6 +180,27 @@ class OperateProblem(models.Model):
         ordering = ['last_updated_time']       # 在管理界面按照创建时间排序
 
 
+class UserAnswerSituation(models.Model):
+    """
+    用户答题情况
+    """
+    id = models.AutoField(primary_key=True, verbose_name="答题情况id")
+    correct_choice_problem_amount = models.IntegerField(verbose_name="用户答对的选择题数", default=0)
+    correct_judge_problem_amount = models.IntegerField(verbose_name="用户答对的判断题数", default=0)
+    fill_blank_problem_scores = models.FloatField(verbose_name="用户填空题总得分", default=0)
+    QA_problem_scores = models.FloatField(verbose_name="用户问答题总得分", default=0)
+    operate_problem_scores = models.FloatField(verbose_name="用户操作题总得分", default=0)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
+
+    def __str__(self):
+        return f"{self.id}-ans_situation"
+
+    class Meta:
+        verbose_name_plural = '用户答题与得分情况'         # 在管理界面中表的名字
+        db_table = 'User_Answer_Situation'               # 在MySQL中表的名字
+        ordering = ['last_updated_time']                 # 在管理界面按照创建时间排序
+
+
 class PaperProblem(models.Model):
     """
     试卷与试题关系表
@@ -207,6 +228,8 @@ class PaperUser(models.Model):
     paper_id = models.IntegerField(verbose_name="试卷编号")
     uid = models.IntegerField(verbose_name="用户编号")
     is_finished = models.BooleanField(verbose_name="是否已完成试卷", default=False)
+    answer_situation = models.ForeignKey(UserAnswerSituation, on_delete=models.CASCADE,
+                                         verbose_name="用户答题情况", default='')
     is_delete = models.BooleanField(verbose_name="是否被删除", default=False)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
@@ -219,26 +242,71 @@ class PaperUser(models.Model):
         ordering = ['paper_id']                  # 在管理界面按照创建时间排序
 
 
-class UserAnswerSituation(models.Model):
+class UserChoiceAnswer(models.Model):
     """
-    用户答题情况
+    用户选择题答案
+    user_answer = {
+        1 -> A
+        2 -> B
+        2 -> C
+        4 -> D
+    }
     """
     paper_id = models.IntegerField(verbose_name="试卷编号")
     uid = models.IntegerField(verbose_name="用户编号")
-    correct_choice_problem_amount = models.IntegerField(verbose_name="用户答对的选择题数", default=0)
-    correct_judge_problem_amount = models.IntegerField(verbose_name="用户答对的判断题数", default=0)
-    fill_blank_problem_scores = models.FloatField(verbose_name="用户填空题总得分", default=0)
-    QA_problem_scores = models.FloatField(verbose_name="用户问答题总得分", default=0)
-    operate_problem_scores = models.FloatField(verbose_name="用户操作题总得分", default=0)
+    problem_id = models.IntegerField(verbose_name="题目编号")
+    user_answer = models.IntegerField(verbose_name="用户答案")
+    scores = models.IntegerField(verbose_name="得分", default=0)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
-        return f"{self.paper_id}-{self.uid}-ans_situation"
+        return f"{self.paper_id}-{self.uid}-{self.problem_id}-answer"
 
     class Meta:
-        verbose_name_plural = '用户答题与得分情况'# 在管理界面中表的名字
-        db_table = 'User_Answer_Situation'      # 在MySQL中表的名字
-        ordering = ['last_updated_time']        # 在管理界面按照创建时间排序
+        verbose_name_plural = '用户选择题答案'          # 在管理界面中表的名字
+        db_table = 'User_Choice_Answer'                # 在MySQL中表的名字
+        ordering = ['paper_id', 'last_updated_time']   # 在管理界面按照创建时间排序
+
+
+class UserJudgeAnswer(models.Model):
+    """
+    用户判断题答案
+    """
+    paper_id = models.IntegerField(verbose_name="试卷编号")
+    uid = models.IntegerField(verbose_name="用户编号")
+    problem_id = models.IntegerField(verbose_name="题目编号")
+    user_answer = models.BooleanField(verbose_name="用户答案")
+    scores = models.IntegerField(verbose_name="得分", default=0)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
+
+    def __str__(self):
+        return f"{self.paper_id}-{self.uid}-{self.problem_id}-answer"
+
+    class Meta:
+        verbose_name_plural = '用户判断题答案'          # 在管理界面中表的名字
+        db_table = 'User_Judge_Answer'                 # 在MySQL中表的名字
+        ordering = ['paper_id', 'last_updated_time']   # 在管理界面按照创建时间排序
+
+
+class UserTextAnswer(models.Model):
+    """
+    用户非选择判断题的答案
+    """
+    paper_id = models.IntegerField(verbose_name="试卷编号")
+    uid = models.IntegerField(verbose_name="用户编号")
+    problem_id = models.IntegerField(verbose_name="题目编号")
+    problem_type = models.CharField(verbose_name="题目类型", max_length=50)
+    user_answer = models.TextField(verbose_name="用户答案")
+    scores = models.IntegerField(verbose_name="得分", default=0)
+    last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
+
+    def __str__(self):
+        return f"{self.paper_id}-{self.uid}-{self.problem_id}-answer"
+
+    class Meta:
+        verbose_name_plural = '用户非选择判断题答案'     # 在管理界面中表的名字
+        db_table = 'User_Text_Answer'                  # 在MySQL中表的名字
+        ordering = ['paper_id', 'last_updated_time']   # 在管理界面按照创建时间排序
 
 
 class TeacherStudent(models.Model):

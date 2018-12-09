@@ -390,26 +390,6 @@ class PaperUserAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(UserAnswerSituation)
-class UserAnswerSituationAdmin(admin.ModelAdmin):
-
-    list_display = ['paper_id', 'uid', 'correct_choice_problem_amount',
-                    'correct_choice_problem_amount',
-                    'fill_blank_problem_scores',
-                    'QA_problem_scores', 'operate_problem_scores',
-                    'last_updated_time']                            # 显示在管理界面的列
-    list_filter = ['paper_id']                                      # 数据过滤字段
-    search_fields = ['paper_id']                                    # 数据搜索字段
-    list_per_page = 20
-
-    # 添加，修改数据项时有分栏目的效果
-    fieldsets = [
-        ("试卷与用户的对应关系", {"fields": ['paper_id', 'uid']}),
-        ("用户答题情况", {"fields": ['correct_choice_problem_amount', 'correct_judge_problem_amount',
-                               'fill_blank_problem_scores', 'QA_problem_scores', 'operate_problem_scores']})
-    ]
-
-
 @admin.register(TeacherStudent)
 class TeacherStudentAdmin(admin.ModelAdmin):
 
