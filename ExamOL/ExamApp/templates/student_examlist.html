@@ -26,12 +26,13 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
             <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="#"><img src="{% static 'others/images/logo.png' %}" class="logo" alt=""></a>
+            <a class="navbar-brand" href="{% url 'ExamApp:老师主页' user.username 'all' %}">
+                <img src="{% static 'others/images/logo.png' %}" class="logo" alt="">
+            </a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
-              <li><a href="#">主页</a></li>
-			  <li><a href="./student_exam.html">考试</a></li>
+              <li><a href="{% url 'ExamApp:学生主页' user.username %}">主页</a></li>
               <li><a href="./showgrade.html">成绩分析</a></li>
             </ul>
           </div>
@@ -54,7 +55,11 @@
 <h5>待考试</h5>
     <ul class="">
         {% for paper in unfinished_paper_list %}
-            <li><a href="#">{{ paper.paper_name }}</a></li>
+            <li>
+                <a href="{% url 'ExamApp:考试页面' user.username paper.paper_id %}">
+                    {{ paper.paper_name }}
+                </a>
+            </li>
         {% endfor %}
     </ul>
 </div>
