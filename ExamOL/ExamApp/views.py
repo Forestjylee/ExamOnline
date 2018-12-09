@@ -1,10 +1,9 @@
-from django.http import HttpResponse
-from django.shortcuts import redirect, render_to_response, get_object_or_404, get_list_or_404, render
+from django.shortcuts import redirect, render_to_response, get_object_or_404, render
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .app_helper import views_helper
-from .models import User
+from .models import User, Paper
 
 
 # Create your views here.
@@ -69,7 +68,7 @@ def page_not_found(request):
 
 @login_required
 @csrf_exempt
-def commit_bug(request, username):
+def commit_bug(request, username: str):
     """
     提交bug页面
     :param request:
@@ -85,7 +84,7 @@ def commit_bug(request, username):
 
 
 @login_required
-def student_home_page(request, username):
+def student_home_page(request, username: str):
     """
     学生主页
     :param request
@@ -101,6 +100,42 @@ def student_home_page(request, username):
             'finished_paper_list': finished_paper_list,
             'unfinished_paper_list': unfinished_paper_list,
         })
+
+
+@login_required
+def take_exam(request, username: str, paper_id: str):
+    """
+    学生考试页面
+    :param request:
+    :param username: 学生的学号
+    :param paper_id: 试卷的id
+    """
+    user = get_object_or_404(User, username=username)
+    paper = get_object_or_404(Paper, paper_id=paper_id)
+    if request.method == 'POST':
+        return render_to_response(
+            'student_exam.html',
+            {
+                'user': user,
+                'paper': paper,
+                'result': True,
+            }
+        )
+    else:
+        raw_exam_problems = views_helper.get_exam_problems(user, paper)
+        exam_problems = views_helper.add_index_to_problems(raw_exam_problems)
+        return render_to_response(
+            'student_exam.html',
+            {
+                'user': user,
+                'paper': paper,
+                'choice_problems': exam_problems[0],
+                'judge_problems': exam_problems[1],
+                'fillblank_problems': exam_problems[2],
+                'QA_problems': exam_problems[3],
+                'operate_problems': exam_problems[4],
+            }
+        )
 
 
 @login_required

@@ -7,9 +7,9 @@ Created by Junyi.
 """
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.contrib.auth import authenticate
-from ..models import (User, Paper, PaperUser, TeacherStudent, TeacherClass,
-                      ChoiceProblem, JudgeProblem, FillBlankProblem,
-                      QAProblem, OperateProblem)
+from ..models import (User, Paper, PaperUser, PaperProblem, TeacherStudent,
+                      TeacherClass, ChoiceProblem, JudgeProblem,
+                      FillBlankProblem, QAProblem, OperateProblem)
 from .create_paper_helper import (check_paper_info, select_problems, create_a_new_paper_in_db,
                                   save_to_paper_problems_db, save_to_paper_user_db)
 
@@ -208,3 +208,53 @@ def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
         return True
     except:
         return False
+
+
+def get_exam_problems(user: User, paper: Paper) -> list:
+    """
+    1.检查用户是否在用户试卷关系表中
+    2.根据用户id和试卷id获取题目列表
+    :param user: User模型对象
+    :param paper: Paper模型对象
+    :return: 题目列表 = [
+        [选择题列表],
+        [判断题列表],
+        [填空题列表],
+        [问答题列表],
+        [实际操作题列表],
+    ]
+    """
+    choice_problems = []
+    judge_problems = []
+    fillblank_problems = []
+    QA_problems = []
+    operate_problems = []
+    get_object_or_404(PaperUser, paper_id=paper.paper_id, uid=user.uid)
+    mix_problems = PaperProblem.objects.filter(paper_id=paper.paper_id)
+    for problem in mix_problems:
+        if problem.problem_type == '选择题':
+            choice_problems.append(get_object_or_404(ChoiceProblem, pk=problem.problem_id))
+        elif problem.problem_type == '判断题':
+            judge_problems.append(get_object_or_404(JudgeProblem, pk=problem.problem_id))
+        elif problem.problem_type == '填空题':
+            fillblank_problems.append(get_object_or_404(FillBlankProblem, pk=problem.problem_id))
+        elif problem.problem_type == '问答题':
+            QA_problems.append(get_object_or_404(QAProblem, pk=problem.problem_id))
+        elif problem.problem_type == '实际操作题':
+            operate_problems.append(get_object_or_404(OperateProblem, pk=problem.problem_id))
+    return [choice_problems, judge_problems, fillblank_problems, QA_problems, operate_problems]
+
+
+def add_index_to_problems(raw_problems: list) -> list:
+    """
+    为每道题目添加临时序号
+    方便考试时学生能够快速定位试题
+    :param raw_problems: 未添加序号的问题列表(格式为get_exam_problems的返回值)
+    :return: 添加临时序号之后的列表
+    """
+    index = 0
+    for each_kind_of_problems in raw_problems:
+        for each_problem in each_kind_of_problems:
+            index += 1
+            each_problem.temp_index = index
+    return raw_problems
