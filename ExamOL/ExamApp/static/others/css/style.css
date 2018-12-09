@@ -1170,7 +1170,7 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content.bg .col-menu{
 	border-radius:4px;
 	background:#fff;
 	padding:6px 12px;
-	font-size:14px;
+	font-size:16px;
 }
 .callus textarea{
 	min-height:160px;
@@ -4087,4 +4087,11 @@ margin:0 20%;
 	background:#fff;
 	padding:6px 9px;
 	font-size:14px;
+}
+.target-fix{
+    position: relative;
+    top: -44px;
+    display: block;
+    height: 0;
+    overflow: hidden;
 }
