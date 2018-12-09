@@ -12,6 +12,7 @@ from ..models import (User, Paper, PaperUser, PaperProblem, TeacherStudent,
                       FillBlankProblem, QAProblem, OperateProblem)
 from .create_paper_helper import (check_paper_info, select_problems, create_a_new_paper_in_db,
                                   save_to_paper_problems_db, save_to_paper_user_db)
+from .save_answers_helper import update_paper_user, save_problem_answers
 
 
 def get_object_or_none(model, *args, **kwargs):
@@ -258,3 +259,20 @@ def add_index_to_problems(raw_problems: list) -> list:
             index += 1
             each_problem.temp_index = index
     return raw_problems
+
+
+def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
+    """
+    将用户的回答保存到PaperUser,UserChoiceAnswer,UserJudgeAnswer,UserTextAnswer
+    :param user: 用户对象
+    :param paper: 试卷对象
+    :param user_answers: 用户答案的字典
+    :return: 是否保存成功
+    """
+    # try:
+    update_paper_user(paper_id=paper.paper_id, uid=user.uid)
+    paper_problems = get_exam_problems(user=user, paper=paper)
+    save_problem_answers(paper_problems=paper_problems, user_answers=user_answers)
+    return True
+    # except:
+    #     return False

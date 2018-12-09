@@ -59,14 +59,14 @@
                             <p style="font-size: 18px;color: #0f0f0f">
                                 {{ choice_problem.temp_index }}.&nbsp;{{ choice_problem.content }}
                             </p>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="A" />
-                            <label for="A"></label>&nbsp;A.&nbsp;{{ choice_problem.option_A }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="B" />
-                            <label for="B"></label>&nbsp;B.&nbsp;{{ choice_problem.option_B }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="C" />
-                            <label for="C"></label>&nbsp;C.&nbsp;{{ choice_problem.option_C }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="D" />
-                            <label for="D"></label>&nbsp;D.&nbsp;{{ choice_problem.option_D }}<br>
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_A" />
+                            <label for="{{ choice_problem.id }}_A"></label>&nbsp;A.&nbsp;{{ choice_problem.option_A }}<br>
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_B" />
+                            <label for="{{ choice_problem.id }}_B"></label>&nbsp;B.&nbsp;{{ choice_problem.option_B }}<br>
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_C" />
+                            <label for="{{ choice_problem.id }}_C"></label>&nbsp;C.&nbsp;{{ choice_problem.option_C }}<br>
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_D" />
+                            <label for="{{ choice_problem.id }}_D"></label>&nbsp;D.&nbsp;{{ choice_problem.option_D }}<br>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -82,10 +82,10 @@
                                 <p style="font-size: 18px;color: #0f0f0f">
                                     {{ judge_problem.temp_index }}.&nbsp;{{ judge_problem.content }}
                                 </p>
-                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="对" />
-                                <label for="对"></label>&nbsp;对<br>
-                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="错" />
-                                <label for="错"></label>&nbsp;错<br>
+                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_对" />
+                                <label for="{{ judge_problem.id }}_对"></label>&nbsp;对<br>
+                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_错" />
+                                <label for="{{ judge_problem.id }}_错"></label>&nbsp;错<br>
                             </div>
                         {% endfor %}
                 {% endif %}
@@ -157,7 +157,7 @@
                 <div class="problem">
                     选择题
                 </div>
-                <div style="margin-left: 5%">
+                <div style="margin-left: 5%;margin-right: 5%">
                     {% for choice_problem in choice_problems %}
                         <li style="margin-top: 3%">
                             <a href="#index_{{ choice_problem.temp_index }}">{{ choice_problem.temp_index }}</a>
@@ -171,7 +171,7 @@
                 <div class="problem">
                     判断题
                 </div>
-                <div style="margin-left: 5%">
+                <div style="margin-left: 5%;margin-right: 5%">
                     {% for judge_problem in judge_problems %}
                         <li style="margin-top: 3%">
                             <a href="#index_{{ judge_problem.temp_index }}">{{ judge_problem.temp_index }}</a>
@@ -185,7 +185,7 @@
                 <div class="problem">
                     填空题
                 </div>
-                <div style="margin-left: 5%">
+                <div style="margin-left: 5%;margin-right: 5%">
                     {% for fillblank_problem in fillblank_problems %}
                         <li style="margin-top: 3%">
                             <a href="#index_{{ fillblank_problem.temp_index }}">{{ fillblank_problem.temp_index }}</a>
@@ -199,7 +199,7 @@
                 <div class="problem">
                     问答题
                 </div>
-                <div style="margin-left: 5%">
+                <div style="margin-left: 5%;margin-right: 5%">
                     {% for QA_problem in QA_problems %}
                         <li style="margin-top: 3%">
                             <a href="#index_{{ QA_problem.temp_index }}">{{ QA_problem.temp_index }}</a>
@@ -213,7 +213,7 @@
                 <div class="problem">
                     实际操作题
                 </div>
-                <div style="margin-left: 5%">
+                <div style="margin-left: 5%;margin-right: 5%">
                     {% for operate_problem in operate_problems %}
                         <li style="margin-top: 3%">
                             <a href="#index_{{ operate_problem.temp_index }}">{{ operate_problem.temp_index }}</a>
@@ -251,6 +251,7 @@
 <script>
     {% if result is True %}
         alert("提交试卷成功!");
+        window.location.href="{% url 'ExamApp:学生主页' user.username %}";
     {% elif result is False %}
         alert("提交试卷失败!");
     {% endif %}
