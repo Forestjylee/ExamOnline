@@ -92,7 +92,7 @@ def student_home_page(request, username: str):
     :param username: 用户的学号
     :return:
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=False)
     finished_paper_list, unfinished_paper_list = views_helper.get_user_do_and_undo_paper_list(user.uid)
     return render_to_response(
         'student_examlist.html',
@@ -149,7 +149,7 @@ def teacher_home_page(request, username: str, class_name: str):
     :param username: 老师的工号
     :param class_name: 展示信息班级名
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=True)
     class_list = views_helper.get_class_list(teacher_id=user.uid)
     student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
     return render_to_response(
@@ -216,6 +216,7 @@ def create_paper(request, username: str):
 
 
 @login_required
+@csrf_exempt
 def mark_scores(request, username: str, paper_id: str, student_id: str):
     """
     老师评分页面
@@ -225,10 +226,18 @@ def mark_scores(request, username: str, paper_id: str, student_id: str):
     :param student_id: 学生的id
     """
     user = get_object_or_404(User, username=username)
+    paper = views_helper.get_paper(paper_id=paper_id)
     if request.method == 'POST':
-        pass
+        result = views_helper.save_user_scores(paper_id, student_id, request.POST)
+        return render_to_response(
+            'T_grade.html',
+            {
+                'user': user,
+                'paper': paper,
+                'result': result,
+            }
+        )
     else:
-        paper = views_helper.get_paper(paper_id=paper_id)
         papers = views_helper.get_paper_list(user=user)
         students = views_helper.get_paper_user_list(paper_id=paper_id)
         fillblank_answers, QA_answers, operate_answers = views_helper.get_user_answers(paper_id, student_id)
