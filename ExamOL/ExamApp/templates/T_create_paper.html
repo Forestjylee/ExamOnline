@@ -36,7 +36,7 @@
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
-              <li><a href="{% url 'ExamApp:评分' user.username %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
               <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
             </ul>
           </div>
@@ -50,7 +50,7 @@
 <!--Partners-->
 <section id="logos">  	
 <div class="tp_overlay">
-  <form class="callus" method="post">
+  <form class="callus" method="post" onsubmit="return checkall()">
       {% csrf_token %}
       <h2 class="text-uppercase t_white bottom20 text-center">组卷</h2>
 
@@ -80,7 +80,7 @@
             <h3>考试开始时间(年/月/日/时/分)</h3>
              <div class="col-sm-2">
                  <div class="single-query bottom15">
-                    <input id="start_time_date" class="keyword-input" type="date" name="start_date" onblur="check_start_date(this.value);">
+                    <input id="start_time_date" class="keyword-input" type="date" name="start_date">
                  </div>
              </div>
              <div class="col-sm-2">
@@ -99,7 +99,7 @@
             <h3>考试结束时间(年/月/日/时/分)</h3>
              <div class="col-sm-2">
                 <div class="single-query bottom15">
-                    <input id="end_time_date" class="keyword-input" type="date" name="end_date" onblur="check_end_date(this.value);">
+                    <input id="end_time_date" class="keyword-input" type="date" name="end_date">
                 </div>
              </div>
              <div class="col-sm-2">
@@ -179,14 +179,16 @@
     {% endif %}
 </script>
 <script>
-    function check_start_date(str){
-        if(str==''){
-            alert("考试开始日期不能为空！");
+    function check_all(){
+        var start_date = document.getElementById("start_time_date");
+        var end_date = document.getElementById("end_time_date");
+        if(start_date == ""){
+            alert("考试开始日期不能为空!");
+            return false;
         }
-    }
-    function check_end_date(str){
-        if(str==''){
-            alert("考试结束日期不能为空！");
+        if(end_date == ""){
+            alert("考试结束日期不能为空!");
+            return false;
         }
     }
 </script>

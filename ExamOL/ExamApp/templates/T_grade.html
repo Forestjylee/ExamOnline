@@ -35,10 +35,13 @@
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
-              <li><a href="{% url 'ExamApp:评分' user.username %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
               <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
             </ul>
-          </div></div> </div> </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
 <!--Header Ends-->
@@ -47,70 +50,124 @@
 <div style="display:flex;">	
 <div class="grade_left">
   <form class="callus">
-  <h2 class="text-uppercase t_white bottom20 text-center">评分</h2>
-    <h3>试卷名字</h3>
-    <div class="row">
-      <div class="problem">
-	  试卷信息
-        </div> </div>
-	<h3>批改内容</h3>
+      <h2 class="text-uppercase t_white bottom20 text-center">
+          {% if paper %}
+              {{ paper.paper_name }}
+          {% else %}
+              请选择您要批阅的试卷 ->
+          {% endif %}
+      </h2>
+
 	
-	<ul>
+    <ul>
+        <h3 style="color: white;font-weight: bolder;margin-bottom: 3%">填空题:</h3>
+        {% if fillblank_answers %}
+            {% for fillblank_answer in fillblank_answers %}
+                <li>
+                    <div class="row">
+                        <div class="problem">
+                            <strong>题目:</strong>&nbsp;&nbsp;{{ fillblank_answer.content }}
+                        </div>
+                        <div class="student_answer">
+                            <strong>学生回答:</strong>&nbsp;&nbsp;{{ fillblank_answer.user_answer }}
+                        </div>
+                        <div class="reference_answer">
+                            <strong>参考答案:</strong>&nbsp;&nbsp;{{ fillblank_answer.standard_answer }}
+                        </div>
+                        <div class="problem_grade">
+                            <input id="fillblank" type="number" name="{{ fillblank_answer.problem_id }}_{{ fillblank_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                        </div>
+                    </div>
+                </li>
+                <hr>
+            {% endfor %}
+        {% endif %}
+
+        <h3 style="color: white;font-weight: bolder;margin-bottom: 3%">问答题:</h3>
+        {% if QA_answers %}
+            {% for QA_answer in QA_answers %}
+                <li>
+                    <div class="row">
+                        <div class="problem">
+                            <strong>题目:</strong>&nbsp;&nbsp;{{ QA_answer.content }}
+                        </div>
+                        <div class="student_answer">
+                            <strong>学生回答:</strong>&nbsp;&nbsp;{{ QA_answer.user_answer }}
+                        </div>
+                        <div class="reference_answer">
+                            <strong>参考答案:&nbsp;&nbsp;</strong>{{ QA_answer.standard_answer }}
+                        </div>
+                        <div class="problem_grade">
+                            <input id="QAProblem" type="number" name="{{ QA_answer.problem_id }}_{{ QA_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                        </div>
+                    </div>
+                </li>
+                <hr>
+            {% endfor %}
+        {% endif %}
+
+        <h3 style="color: white;font-weight: bolder;margin-bottom: 3%">实际操作题:</h3>
+        {% if operate_answers %}
+            {% for operate_answer in operate_answers %}
+                <li>
+                    <div class="row">
+                        <div class="problem">
+                            <strong>题目:&nbsp;&nbsp;</strong>{{ operate_answer.content }}
+                        </div>
+                        <div class="student_answer">
+                            <strong>学生回答:&nbsp;&nbsp;</strong>{{ operate_answer.user_answer }}
+                        </div>
+                        <div class="reference_answer">
+                            <strong>参考答案:&nbsp;&nbsp;</strong>{{ operate_answer.standard_answer }}
+                        </div>
+                        <div class="problem_grade">
+                            <input id="OperateProblem" type="number" name="{{ operate_answer.problem_id }}_{{ operate_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                        </div>
+                    </div>
+                </li>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    </ul>
 	
-	<li><div class="row"><div class="problem">
-	题目
-	</div>
-	<div class="student_answer">
-	学生答案
-	</div>
-	<div class="reference_answer">
-	参考答案
-	</div>
-      <div class="problem_grade"> 
-          <input id="QAProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="分数"> </div>
-      </div></li>
-	
-	<li><div class="row"><div class="problem">
-	题目
-	i还是被动vibe我vu
-	为uv额我v弄二五iv和v别uv五恶化v额外v和欧文iv哦i我v哦二五ivv二五v额外iv那位uvine我uv
-	为uv额我v弄二五iv和v别uv五恶化v额外v和欧文iv哦i我v哦二五ivv二五v额外iv那位uvine我uv
-	为uv额我v弄二五iv和v别uv五恶化v额外v和欧文iv哦i我v哦二五ivv二五v额外iv那位uvine我uv
-	</div>
-	<div class="student_answer">
-	学生答案
-	</div>
-	<div class="reference_answer">
-	参考答案
-	</div>
-      <div class="problem_grade"> 
-          <input id="QAProblem_simple" type="number"  oninput="value=value.replace(/[^\d]/g,'')" class="keyword-input" placeholder="分数"> </div>
-      </div></li>
-	
-	
-	</ul>
-	
-	
-	
-	
+
     <div class="row">
       <div class="text-right">
-        <button type="submit" class="border_radius btn-yellow text-uppercase">提交成绩</button>
+        <button type="submit" class="border_radius btn-yellow text-uppercase" name="commit_result">提交成绩</button>
       </div>
     </div>
-  </form></div>		
-
-<div class="grade_right">
-<h4>学生试卷</h4>
-<ul class="">
-              <li><a href="#.">201630601111 王小明</a></li>
-              <li><a href="#.">201630601111 王小明</a></li>
-              <li><a href="#.">201630601111 王小明</a></li>
-              <li><a href="#.">201630601111 王小明</a></li>
-              <li><a href="#.">201630601111 王小明</a></li>
-            </ul>
-
+  </form>
 </div>
+
+{% if students %}
+    <div class="grade_right">
+        <h4>学生试卷</h4>
+        <ul class="">
+            {% for student in students %}
+                <li style="margin-bottom: 3%;font-family: Consolas">
+                  <a href="{% url 'ExamApp:评分' user.username paper.paper_id student.uid %}">
+                      {{ student.real_name }}&nbsp;{{ student.username }}
+                  </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+{% endif %}
+
+{% if papers %}
+    <div class="grade_right">
+        <h4>试卷列表</h4>
+        <ul class="">
+            {% for paper in papers %}
+                <li style="margin-bottom: 3%;font-family: Consolas">
+                  <a href="{% url 'ExamApp:评分' user.username paper.paper_id 'all' %}">{{ paper.paper_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+{% endif %}
             
 </div>
 <!--Partners Ends-->

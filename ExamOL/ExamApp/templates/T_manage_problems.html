@@ -33,7 +33,7 @@
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
-              <li><a href="{% url 'ExamApp:评分' user.username %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
               <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
             </ul>
           </div>
