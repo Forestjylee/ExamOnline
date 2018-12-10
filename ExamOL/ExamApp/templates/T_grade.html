@@ -49,7 +49,7 @@
 <!--Partners-->
 <div style="display:flex;">	
 <div class="grade_left">
-  <form class="callus">
+  <form class="callus" method="post">
       <h2 class="text-uppercase t_white bottom20 text-center">
           {% if paper %}
               {{ paper.paper_name }}
@@ -69,10 +69,10 @@
                             <strong>题目:</strong>&nbsp;&nbsp;{{ fillblank_answer.content }}
                         </div>
                         <div class="student_answer">
-                            <strong>学生回答:</strong>&nbsp;&nbsp;{{ fillblank_answer.user_answer }}
+                            <strong>学生回答:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fillblank_answer.user_answer }}
                         </div>
                         <div class="reference_answer">
-                            <strong>参考答案:</strong>&nbsp;&nbsp;{{ fillblank_answer.standard_answer }}
+                            <strong>参考答案:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fillblank_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
                             <input id="fillblank" type="number" name="{{ fillblank_answer.problem_id }}_{{ fillblank_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
@@ -92,10 +92,10 @@
                             <strong>题目:</strong>&nbsp;&nbsp;{{ QA_answer.content }}
                         </div>
                         <div class="student_answer">
-                            <strong>学生回答:</strong>&nbsp;&nbsp;{{ QA_answer.user_answer }}
+                            <strong>学生回答:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ QA_answer.user_answer }}
                         </div>
                         <div class="reference_answer">
-                            <strong>参考答案:&nbsp;&nbsp;</strong>{{ QA_answer.standard_answer }}
+                            <strong>参考答案:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{ QA_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
                             <input id="QAProblem" type="number" name="{{ QA_answer.problem_id }}_{{ QA_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
@@ -115,10 +115,10 @@
                             <strong>题目:&nbsp;&nbsp;</strong>{{ operate_answer.content }}
                         </div>
                         <div class="student_answer">
-                            <strong>学生回答:&nbsp;&nbsp;</strong>{{ operate_answer.user_answer }}
+                            <strong>学生回答:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{ operate_answer.user_answer }}
                         </div>
                         <div class="reference_answer">
-                            <strong>参考答案:&nbsp;&nbsp;</strong>{{ operate_answer.standard_answer }}
+                            <strong>参考答案:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{ operate_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
                             <input id="OperateProblem" type="number" name="{{ operate_answer.problem_id }}_{{ operate_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
@@ -133,7 +133,7 @@
 
     <div class="row">
       <div class="text-right">
-        <button type="submit" class="border_radius btn-yellow text-uppercase" name="commit_result">提交成绩</button>
+        <button type="submit" class="border_radius btn-yellow text-uppercase">提交成绩</button>
       </div>
     </div>
   </form>
@@ -193,6 +193,14 @@
 
 
 
+<script>
+    {% if result is True %}
+        alert("提交试卷成功!");
+        window.location.href="{% url 'ExamApp:评分' user.username paper.paper_id 'all' %}";
+    {% elif result is False %}
+        alert("提交试卷失败!");
+    {% endif %}
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>
