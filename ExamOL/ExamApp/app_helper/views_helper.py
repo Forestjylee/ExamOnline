@@ -292,6 +292,7 @@ def get_user_answers(paper_id: str, user_id: str) -> list:
             yield []
 
 
+@deal_exceptions(return_when_exceptions=False)
 def save_user_scores(paper_id: str, user_id: str, scores_info: dict) -> bool:
     """
     将老师的评分信息保存到数据库
@@ -300,7 +301,6 @@ def save_user_scores(paper_id: str, user_id: str, scores_info: dict) -> bool:
     :param scores_info: 老师评分信息
     :return: 是否保存成功
     """
-    # try:
     for key, value in scores_info.items():
         problem_id, problem_type = key.split('_')
         UTA = UserTextAnswer.objects.get(
@@ -312,8 +312,6 @@ def save_user_scores(paper_id: str, user_id: str, scores_info: dict) -> bool:
         UTA.scores = value
         UTA.save()
     return True
-    # except:
-    #     return False
 
 
 def add_index_to_problems(raw_problems: list) -> list:
