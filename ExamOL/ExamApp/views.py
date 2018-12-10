@@ -193,10 +193,7 @@ def create_paper(request, username: str):
     user = get_object_or_404(User, username=username)
     problem_names = ['选择题', '判断题', '填空题', '问答题', '实际操作题']
     if request.method == 'POST':
-        if views_helper.use_info_to_create_paper(teacher_id=user.uid, paper_info=request.POST):
-            result = True
-        else:
-            result = False
+        result = views_helper.use_info_to_create_paper(teacher_id=user.uid, paper_info=request.POST)
         return render_to_response(
             'T_create_paper.html',
             {
