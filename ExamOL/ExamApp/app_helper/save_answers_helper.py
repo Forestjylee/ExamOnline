@@ -47,10 +47,10 @@ def save_problem_answers(paper_id: int, user_id:int, paper_problems: list, user_
     _save_text_answer(paper_id, user_id, 'fillblank', answers=_get_a_kind_of_problem_answers(
         fillblank_problems, 'fillblank', user_answers
     ))
-    _save_text_answer(paper_id, user_id, 'fillblank', answers=_get_a_kind_of_problem_answers(
+    _save_text_answer(paper_id, user_id, 'QA', answers=_get_a_kind_of_problem_answers(
         QA_problems, 'QA', user_answers
     ))
-    _save_text_answer(paper_id, user_id, 'fillblank', answers=_get_a_kind_of_problem_answers(
+    _save_text_answer(paper_id, user_id, 'operate', answers=_get_a_kind_of_problem_answers(
         operate_problems, 'operate', user_answers
     ))
 
