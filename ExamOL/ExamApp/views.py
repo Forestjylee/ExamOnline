@@ -103,6 +103,7 @@ def student_home_page(request, username: str):
 
 
 @login_required
+@csrf_exempt
 def take_exam(request, username: str, paper_id: str):
     """
     学生考试页面
@@ -113,12 +114,13 @@ def take_exam(request, username: str, paper_id: str):
     user = get_object_or_404(User, username=username)
     paper = get_object_or_404(Paper, paper_id=paper_id)
     if request.method == 'POST':
+        result = views_helper.save_user_answers(user, paper, request.POST)
         return render_to_response(
             'student_exam.html',
             {
                 'user': user,
                 'paper': paper,
-                'result': True,
+                'result': result,
             }
         )
     else:
