@@ -269,10 +269,15 @@ def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     :param user_answers: 用户答案的字典
     :return: 是否保存成功
     """
-    # try:
-    update_paper_user(paper_id=paper.paper_id, uid=user.uid)
-    paper_problems = get_exam_problems(user=user, paper=paper)
-    save_problem_answers(paper_problems=paper_problems, user_answers=user_answers)
-    return True
-    # except:
-    #     return False
+    try:
+        update_paper_user(paper_id=paper.paper_id, uid=user.uid)
+        paper_problems = get_exam_problems(user=user, paper=paper)
+        save_problem_answers(
+            paper_id=paper.paper_id,
+            user_id=user.uid,
+            paper_problems=paper_problems,
+            user_answers=user_answers
+        )
+        return True
+    except:
+        return False
