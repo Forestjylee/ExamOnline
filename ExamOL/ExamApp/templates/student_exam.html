@@ -56,16 +56,16 @@
                     </div>
                     {% for choice_problem in choice_problems %}
                         <div class="student_answer" id="index_{{ choice_problem.temp_index }}">
-                            <p style="font-size: 18px;color: #0f0f0f">
+                            <p style="font-size: 18px;color: #0f0f0f;word-wrap: break-word;word-break: break-all;">
                                 {{ choice_problem.temp_index }}.&nbsp;{{ choice_problem.content }}
                             </p>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_A" />
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_A" value="1" />
                             <label for="{{ choice_problem.id }}_A"></label>&nbsp;A.&nbsp;{{ choice_problem.option_A }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_B" />
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_B" value="2" />
                             <label for="{{ choice_problem.id }}_B"></label>&nbsp;B.&nbsp;{{ choice_problem.option_B }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_C" />
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_C" value="3" />
                             <label for="{{ choice_problem.id }}_C"></label>&nbsp;C.&nbsp;{{ choice_problem.option_C }}<br>
-                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_D" />
+                            <input type="radio" name="{{ choice_problem.id }}_choice" class="gcs-radio" id="{{ choice_problem.id }}_D" value="4" />
                             <label for="{{ choice_problem.id }}_D"></label>&nbsp;D.&nbsp;{{ choice_problem.option_D }}<br>
                         </div>
                     {% endfor %}
@@ -79,12 +79,12 @@
                     </div>
                         {% for judge_problem in judge_problems %}
                             <div class="student_answer" id="index_{{ judge_problem.temp_index }}">
-                                <p style="font-size: 18px;color: #0f0f0f">
+                                <p style="font-size: 18px;color: #0f0f0f;word-wrap: break-word;word-break: break-all;">
                                     {{ judge_problem.temp_index }}.&nbsp;{{ judge_problem.content }}
                                 </p>
-                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_对" />
+                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_对" value="True" />
                                 <label for="{{ judge_problem.id }}_对"></label>&nbsp;对<br>
-                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_错" />
+                                <input type="radio" name="{{ judge_problem.id }}_judge" class="gcs-radio" id="{{ judge_problem.id }}_错" value="False" />
                                 <label for="{{ judge_problem.id }}_错"></label>&nbsp;错<br>
                             </div>
                         {% endfor %}
@@ -98,7 +98,7 @@
                     </div>
                     {% for fillblank_problem in fillblank_problems %}
                         <div class="student_answer" id="index_{{ fillblank_problem.temp_index }}">
-                            <p style="font-size: 18px;color: #0f0f0f">
+                            <p style="font-size: 18px;color: #0f0f0f;word-wrap: break-word;word-break: break-all;">
                                 {{ fillblank_problem.temp_index }}.&nbsp;{{ fillblank_problem.content }}
                             </p>
                             <input type="text" class="keyword-input" style="width: 100%" name="{{ fillblank_problem.id }}_fillblank">
@@ -114,7 +114,7 @@
                     </div>
                     {% for QA_problem in QA_problems %}
                         <div class="student_answer" id="index_{{ QA_problem.temp_index }}">
-                            <p style="font-size: 18px;color: #0f0f0f">
+                            <p style="font-size: 18px;color: #0f0f0f;word-wrap: break-word;word-break: break-all;">
                                 {{ QA_problem.temp_index }}.&nbsp;{{ QA_problem.content }}
                             </p>
                             <textarea class="keyword-input" style="width: 100%" cols="80" rows="8" name="{{ QA_problem.id }}_QA"></textarea>
@@ -130,7 +130,7 @@
                     </div>
                     {% for operate_problem in operate_problems %}
                         <div class="student_answer" id="index_{{ operate_problem.temp_index }}">
-                            <p style="font-size: 18px;color: #0f0f0f">
+                            <p style="font-size: 18px;color: #0f0f0f;word-wrap: break-word;word-break: break-all;">
                                 {{ operate_problem.temp_index }}.&nbsp;{{ operate_problem.content }}
                             </p>
                             <textarea class="student_answer"  cols="80" rows="8" name="{{ operate_problem.id }}_operate"></textarea>
