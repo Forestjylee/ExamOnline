@@ -5,7 +5,7 @@
 @time: 2018/11/6 22:06
 Created by Junyi.
 """
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
 from ..models import (User, Paper, PaperUser, PaperProblem, TeacherStudent,
                       TeacherClass, ChoiceProblem, JudgeProblem,
@@ -13,6 +13,7 @@ from ..models import (User, Paper, PaperUser, PaperProblem, TeacherStudent,
 from .create_paper_helper import (check_paper_info, select_problems, create_a_new_paper_in_db,
                                   save_to_paper_problems_db, save_to_paper_user_db)
 from .save_answers_helper import update_paper_user, save_problem_answers
+from .get_answers_helper import get_a_kind_of_problem_answers, get_problem_standard_answer
 
 
 def get_object_or_none(model, *args, **kwargs):
@@ -246,6 +247,53 @@ def get_exam_problems(user: User, paper: Paper) -> list:
     return [choice_problems, judge_problems, fillblank_problems, QA_problems, operate_problems]
 
 
+def get_paper_list(user: User) -> list:
+    """
+    在数据库中查找返回该老师管理的试卷列表
+    :param user: 老师对象
+    :return: 老师管理的试卷列表
+    """
+    return Paper.objects.filter(owner_id=user.uid)
+
+
+def get_paper_user_list(paper_id: str) -> list:
+    """
+    返回已完成该试卷的用户id列表
+    :param paper_id: 试卷id
+    :return: 使用该试卷的用户id列表
+    """
+    if paper_id != 'all':
+        user_list = []
+        paper_users = PaperUser.objects.filter(
+            paper_id=paper_id,
+            is_finished=True,
+            is_delete=False)
+        for paper_user in paper_users:
+            user_list.append(User.objects.get(uid=paper_user.uid))
+        return user_list
+    else:
+        return []
+
+
+def get_user_answers(paper_id: str, user_id: str) -> list:
+    """
+    根据学生id和试卷id获取答题情况
+    [[填空题]，[问答题]，[实际操作题]]
+    :param paper_id: 试卷id
+    :param user_id: 用户id
+    :return: [[填空题]，[问答题]，[实际操作题]]
+    """
+    if user_id != 'all':
+        for problem_type in ['fillblank', 'QA', 'operate']:
+            temp_answers = get_a_kind_of_problem_answers(paper_id, user_id, problem_type)
+            for answer in temp_answers:
+                answer.content, answer.standard_answer = get_problem_standard_answer(problem_type, answer.problem_id)
+            yield temp_answers
+    else:
+        for _ in range(3):
+            yield []
+
+
 def add_index_to_problems(raw_problems: list) -> list:
     """
     为每道题目添加临时序号
@@ -281,3 +329,15 @@ def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
         return True
     except:
         return False
+
+
+def get_paper(paper_id: str) -> Paper:
+    """
+    根据试卷id获取试卷对象
+    :param paper_id: 试卷id
+    :return: 试卷对象
+    """
+    try:
+        return get_object_or_404(Paper, paper_id=paper_id)
+    except ValueError:
+        return None
