@@ -16,6 +16,7 @@ def start_page(request):
     return redirect('ExamApp:登录')
 
 
+@csrf_exempt
 @views_helper.is_post_or_get(get_render_html='login.html')
 def user_login(request):
     """
@@ -215,20 +216,32 @@ def create_paper(request, username: str):
 
 
 @login_required
-def mark_scores(request, username: str):
+def mark_scores(request, username: str, paper_id: str, student_id: str):
     """
     老师评分页面
     :param request
     :param username: 老师的工号
+    :param paper_id: 试卷id
+    :param student_id: 学生的id
     """
     user = get_object_or_404(User, username=username)
     if request.method == 'POST':
         pass
     else:
+        paper = views_helper.get_paper(paper_id=paper_id)
+        papers = views_helper.get_paper_list(user=user)
+        students = views_helper.get_paper_user_list(paper_id=paper_id)
+        fillblank_answers, QA_answers, operate_answers = views_helper.get_user_answers(paper_id, student_id)
         return render_to_response(
             'T_grade.html',
             {
                 'user': user,
+                'paper': paper,
+                'papers': papers,
+                'students': students,
+                'fillblank_answers': [i for i in fillblank_answers],
+                'QA_answers': [i for i in QA_answers],
+                'operate_answers': [i for i in operate_answers],
             }
         )
 
