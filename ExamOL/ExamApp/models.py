@@ -258,7 +258,7 @@ class UserChoiceAnswer(models.Model):
     uid = models.IntegerField(verbose_name="用户编号")
     problem_id = models.IntegerField(verbose_name="题目编号")
     user_answer = models.IntegerField(verbose_name="用户答案")
-    scores = models.IntegerField(verbose_name="得分", default=0)
+    is_correct = models.BooleanField(verbose_name="回答是否正确", default=False)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
@@ -278,7 +278,7 @@ class UserJudgeAnswer(models.Model):
     uid = models.IntegerField(verbose_name="用户编号")
     problem_id = models.IntegerField(verbose_name="题目编号")
     user_answer = models.BooleanField(verbose_name="用户答案")
-    scores = models.IntegerField(verbose_name="得分", default=0)
+    is_correct = models.BooleanField(verbose_name="回答是否正确", default=False)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
