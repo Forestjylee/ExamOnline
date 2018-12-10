@@ -8,8 +8,8 @@ Created by Junyi.
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
 from ..models import (User, Paper, PaperUser, PaperProblem, TeacherStudent,
-                      TeacherClass, ChoiceProblem, JudgeProblem,
-                      FillBlankProblem, QAProblem, OperateProblem)
+                      TeacherClass, ChoiceProblem, JudgeProblem, FillBlankProblem,
+                      QAProblem, OperateProblem, UserTextAnswer)
 from .create_paper_helper import (check_paper_info, select_problems, create_a_new_paper_in_db,
                                   save_to_paper_problems_db, save_to_paper_user_db)
 from .save_answers_helper import update_paper_user, save_problem_answers
@@ -179,6 +179,7 @@ def get_problem_list(problem_type: str) -> tuple:
         return '选择题', ChoiceProblem.objects.all()
 
 
+@deal_exceptions(return_when_exceptions=False)
 def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
     """
     根据题目的数量信息和分值自动生成试卷
@@ -192,24 +193,21 @@ def use_info_to_create_paper(teacher_id: int, paper_info: dict) -> bool:
     :param paper_info: 试卷的各题目数量信息字典
     :return: (是否创建成功)True | False
     """
-    try:
-        checked_paper_info = check_paper_info(paper_info)
-        selected_problems = select_problems(checked_paper_info)
-        student_list = get_student_list(teacher_id, class_name='all')
-        new_paper_id = create_a_new_paper_in_db(
-            level=checked_paper_info['paper_level'],
-            paper_name=checked_paper_info['paper_name'],
-            choice_score=checked_paper_info['选择题_point'],
-            judge_score=checked_paper_info['判断题_point'],
-            start_time=checked_paper_info['start_datetime'],
-            end_time=checked_paper_info['end_datetime'],
-            owner_id=teacher_id,
-        )
-        save_to_paper_problems_db(paper_id=new_paper_id, selected_problems=selected_problems)
-        save_to_paper_user_db(paper_id=new_paper_id, user_list=student_list)
-        return True
-    except:
-        return False
+    checked_paper_info = check_paper_info(paper_info)
+    selected_problems = select_problems(checked_paper_info)
+    student_list = get_student_list(teacher_id, class_name='all')
+    new_paper_id = create_a_new_paper_in_db(
+        level=checked_paper_info['paper_level'],
+        paper_name=checked_paper_info['paper_name'],
+        choice_score=checked_paper_info['选择题_point'],
+        judge_score=checked_paper_info['判断题_point'],
+        start_time=checked_paper_info['start_datetime'],
+        end_time=checked_paper_info['end_datetime'],
+        owner_id=teacher_id,
+    )
+    save_to_paper_problems_db(paper_id=new_paper_id, selected_problems=selected_problems)
+    save_to_paper_user_db(paper_id=new_paper_id, user_list=student_list)
+    return True
 
 
 def get_exam_problems(user: User, paper: Paper) -> list:
@@ -294,6 +292,30 @@ def get_user_answers(paper_id: str, user_id: str) -> list:
             yield []
 
 
+def save_user_scores(paper_id: str, user_id: str, scores_info: dict) -> bool:
+    """
+    将老师的评分信息保存到数据库
+    :param paper_id: 试卷id
+    :param user_id: 用户id
+    :param scores_info: 老师评分信息
+    :return: 是否保存成功
+    """
+    # try:
+    for key, value in scores_info.items():
+        problem_id, problem_type = key.split('_')
+        UTA = UserTextAnswer.objects.get(
+            paper_id=paper_id,
+            uid=user_id,
+            problem_id=problem_id,
+            problem_type=problem_type,
+        )
+        UTA.scores = value
+        UTA.save()
+    return True
+    # except:
+    #     return False
+
+
 def add_index_to_problems(raw_problems: list) -> list:
     """
     为每道题目添加临时序号
@@ -309,6 +331,7 @@ def add_index_to_problems(raw_problems: list) -> list:
     return raw_problems
 
 
+@deal_exceptions(return_when_exceptions=False)
 def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     """
     将用户的回答保存到PaperUser,UserChoiceAnswer,UserJudgeAnswer,UserTextAnswer
@@ -317,18 +340,15 @@ def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     :param user_answers: 用户答案的字典
     :return: 是否保存成功
     """
-    try:
-        update_paper_user(paper_id=paper.paper_id, uid=user.uid)
-        paper_problems = get_exam_problems(user=user, paper=paper)
-        save_problem_answers(
-            paper_id=paper.paper_id,
-            user_id=user.uid,
-            paper_problems=paper_problems,
-            user_answers=user_answers
-        )
-        return True
-    except:
-        return False
+    update_paper_user(paper_id=paper.paper_id, uid=user.uid)
+    paper_problems = get_exam_problems(user=user, paper=paper)
+    save_problem_answers(
+        paper_id=paper.paper_id,
+        user_id=user.uid,
+        paper_problems=paper_problems,
+        user_answers=user_answers
+    )
+    return True
 
 
 def get_paper(paper_id: str) -> Paper:
