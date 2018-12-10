@@ -254,6 +254,7 @@
         window.location.href="{% url 'ExamApp:学生主页' user.username %}";
     {% elif result is False %}
         alert("提交试卷失败!");
+        window.history.go(-1);
     {% endif %}
 </script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>

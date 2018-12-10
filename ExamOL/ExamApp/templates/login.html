@@ -34,6 +34,7 @@
     <script>
         {% if error %}
             alert("{{ error }}");
+            window.history.go(-1);
         {% endif %}
     </script>
 

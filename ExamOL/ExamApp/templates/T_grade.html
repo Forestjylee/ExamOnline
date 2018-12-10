@@ -199,6 +199,7 @@
         window.location.href="{% url 'ExamApp:评分' user.username paper.paper_id 'all' %}";
     {% elif result is False %}
         alert("提交试卷失败!");
+        window.history.go(-1);
     {% endif %}
 </script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>

@@ -174,8 +174,10 @@
 <script>
     {% if result is True %}
         alert("生成试卷成功!");
+        {% url 'ExamApp:创建试卷' user.username %}
     {% elif result is False %}
         alert("生成试卷失败!");
+        window.history.go(-1);
     {% endif %}
 </script>
 <script>
