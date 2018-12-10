@@ -19,7 +19,7 @@ urlpatterns = [
     path('tea_home/<username>/<class_name>/', views.teacher_home_page, name='老师主页'),
     path('admin_problems/<username>/<problem_type>/', views.admin_problems, name='管理试题'),
     path('create_paper/<username>/', views.create_paper, name='创建试卷'),
-    path('mark_scores/<username>/', views.mark_scores, name='评分'),
+    path('mark_scores/<username>/<paper_id>/<student_id>/', views.mark_scores, name='评分'),
     path('analyse/<username>/<paper_id>/', views.analyse, name='考试情况'),
 ]
 
