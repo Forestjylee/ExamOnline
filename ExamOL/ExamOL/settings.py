@@ -25,9 +25,6 @@ SECRET_KEY = 'l$xxuu&in^+64ao!zkm9r6qud+yp-5yjw9djmly)-@2%hd^ypf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Produce
-# ALLOWED_HOSTS = ['47.104.220.233']
-
 # Debug(area network)
 ALLOWED_HOSTS = ['125.216.246.246']
 
@@ -141,3 +138,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# 接收用户反馈的bug信息的邮箱
+
+ADMIN_MAIL_ADDRESS = '365154018@qq.com'
