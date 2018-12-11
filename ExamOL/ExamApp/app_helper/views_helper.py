@@ -329,7 +329,7 @@ def add_index_to_problems(raw_problems: list) -> list:
     return raw_problems
 
 
-@deal_exceptions(return_when_exceptions=False)
+# @deal_exceptions(return_when_exceptions=False)
 def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     """
     将用户的回答保存到PaperUser,UserChoiceAnswer,UserJudgeAnswer,UserTextAnswer
@@ -339,11 +339,9 @@ def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     :return: 是否保存成功
     """
     update_paper_user(paper_id=paper.paper_id, uid=user.uid)
-    paper_problems = get_exam_problems(user=user, paper=paper)
     save_problem_answers(
         paper_id=paper.paper_id,
         user_id=user.uid,
-        paper_problems=paper_problems,
         user_answers=user_answers
     )
     return True
