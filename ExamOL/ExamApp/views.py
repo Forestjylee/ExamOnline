@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .app_helper import views_helper
-from .models import User, Paper
+from .models import User, Paper, PaperUser
 
 
 # Create your views here.
@@ -114,6 +114,8 @@ def take_exam(request, username: str, paper_id: str):
     """
     user = get_object_or_404(User, username=username)
     paper = get_object_or_404(Paper, paper_id=paper_id)
+    if views_helper.get_object_or_none(PaperUser, paper_id=paper_id, uid=user.uid, is_finished=True):
+        return render_to_response('404.html')
     if request.method == 'POST':
         result = views_helper.save_user_answers(user, paper, request.POST)
         return render_to_response(
