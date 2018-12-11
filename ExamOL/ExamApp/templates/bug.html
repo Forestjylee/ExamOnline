@@ -26,7 +26,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
             <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="{% url 'ExamApp:学生主页' user.username %}"><img src="{% static 'others/images/logo.png' %}" class="logo" alt=""></a>
+            <a class="navbar-brand" href=""><img src="{% static 'others/images/logo.png' %}" class="logo" alt=""></a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
           </div></div> </div> </div>
@@ -69,9 +69,10 @@
 <script>
     {% if commit_result is True %}
         alert("提交成功!我们将尽快修复该问题，感谢您的反馈！");
+        window.history.go(-2);
     {% elif commit_result is False %}
+        window.history.go(-1);
         alert("糟糕！提交失败了!");
-    {% else  %}
     {% endif %}
 </script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
