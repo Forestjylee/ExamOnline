@@ -2,7 +2,9 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404, re
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from .app_helper import views_helper
+from .app_helper.send_email import send_bug_to_email
 from .models import User, Paper, PaperUser
 
 
@@ -75,13 +77,13 @@ def commit_bug(request, username: str):
     :param request:
     :param username: 用户的学号
     """
+    user = get_object_or_404(User, username=username)
     if request.method == 'POST':
         bug_information = request.POST['bug_information']
-        # TODO bug信息发送到后台
-        return render(request, 'bug.html', {'commit_result': True})
+        commit_result = send_bug_to_email(bug_information, settings.ADMIN_MAIL_ADDRESS)
+        return render(request, 'bug.html', {'commit_result': commit_result})
     else:
-        user = get_object_or_404(User, username=username)
-        return render_to_response('bug.html', {'user': user, 'commit_result': None})
+        return render_to_response('bug.html', {'user': user})
 
 
 @login_required
