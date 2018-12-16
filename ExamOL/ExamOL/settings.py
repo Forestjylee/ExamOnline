@@ -28,9 +28,6 @@ DEBUG = True
 # Debug(area network)
 ALLOWED_HOSTS = ['125.216.246.246']
 
-# Local(Default)
-# ALLOWED_HOSTS = []
-
 
 # Application definition
 
