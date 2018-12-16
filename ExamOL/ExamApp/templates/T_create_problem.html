@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<!--加载静态文件-->
+{% load static %}
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>创建试题</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootsnav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/style.css' %}">
+</head>
+<body>               
+               
+
+<!--Header-->
+<div id="mainMenuBarAnchor"></div>
+<header class="white_header">
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'ExamApp:管理试题' user.username 'all' %}">
+                <img src="{% static 'others/images/return.png' %}" class="logo" alt="">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<!--Header Ends-->
+
+<!--Partners-->
+<section id="logos">  	
+<div class="tp_overlay">
+  <form class="callus" method="post">
+        {% csrf_token %}
+        <h3>题目类型</h3>
+      <select name="problem_type" id="problem_type" onchange="changeType()">
+              <option value="选择题">选择题</option>
+              <option value="判断题">判断题</option>
+              <option value="填空题">填空题</option>
+              <option value="问答题">问答题</option>
+              <option value="实际操作题">实际操作题</option>
+      </select>
+        <h3>题目难度</h3>
+        <select name="level">
+              <option value="1">简单</option>
+              <option value="2">中等</option>
+              <option value="3">困难</option>
+        </select>
+        <h3>题目标签</h3>
+        <input type="text" class="keyword-input" name="tag" value="数据库">
+        <h3>题目内容</h3>
+        <textarea  cols="80" rows="5" name="content"></textarea>
+        <div id="choice_options">
+            <h4 style="color: white;margin: 10px;font-weight: bolder;font-family: robotomedium;">A选项</h4>
+            <input type="text" class="keyword-input" name="A_content" style="width: 50%" id="A_content" placeholder="A选项">
+            <h4 style="color: white;margin: 10px;font-weight: bolder;font-family: robotomedium;">B选项</h4>
+            <input type="text" class="keyword-input" name="B_content" style="width: 50%" id="B_content" placeholder="B选项">
+            <h4 style="color: white;margin: 10px;font-weight: bolder;font-family: robotomedium;">C选项</h4>
+            <input type="text" class="keyword-input" name="C_content" style="width: 50%" id="C_content" placeholder="C选项">
+            <h4 style="color: white;margin: 10px;font-weight: bolder;font-family: robotomedium;">D选项</h4>
+            <input type="text" class="keyword-input" name="D_content" style="width: 50%" id="D_content" placeholder="D选项">
+        </div>
+        <hr>
+        <h3>题目答案</h3>
+        <select name="choice_answer" id="choice_answer">
+              <option value="1">A</option>
+              <option value="2">B</option>
+              <option value="3">C</option>
+              <option value="4">D</option>
+        </select>
+        <select name="judge_answer" id="judge_answer" style="display: none">
+              <option value="1">对</option>
+              <option value="0">错</option>
+        </select>
+        <textarea  cols="80" rows="5" name="text_answer" id="text_answer" style="display: none"></textarea>
+        <div class="row">
+          <div class="text-right ">
+            <button type="submit" class="border_radius btn-yellow text-uppercase" style="margin-right: 45%">创建试题</button>
+          </div>
+        </div>
+  </form></div>		
+
+</section>
+<!--Partners Ends-->
+
+
+
+<!--Footer-->
+<footer class="footer_third">
+  <div class="container padding_top">
+    <!--CopyRight-->
+    <div class="copyright_simple">
+        <div class="col-md-6 col-sm-5 top20 bottom20">
+          <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
+		  <a href="{% url 'ExamApp:报告错误' user.username %}">
+		  <button type="submit" class="border_radius btn" style="left:180%;">试卷系统bug提交</button></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script type="text/javascript">
+    function changeType() {
+        var myElement = document.getElementById("problem_type");
+        if (myElement.value == "选择题"){
+            document.getElementById("choice_options").style.display="inline";
+            document.getElementById("choice_answer").style.display="inline";
+            document.getElementById("judge_answer").style.display="none";
+            document.getElementById("text_answer").style.display="none";
+        } else {
+            if (myElement.value == "判断题") {
+                document.getElementById("judge_answer").style.display="inline";
+                document.getElementById("choice_options").style.display="none";
+                document.getElementById("choice_answer").style.display="none";
+                document.getElementById("text_answer").style.display="none";
+            } else {
+                document.getElementById("text_answer").style.display="inline";
+                document.getElementById("choice_options").style.display="none";
+                document.getElementById("judge_answer").style.display="none";
+                document.getElementById("choice_answer").style.display="none";
+            }
+        }
+    }
+</script>
+<script>
+    {% if result is True %}
+        alert("添加新题目成功!");
+        window.location.href = "{% url 'ExamApp:创建题目' user.username %}";
+    {% elif result is False %}
+        alert("添加新题目失败!");
+        window.history.go(-1);
+    {% endif %}
+</script>
+<script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
+<script src="{% static 'others/js/zelect.js' %}"></script>
+<script src="{% static 'others/js/custom.js' %}"></script>
+<script src="{% static 'others/js/functions.js' %}"></script>
+
+</body>
+</html>
