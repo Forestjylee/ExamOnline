@@ -93,6 +93,7 @@ def check_paper_info(paper_info: dict) -> dict:
 def select_a_kind_of_problem(problem_type: str, amount_list: list) -> list:
     """
     选择一个类型的题目
+    只选择is_delete为False的题目
     :param problem_type: 题目类型
     :param amount_list: 按照简单，中等，困难排序的数量列表
     :return: 一个类型题目的列表
@@ -100,13 +101,13 @@ def select_a_kind_of_problem(problem_type: str, amount_list: list) -> list:
     problem_list = []
     model_object = _get_model_object(problem_type)
     if amount_list[0]:
-        problems = list(model_object.objects.filter(level=1))
+        problems = list(model_object.objects.filter(level=1, is_delete=False))
         problem_list.extend(_get_random_problems(problems, amount_list[0]))
     if amount_list[1]:
-        problems = list(model_object.objects.filter(level=2))
+        problems = list(model_object.objects.filter(level=2, is_delete=False))
         problem_list.extend(_get_random_problems(problems, amount_list[1]))
     if amount_list[2]:
-        problems = list(model_object.objects.filter(level=3))
+        problems = list(model_object.objects.filter(level=3, is_delete=False))
         problem_list.extend(_get_random_problems(problems, amount_list[2]))
     return problem_list
 
