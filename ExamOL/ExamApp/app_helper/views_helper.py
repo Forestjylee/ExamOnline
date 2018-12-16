@@ -78,34 +78,6 @@ def get_user_or_none(request):
     return user
 
 
-def sign_up_user_or_none(request):
-    """
-    用户注册
-    :return: user | None
-    """
-    if __is_password_valid(request.POST['password']):
-        user = User.objects.create_user(username=request.POST['username'],
-                                        password=request.POST['password'],
-                                        real_name=request.POST['real_name'],
-                                        class_name=request.POST['class_name'])
-        return user
-    else:
-        return None
-
-
-def __is_password_valid(password):
-    """
-    判断密码是否符合规范
-    1. 长度大于等于6位
-    :param password: 用户输入的密码
-    :return: -> True | False
-    """
-    if len(password) >= 6:
-        return True
-    else:
-        return False
-
-
 def get_user_do_and_undo_paper_list(user_id: str) -> tuple:
     """
     接收用户的id获取完成与未完成的考试列表
@@ -125,7 +97,7 @@ def get_user_do_and_undo_paper_list(user_id: str) -> tuple:
     return finished_paper_list, unfinished_paper_list
 
 
-def get_class_list(teacher_id: str) -> list:
+def get_class_list(teacher_id: int) -> list:
     """
     输入一个老师id
     返回他的班级列表
@@ -158,6 +130,50 @@ def get_student_list(user_id: int, class_name: str) -> list:
     return student_list
 
 
+@deal_exceptions(return_when_exceptions=False)
+def create_student(teacher_id: int, student_info: dict) -> bool:
+    """
+    根据学生的信息在数据库中创建一个学生
+    默认密码为：scut+学号后6位
+    :param teacher_id: 老师的id
+    :param student_info: 学生的信息,从request.POST中得出
+    :return: 是否创建成功
+    """
+    if len(student_info['student_id']) < 6 or User.objects.filter(username=student_info['student_id']):
+        return False
+    password = f"scut{student_info['student_id'][-6:]}"
+    user = User.objects.create_user(username=student_info['student_id'],
+                                    password=password,
+                                    real_name=student_info['student_name'],
+                                    class_name=student_info['student_class'])
+    ts = TeacherStudent()
+    ts.student_id = user.uid
+    ts.teacher_id = teacher_id
+    ts.save()
+    return True
+
+
+@deal_exceptions(return_when_exceptions=False)
+def delete_students(students: dict) -> bool:
+    """
+    根据uid删除传入的学生
+    1.TeacherStudent表中该学生的is_delete变为True
+    2.PaperUser表中该学生的is_delete变为True
+    :param students: 需要删除的学生信息
+    :return: 是否删除成功
+    """
+    students_to_delete = list(students)
+    for student in students_to_delete:
+        uid = student.split('_')[1]
+        ts = TeacherStudent.objects.get(student_id=uid)
+        ts.is_delete = True
+        ts.save()
+        pu = get_object_or_none(PaperUser, student_id=uid)
+        if pu:
+            pu.is_delete = True
+    return True
+
+
 def get_problem_list(problem_type: str) -> tuple:
     """
     输入一个题目类型
@@ -166,17 +182,84 @@ def get_problem_list(problem_type: str) -> tuple:
     :return: 题目列表
     """
     if problem_type == 'choice':
-        return '选择题', ChoiceProblem.objects.all()
+        return '选择题', ChoiceProblem.objects.filter(is_delete=False)
     elif problem_type == 'judge':
-        return '判断题', JudgeProblem.objects.all()
+        return '判断题', JudgeProblem.objects.filter(is_delete=False)
     elif problem_type == 'fillblank':
-        return '填空题', FillBlankProblem.objects.all()
+        return '填空题', FillBlankProblem.objects.filter(is_delete=False)
     elif problem_type == 'QA':
-        return '问答题', QAProblem.objects.all()
+        return '问答题', QAProblem.objects.filter(is_delete=False)
     elif problem_type == 'operate':
-        return '实际操作题', OperateProblem.objects.all()
+        return '实际操作题', OperateProblem.objects.filter(is_delete=False)
     else:
-        return '选择题', ChoiceProblem.objects.all()
+        return '选择题', ChoiceProblem.objects.filter(is_delete=False)
+
+
+def create_problem(teacher_name: str, problem_info: dict) -> bool:
+    """
+    根据题目内容，参考答案等信息
+    在数据库中创建一道新题目
+    :param teacher_name: 老师的名字(题目作者)
+    :param problem_info: 题目信息字典
+    :return: 是否创建成功
+    """
+    if problem_info['problem_type'] == '选择题':
+        problem = ChoiceProblem()
+        problem.option_A = problem_info['A_content']
+        problem.option_B = problem_info['B_content']
+        problem.option_C = problem_info['C_content']
+        problem.option_D = problem_info['D_content']
+        answer = problem_info['choice_answer']
+    elif problem_info['problem_type'] == '判断题':
+        problem = JudgeProblem()
+        answer = problem_info['judge_answer']
+    elif problem_info['problem_type'] == '填空题':
+        problem = FillBlankProblem()
+        answer = problem_info['text_answer']
+    elif problem_info['problem_type'] == '问答题':
+        problem = QAProblem()
+        answer = problem_info['text_answer']
+    else:
+        problem = OperateProblem()
+        answer = problem_info['text_answer']
+    problem.level = problem_info['level']
+    problem.tag = problem_info['tag']
+    problem.author = teacher_name
+    problem.content = problem_info['content']
+    problem.answer = answer
+    problem.save()
+    return True
+
+
+@deal_exceptions(return_when_exceptions=False)
+def delete_problems(problems: list) -> bool:
+    """
+    根据uid删除传入的学生
+    :param problems: 需要删除的学生信息
+    :return: 是否删除成功
+    """
+    problems_to_delete = list(problems)
+    for problem in problems_to_delete:
+        info_list = problem.split('_')
+        problem_type = info_list[1]
+        problem_id = info_list[2]
+        _delete_problem(problem_type, problem_id)
+    return True
+
+
+def _delete_problem(problem_type: str, problem_id: int) -> None:
+    if problem_type == '选择题':
+        problem = ChoiceProblem.objects.get(id=problem_id)
+    elif problem_type == '判断题':
+        problem = JudgeProblem.objects.get(id=problem_id)
+    elif problem_type == '填空题':
+        problem = FillBlankProblem.objects.get(id=problem_id)
+    elif problem_type == '问答题':
+        problem = QAProblem.objects.get(id=problem_id)
+    else:
+        problem = OperateProblem.objects.get(id=problem_id)
+    problem.is_delete = True
+    problem.save()
 
 
 @deal_exceptions(return_when_exceptions=False)
@@ -329,7 +412,7 @@ def add_index_to_problems(raw_problems: list) -> list:
     return raw_problems
 
 
-# @deal_exceptions(return_when_exceptions=False)
+@deal_exceptions(return_when_exceptions=False)
 def save_user_answers(user: User, paper: Paper, user_answers: dict) -> bool:
     """
     将用户的回答保存到PaperUser,UserChoiceAnswer,UserJudgeAnswer,UserTextAnswer
