@@ -192,6 +192,7 @@ class UserAnswerSituation(models.Model):
     fill_blank_problem_scores = models.FloatField(verbose_name="用户填空题总得分", default=0)
     QA_problem_scores = models.FloatField(verbose_name="用户问答题总得分", default=0)
     operate_problem_scores = models.FloatField(verbose_name="用户操作题总得分", default=0)
+    sum_scores = models.FloatField(verbose_name="总分", default=0)
     last_updated_time = models.DateTimeField(verbose_name="最后修改时间", auto_now=True)
 
     def __str__(self):
