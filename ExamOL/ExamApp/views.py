@@ -43,25 +43,6 @@ def user_logout(request):
     return redirect('ExamApp:登录')
 
 
-@views_helper.is_post_or_get(get_render_html='create_user.html')
-def create_user(request):
-    """
-    创建用户界面
-    用户(姓名, 学号(用户名)，密码，班级名)
-    """
-    try:
-        user = views_helper.sign_up_user_or_none(request)
-        if user is not None:
-            #TODO 弹出页面显示:创建用户成功，5秒之后去往主界面
-            pass
-        else:
-            #TODO render渲染，提示用户密码格式不正确
-            pass
-    except:
-        #TODO 提示用户请输入完整信息后再提交
-        pass
-
-
 def page_not_found(request):
     """
     404页面
@@ -146,6 +127,7 @@ def take_exam(request, username: str, paper_id: str):
 
 
 @login_required
+@csrf_exempt
 def teacher_home_page(request, username: str, class_name: str):
     """
     老师主页
@@ -154,36 +136,122 @@ def teacher_home_page(request, username: str, class_name: str):
     :param class_name: 展示信息班级名
     """
     user = get_object_or_404(User, username=username, is_teacher=True)
-    class_list = views_helper.get_class_list(teacher_id=user.uid)
-    student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
-    return render_to_response(
-        'T_manage_student.html',
-        {
-            'user': user,
-            'student_list': student_list,
-            'class_list': class_list,
-            'class_name': class_name,
-        })
+    if request.method == 'POST':
+        result = views_helper.delete_students(students=request.POST)
+        class_list = views_helper.get_class_list(teacher_id=user.uid)
+        student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
+        return render_to_response(
+            'T_manage_student.html',
+            {
+                'user': user,
+                'student_list': student_list,
+                'class_list': class_list,
+                'class_name': class_name,
+                'result': result,
+            }
+        )
+    else:
+        class_list = views_helper.get_class_list(teacher_id=user.uid)
+        student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
+        return render_to_response(
+            'T_manage_student.html',
+            {
+                'user': user,
+                'student_list': student_list,
+                'class_list': class_list,
+                'class_name': class_name,
+            })
 
 
 @login_required
+@csrf_exempt
+def create_student(requests, username: str):
+    """
+    新建单个学生页面
+    :param requests:
+    :param username: 老师的工号
+    """
+    user = get_object_or_404(User, username=username, is_teacher=True)
+    class_list = views_helper.get_class_list(teacher_id=user.uid)
+    if requests.method == 'POST':
+        result = views_helper.create_student(teacher_id=user.uid, student_info=requests.POST)
+        return render_to_response(
+            'T_create_student.html',
+            {
+                'user': user,
+                'result': result,
+                'class_list': class_list,
+            }
+        )
+    else:
+        return render_to_response(
+            'T_create_student.html',
+            {
+                'user': user,
+                'class_list': class_list,
+            }
+        )
+
+
+@login_required
+@csrf_exempt
 def admin_problems(request, username: str, problem_type: str):
     """
     老师管理题库页面
+    POST时代表需要删除指定的题目
     :param request:
     :param username: 老师的工号
     :param problem_type: 问题的类型(all|choice|judge|fillblank|QA|operate)
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=True)
     complete_type, problem_list = views_helper.get_problem_list(problem_type)
-    return render_to_response(
-        'T_manage_problems.html',
-        {
-            'user': user,
-            'problem_list': problem_list,
-            'complete_type': complete_type,
-        }
-    )
+    if request.method == 'POST':
+        result = views_helper.delete_problems(problems=request.POST)
+        return render_to_response(
+            'T_manage_problems.html',
+            {
+                'user': user,
+                'problem_list': problem_list,
+                'complete_type': complete_type,
+                'result': result,
+            }
+        )
+    else:
+        return render_to_response(
+            'T_manage_problems.html',
+            {
+                'user': user,
+                'problem_list': problem_list,
+                'complete_type': complete_type,
+            }
+        )
+
+
+@login_required
+@csrf_exempt
+def create_problem(requests, username: str):
+    """
+    新增1个问题
+    :param requests:
+    :param username: 老师的工号
+    """
+    user = get_object_or_404(User, username=username, is_teacher=True)
+    if requests.method == 'POST':
+        result = views_helper.create_problem(teacher_name=user.real_name, problem_info=requests.POST)
+        return render_to_response(
+            'T_create_problem.html',
+            {
+                'user': user,
+                'result': result,
+            }
+        )
+    else:
+        return render_to_response(
+            'T_create_problem.html',
+            {
+                'user': user,
+            }
+        )
 
 
 @login_required
@@ -194,7 +262,7 @@ def create_paper(request, username: str):
     :param request
     :param username: 老师的工号
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=True)
     problem_names = ['选择题', '判断题', '填空题', '问答题', '实际操作题']
     if request.method == 'POST':
         result = views_helper.use_info_to_create_paper(teacher_id=user.uid, paper_info=request.POST)
@@ -226,7 +294,7 @@ def mark_scores(request, username: str, paper_id: str, student_id: str):
     :param paper_id: 试卷id
     :param student_id: 学生的id
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=True)
     paper = views_helper.get_paper(paper_id=paper_id)
     if request.method == 'POST':
         result = views_helper.save_user_scores(paper_id, student_id, request.POST)
@@ -264,10 +332,11 @@ def analyse(request, username: str, paper_id: str):
     :param username: 老师的工号
     :param paper_id: 试卷id
     """
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username, is_teacher=True)
     return render_to_response(
         'T_analyze.html',
         {
             'user': user,
         }
     )
+
