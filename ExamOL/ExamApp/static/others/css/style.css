@@ -1170,7 +1170,7 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content.bg .col-menu{
 	border-radius:4px;
 	background:#fff;
 	padding:6px 12px;
-	font-size:16px;
+	font-size:14px;
 }
 .callus textarea{
 	min-height:160px;
@@ -3909,8 +3909,8 @@ ul.social_share {
   display: inline-table;
   overflow:hidden;
   position:static; top:0; z-index:990;
-  width:50%;
-  margin:0 0 0 25%;
+  width:60%;
+  margin:0 0 0 19%;
 }
 .student_center form.callus{
 	padding:30px 30px 15px 30px;
@@ -3921,14 +3921,14 @@ ul.social_share {
   overflow:hidden;
   position: fixed;
   border-radius: 9px;
-  top:70px; z-index:990;
-  width:18%;  
+  top:20%; z-index:990;
+  width:12%;  
 }
 .student_left div{
 	padding:30px 30px 15px 30px;
 }
 .footer_third{
-	margin-top:100px;
+	margin-top:10%;
 }
 .btn{
 	font-size:14px;
@@ -3970,22 +3970,6 @@ select{
 	background:#fff;
 	padding:6px 9px;
 	font-size:14px;
-}
-.paper_left{
-  background:rgba(31, 63, 129, 0.9);
-  display: inline-table;
-  border-radius: 9px;z-index:990;
-  width:28%; 
- margin-right:-23%;
-}
-.paper_left div{
-	padding:30px 30px 15px 30px;
-}
-.paper_left h4{
-	color:white;
-}
-.paper_left h5{
-	color:white;
 }
 textarea {
 	border:1px solid #d5dadf;
@@ -4034,7 +4018,7 @@ width:17%;
 .gcs-radio+label {
   width: 15px;
   height: 15px;
-  line-height: 15px;
+  line-height: 100%;
   display: inline-block;
   text-align: center;
   vertical-align: bottom;
@@ -4087,11 +4071,4 @@ margin:0 20%;
 	background:#fff;
 	padding:6px 9px;
 	font-size:14px;
-}
-.target-fix{
-    position: relative;
-    top: -44px;
-    display: block;
-    height: 0;
-    overflow: hidden;
 }
