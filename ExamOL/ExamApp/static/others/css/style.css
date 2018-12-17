@@ -3816,8 +3816,8 @@ ul.social_share {
   display: inline-table;
   overflow:hidden;
   position:static; top:0; z-index:990;
-  width:60%;
-  margin:0 0 0 7%;
+  width:56%;
+  margin:0 2%;
 }
 .grade_left  .topbar ul.breadcrumb_top li a{
   font-size: 10px;
@@ -3833,8 +3833,8 @@ ul.social_share {
   overflow:hidden;
   text-align: center;
   position:static; top:0; z-index:990;
-  width:17%;
-  margin:0 0 0 2%;
+  width:16%;
+  margin:0 2%;
 }
 .grade_right ul li{
    border:1px solid #d5dadf;
@@ -4007,7 +4007,7 @@ width:17%;
   color:white;
   margin:12%;
 }
-.grade_left input[type="text"]{
+.grade_center input[type="text"]{
 	margin: 0 5px;
 }
 
