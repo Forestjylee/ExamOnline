@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--加载静态文件-->
+{% load static %}
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>管理学生</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootsnav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/style.css' %}">
+</head>
+<body>
+
+
+<!--Header-->
+<div id="mainMenuBarAnchor"></div>
+<header class="white_header">
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="{% url 'ExamApp:老师主页' user.username 'all' %}">
+                <img src="{% static 'others/images/logo.png' %}" class="logo" alt="">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+                <li><a>欢迎您，{{ user.real_name }}老师！</a></li>
+                <li style="margin-left: -4%"><a href="">登出</a></li>
+			  <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
+              <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
+              <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
+              <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<!--Header Ends-->
+
+<!--Partners-->
+<div style="display:flex;">
+
+
+<div class="student_center">
+  <form class="callus" method="post" name="StudentForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <div style="float: left;margin-left: 30%;margin-top: 1%;color: white">
+                <input type="file" id="btn_file" name="students_info">
+            </div>
+            <div style="float: left">
+                <button type="submit" name="upload" class="border_radius btn">上传</button>
+            </div>
+            <div style="float: left;margin-left: 2%">
+                <button type="submit" name="create" class="border_radius btn">创建</button>
+            </div>
+        </div>
+  </form>
+        <br><br><hr>
+        <h2 class="text-uppercase t_white bottom20 text-center">文件中的学生信息</h2>
+
+        {% if students_info %}
+            <p style="font-size: 18px;font-family: Consolas;color: white;text-align: right;margin-right: 12%">
+                一共有
+                <strong>{{ students_info|length }}</strong>
+                个学生
+            </p>
+            <table id="student_message" style="width: 80%;margin: 0 auto">
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>班级</th>
+                </tr>
+
+                {% for student in students_info %}
+                <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.student_name }}</td>
+                    <td>{{ student.student_class }}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            <div style="margin-bottom: 6%"></div>
+        {% endif %}
+</div>
+
+
+</div>
+<!--Partners Ends-->
+
+
+
+<!--Footer-->
+<footer class="footer_third">
+  <div class="container padding_top">
+    <!--CopyRight-->
+    <div class="copyright_simple">
+        <div class="col-md-6 col-sm-5 top20 bottom20">
+          <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
+		  <a href="{% url 'ExamApp:报告错误' user.username %}">
+              <button type="submit" class="border_radius btn" style="left:180%;" name="commit_bug">
+                  试卷系统bug提交
+              </button>
+          </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+    {% if result is True %}
+        alert("操作成功!");
+    {% elif result is False %}
+        alert("操作失败!");
+    {% endif %}
+</script>
+<script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
+<script src="{% static 'others/js/zelect.js' %}"></script>
+<script src="{% static 'others/js/custom.js' %}"></script>
+<script src="{% static 'others/js/functions.js' %}"></script>
+
+</body>
+</html>
