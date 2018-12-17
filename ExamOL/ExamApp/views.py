@@ -389,7 +389,9 @@ def analyse(request, username: str, paper_id: str):
             'actual_students': actual_students,
             'absent_students': 0 if not reference_students else reference_students - actual_students,
             'answer_situation': analyze_helper.get_answer_situation(paper_id),
-            'scores_situation': analyze_helper.get_scores_situation(paper_id)
+            'scores_situation': analyze_helper.get_scores_situation(paper_id),
+            'choice_problems': analyze_helper.get_choice_situation(paper_id),
+            'judge_problems': analyze_helper.get_judge_situation(paper_id),
         }
     )
 
