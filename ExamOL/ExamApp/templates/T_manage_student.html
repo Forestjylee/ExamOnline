@@ -32,13 +32,18 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
-              <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
+                <li><a>欢迎您，{{ user.real_name }}老师！</a></li>
+                <li style="margin-left: -5%"><a href="">登出</a></li>
+			  <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
-              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
-          </div></div> </div> </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
 <!--Header Ends-->
@@ -46,11 +51,33 @@
 <!--Partners-->
 <div style="display:flex;">
 
+<div class="student_left">
+    <div>
+        <button type="submit" class="border_radius btn" onclick="selectall()">选择全部</button>
+        <button type="submit" class="border_radius btn" onclick="submitStudentForm()">删除学生</button>
+        <button type="submit" class="border_radius btn">
+            <a href="{% url 'ExamApp:创建学生' user.username %}">增加学生</a>
+        </button>
+        <button type="submit" class="border_radius btn">
+            <a href="{% url 'ExamApp:批量创建学生' user.username %}">批量导入学生</a>
+        </button>
+    </div>
+</div>
+
 <div class="student_center">
-  <form class="callus">
-        <h2 class="text-uppercase t_white bottom20 text-center">学生信息</h2>
-    
-        <table id="student_message">
+  <form class="callus" method="post" name="StudentForm" style="margin-bottom: 6%">
+        {% csrf_token %}
+        <h2 class="text-uppercase t_white bottom20 text-center" style="margin-top: 2%">学生信息</h2>
+
+        <p style="font-size: 18px;font-family: Consolas;color: white;text-align: right;margin-right: 6%">
+            {% if class_name != 'all' %}
+            {{ class_name }}
+            {% endif %}
+            一共有
+            <strong>{{ student_list|length }}</strong>
+            个学生
+        </p>
+        <table id="student_message" style="margin: 0 auto;width: 90%">
             <tr>
                 <th>学号</th>
                 <th>姓名</th>
@@ -59,25 +86,17 @@
 
             {% for student in student_list %}
             <tr>
-                <td><input name="in" type="checkbox">{{ student.username }}</td>
+                <td><input name="in_{{ student.uid }}" type="checkbox" class="ininin">{{ student.username }}</td>
                 <td>{{ student.real_name }}</td>
                 <td>{{ student.class_name }}</td>
             </tr>
             {% endfor %}
 
         </table>
-        <p style="font-size: 18px;font-family: Consolas;color: #02b2e1;text-align: right;margin-top: 3%">
-            {% if class_name != 'all' %}
-            {{ class_name }}
-            {% endif %}
-            一共有
-            <strong>{{ student_list|length }}</strong>
-            个学生
-        </p>
  </form>
 </div>
 
-<div class="grade_right">
+<div class="grade_right" style="margin-top: 1%">
     <h4>班级</h4>
     <ul class="">
         {% for class in class_list %}
@@ -104,7 +123,7 @@
         <div class="col-md-6 col-sm-5 top20 bottom20">
           <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
 		  <a href="{% url 'ExamApp:报告错误' user.username %}">
-              <button type="submit" class="border_radius btn" style="left:200%;" name="commit_bug">
+              <button type="submit" class="border_radius btn" style="left:180%;" name="commit_bug">
                   试卷系统bug提交
               </button>
           </a>
@@ -115,44 +134,30 @@
 
 
 <script>
-function remove()
-{var boxes = document.getElementsByName("in");
-for(var k=boxes.length-1;k>=0;k--)
-if(boxes[k].checked){
-boxes[k].parentNode.parentNode.parentNode.removeChild(boxes[k].parentNode.parentNode);             
-	}
-}
-
-function add()
-{   var id = document.getElementById("student_id").value;
-    var name = document.getElementById("student_name").value;
-    if (id&&name) {
-	var D = new Date();
-	var set=document.createElement("tr");
-	set.innerHTML='<td><input name="in" type="checkbox">'+id+'</td><td>'+name+'</td><td>'+D.toLocaleDateString()+'</td>';
-	var newnew=document.getElementById('student_message');
-	newnew.appendChild(set);
-	}
-}
-
-function modify()
-{
-var id = document.getElementById("student_id").value;
-var name = document.getElementById("student_name").value;
-if (id||name) {
-var boxes = document.getElementsByName("in");
-for(var k=boxes.length-1;k>=0;k--)
-if(boxes[k].checked){
-var td = boxes[k].parentNode.parentNode.childNodes;
-if (id) td[1].innerHTML='<input name="in" type="checkbox">'+id;
-if (name) td[3].innerHTML=name;
-var D = new Date();
-td[5].innerHTML=D.toLocaleDateString();        
-}
-}
-}
-
-    </script>
+    var i=0;
+    function selectall(){
+        i=i+1;
+        var boxes = document.getElementsByClassName("ininin");
+        if(i%2==1)
+        {for(var k = 0;k<=boxes.length;k++)
+        boxes[k].checked=true;}
+        else
+        {for(var k = 0;k<=boxes.length;k++)
+        boxes[k].checked=false;}
+        }
+	function submitStudentForm() {
+        document.StudentForm.submit();
+    }
+</script>
+<script>
+    {% if result is True %}
+        alert("操作成功!");
+        window.location.href = "{% url 'ExamApp:老师主页' user.username 'all' %}";
+    {% elif result is False %}
+        alert("操作失败!");
+        window.history.go(-1);
+    {% endif %}
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>

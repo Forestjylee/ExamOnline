@@ -34,7 +34,7 @@
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
-              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
           </div>
         </div>
@@ -47,31 +47,41 @@
 <!--Partners-->
 <div style="display:flex;">	
 
-    <div class="student_center">
-      <form class="callus">
-      <h2 class="text-uppercase t_white bottom20 text-center">题目信息</h2>
-        <table id="student_message">
-            <tr>
-                <th>题目类型</th>
-                <th>难度系数</th>
-                <th>题目内容</th>
-                <th>标签</th>
-            </tr>
+<div class="student_left">
+    <div>  
+         <button type="submit" class="border_radius btn" onclick="selectall()">选择全部</button>
+         <button class="border_radius btn" onclick="submitStudentForm()">删除题目</button>
+         <button type="submit" class="border_radius btn">
+             <a href="{% url 'ExamApp:创建题目' user.username %}">编写题目</a>
+         </button>
+    </div>
+</div>
 
-            {% for problem in problem_list %}
+<div class="student_center">
+      <form class="callus" method="post" name="ProblemForm">
+          <h2 class="text-uppercase t_white bottom20 text-center">题目信息</h2>
+            <table id="student_message">
                 <tr>
-                    <td><input name="in" type="checkbox">{{ problem.problem_type }}</td>
-                    <td>{{ problem.level }}</td>
-                    <td>{{ problem.content|truncatechars:20 }}</td>
-                    <td>{{ problem.tag }}</td>
+                    <th>题目类型</th>
+                    <th>难度系数</th>
+                    <th>题目内容</th>
+                    <th>标签</th>
                 </tr>
-            {% endfor %}
-        </table>
-          <p style="font-size: 18px;font-family: Consolas;color: #02b2e1;text-align: right;margin-top: 3%">
-              题库中一共有
-              <strong>{{ problem_list|length }}</strong>
-              道{{ complete_type }}
-          </p>
+
+                {% for problem in problem_list %}
+                    <tr>
+                        <td><input name="in_{{ problem.problem_type }}_{{ problem.id }}" type="checkbox" class="ininin">{{ problem.problem_type }}</td>
+                        <td>{{ problem.level }}</td>
+                        <td>{{ problem.content|truncatechars:20 }}</td>
+                        <td>{{ problem.tag }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+              <p style="font-size: 18px;font-family: Consolas;color: #02b2e1;text-align: right;margin-top: 3%">
+                  题库中一共有
+                  <strong>{{ problem_list|length }}</strong>
+                  道{{ complete_type }}
+              </p>
 
       </form>
     </div>
@@ -110,7 +120,7 @@
         <div class="col-md-6 col-sm-5 top20 bottom20">
           <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
 		  <a href="{% url 'ExamApp:报告错误' user.username %}">
-              <button type="submit" class="border_radius btn" style="left:200%;" name="commit_bug">
+              <button type="submit" class="border_radius btn" style="left:180%;" name="commit_bug">
                   试卷系统bug提交
               </button>
           </a>
@@ -120,7 +130,29 @@
 </footer>
 
 
-
+<script>
+    var i=0;
+    function selectall(){
+        i=i+1;
+        var boxes = document.getElementsByClassName("ininin");
+        if(i%2==1)
+        {for(var k = 0;k<=boxes.length;k++)
+        boxes[k].checked=true;}
+        else
+        {for(var k = 0;k<=boxes.length;k++)
+        boxes[k].checked=false;}
+        }
+    function submitStudentForm() {
+        document.ProblemForm.submit();
+    }
+    {% if result is True %}
+        alert("删除题目成功!");
+        window.location.href = "{% url 'ExamApp:管理试题' user.username 'all' %}";
+    {% elif result is False %}
+        alert("删除题目失败!");
+        window.history.go(-1);
+    {% endif %}
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>

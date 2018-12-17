@@ -37,7 +37,7 @@
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
-              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
           </div>
         </div>
@@ -161,7 +161,7 @@
         <div class="col-md-6 col-sm-5 top20 bottom20">
           <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
 		  <a href="{% url 'ExamApp:报告错误' user.username %}">
-              <button type="submit" class="border_radius btn" style="left:200%;" name="commit_bug">
+              <button type="submit" class="border_radius btn" style="left:180%;" name="commit_bug">
                   试卷系统bug提交
               </button>
           </a>
@@ -174,7 +174,7 @@
 <script>
     {% if result is True %}
         alert("生成试卷成功!");
-        {% url 'ExamApp:创建试卷' user.username %}
+        window.location.href = "{% url 'ExamApp:创建试卷' user.username %}";
     {% elif result is False %}
         alert("生成试卷失败!");
         window.history.go(-1);

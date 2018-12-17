@@ -36,7 +36,7 @@
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
-              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
           </div>
         </div>
@@ -47,8 +47,24 @@
 <!--Header Ends-->
 
 <!--Partners-->
-<div style="display:flex;">	
-<div class="grade_left">
+<div style="display:flex;">
+
+{% if papers %}
+    <div class="grade_right" style="margin-left: 2%">
+        <h4>试卷列表</h4>
+        <ul class="">
+            {% for paper in papers %}
+                <li style="margin-bottom: 3%;font-family: Consolas">
+                  <a href="{% url 'ExamApp:评分' user.username paper.paper_id 'all' %}">{{ paper.paper_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+{% endif %}
+
+
+<div class="grade_left" style="margin-left: 2%">
   <form class="callus" method="post">
       <h2 class="text-uppercase t_white bottom20 text-center">
           {% if paper %}
@@ -75,7 +91,7 @@
                             <strong>参考答案:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ fillblank_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
-                            <input id="fillblank" type="number" name="{{ fillblank_answer.problem_id }}_{{ fillblank_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                            <input style="margin-left: 8%" id="fillblank" type="number" name="{{ fillblank_answer.problem_id }}_{{ fillblank_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
                         </div>
                     </div>
                 </li>
@@ -98,7 +114,7 @@
                             <strong>参考答案:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{ QA_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
-                            <input id="QAProblem" type="number" name="{{ QA_answer.problem_id }}_{{ QA_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                            <input style="margin-left: 8%" id="QAProblem" type="number" name="{{ QA_answer.problem_id }}_{{ QA_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
                         </div>
                     </div>
                 </li>
@@ -121,7 +137,7 @@
                             <strong>参考答案:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{ operate_answer.standard_answer }}
                         </div>
                         <div class="problem_grade">
-                            <input id="OperateProblem" type="number" name="{{ operate_answer.problem_id }}_{{ operate_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
+                            <input style="margin-left: 8%" id="OperateProblem" type="number" name="{{ operate_answer.problem_id }}_{{ operate_answer.problem_type }}" min="0" class="keyword-input" placeholder="分数">
                         </div>
                     </div>
                 </li>
@@ -131,16 +147,16 @@
     </ul>
 	
 
-    <div class="row">
+    <div class="row" style="margin-bottom: 5%;margin-top: 3%">
       <div class="text-right">
-        <button type="submit" class="border_radius btn-yellow text-uppercase">提交成绩</button>
+        <button type="submit" class="border_radius btn-yellow text-uppercase" style="margin-right: 7%">提交成绩</button>
       </div>
     </div>
   </form>
 </div>
 
 {% if students %}
-    <div class="grade_right">
+    <div class="grade_right" style="margin-right: 2%">
         <h4>学生试卷</h4>
         <ul class="">
             {% for student in students %}
@@ -155,19 +171,6 @@
 {% else %}
 {% endif %}
 
-{% if papers %}
-    <div class="grade_right">
-        <h4>试卷列表</h4>
-        <ul class="">
-            {% for paper in papers %}
-                <li style="margin-bottom: 3%;font-family: Consolas">
-                  <a href="{% url 'ExamApp:评分' user.username paper.paper_id 'all' %}">{{ paper.paper_name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-{% else %}
-{% endif %}
             
 </div>
 <!--Partners Ends-->
@@ -182,7 +185,7 @@
         <div class="col-md-6 col-sm-5 top20 bottom20">
           <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
 		  <a href="{% url 'ExamApp:报告错误' user.username %}">
-		    <button type="submit" class="border_radius btn" style="left:200%;">
+		    <button type="submit" class="border_radius btn" style="left:180%;">
                 试卷系统bug提交
             </button>
           </a>

@@ -36,7 +36,7 @@
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
-              <li><a href="{% url 'ExamApp:考试情况' user.username '1' %}">考试情况</a></li>
+              <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
           </div></div> </div> </div>
   </nav>
@@ -45,50 +45,180 @@
 
 <!--Partners-->
 <div style="display:flex;">	
-<div class="grade_left">
-  <form class="callus">
-  <h2 class="text-uppercase t_white bottom20 text-center">试卷分析</h2>
-    <h3>试卷名字</h3>
-    <div class="row">
-      <div class="problem">
-	  试卷信息
-	  考试人数等
-        </div> </div>
-		
-	<h3>学生测试分析</h3>
+<div class="grade_left" style="margin-left: 22%">
+  <form class="callus" style="margin-bottom: 3%;margin-left: 4%;margin-top: 1%">
+  <h2 class="text-uppercase t_white bottom20 text-center">
+      {% if paper %}
+          {{ paper.paper_name }}
+      {% else %}
+          <- 请选择您要查看的试卷
+      {% endif %}
+  </h2>
+    <h3>试卷信息</h3>
+      {% if paper %}
+            <div class="row">
+              <div class="student_answer">
+                试卷名: &nbsp;&nbsp;&nbsp;{{ paper.paper_name }}
+              </div>
+              <div class="student_answer">
+                试卷难度: &nbsp;&nbsp;
+                  {% if paper.level == 1 %}
+                    简单
+                  {% elif paper.level == 2 %}
+                    中等
+                  {% elif paper.level == 3 %}
+                    困难
+                  {% endif %}
+              </div>
+              <div class="student_answer">
+                试卷标签: &nbsp;&nbsp;&nbsp;{{ paper.tag }}
+              </div>
+              <div class="student_answer">
+                开始时间: &nbsp;&nbsp;&nbsp;{{ paper.start_time }}
+              </div>
+              <div class="student_answer">
+                结束时间: &nbsp;&nbsp;&nbsp;{{ paper.end_time }}
+              </div>
+              <div class="student_answer">
+                规定考试人数: &nbsp;&nbsp;
+                  {{ reference_students }}人
+              </div>
+              <div class="student_answer">
+                 实际考试人数: &nbsp;&nbsp;
+                  {{ actual_students }}人
+              </div>
+              <div class="student_answer">
+                 缺考人数: &nbsp;&nbsp;
+                  {{ absent_students }}人
+              </div>
+            </div>
+      {% endif %}
+    <hr>
+	<h3>整体情况</h3>
 	
 	<ul>
 	
-	<li><div class="row"><div class="problem">
-	题目内容
-	</div>
-	<div class="student_answer">
-	分析信息：错误率、各分数区间等
-	</div>
-      </div></li>
+        <li>
+            <div class="row">
+                <div class="problem">
+                    分数区间
+                </div>
+                <div class="student_answer">
+                    90分以上:&nbsp;&nbsp;&nbsp;{{ scores_situation.ninety_plus }}人
+                </div>
+                <div class="student_answer">
+                    80~90分:&nbsp;&nbsp;&nbsp;{{ scores_situation.eighty_ninety }}人
+                </div>
+                <div class="student_answer">
+                    70~80分:&nbsp;&nbsp;&nbsp;{{ scores_situation.seventy_eighty }}人
+                </div>
+                <div class="student_answer">
+                    60~70分:&nbsp;&nbsp;&nbsp;{{ scores_situation.sixty_seventy }}人
+                </div>
+                <div class="student_answer">
+                    60分以下:&nbsp;&nbsp;&nbsp;{{ scores_situation.less_sixty }}人
+                </div>
+                <div class="student_answer">
+                    整体平均分:&nbsp;&nbsp;&nbsp;{{ scores_situation.mean_scores }}分
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div class="row">
+                <div class="problem">
+                    各题型答题情况
+                </div>
+                <div class="student_answer">
+                    选择题平均答对题数:&nbsp;&nbsp;&nbsp;{{ answer_situation.choice_mean_amount }}道&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;共{{ answer_situation.choice_amount }}道
+                </div>
+                <div class="student_answer">
+                    判断题平均答对题数:&nbsp;&nbsp;&nbsp;{{ answer_situation.judge_mean_amount }}道&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;共{{ answer_situation.judge_amount }}道
+                </div>
+                <div class="student_answer">
+                    填空题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.fillblank_mean_scores }}分
+                </div>
+                <div class="student_answer">
+                    问答题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.QA_mean_scores }}分
+                </div>
+                <div class="student_answer">
+                    实际操作题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.operate_mean_scores }}分
+                </div>
+            </div>
+        </li>
 	
-	<li><div class="row"><div class="problem">
-	题目内容
-	</div>
-	<div class="student_answer">
-	分析信息：错误率、各分数区间等
-	</div>
-      </div></li>	
-	
+	</ul>
+    <hr>
+	<h3>高频错题</h3>
+
+	<ul>
+
+        <li>
+            <div class="row">
+                <div class="problem">
+                    选择题情况
+                </div>
+                <div class="student_answer">
+                    分析信息：错误率、各分数区间等
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="problem">
+                    判断题情况
+                </div>
+                <div class="student_answer">
+                    分析信息：错误率、各分数区间等
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="problem">
+                    填空题情况
+                </div>
+                <div class="student_answer">
+                    分析信息：错误率、各分数区间等
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="problem">
+                    问答题情况
+                </div>
+                <div class="student_answer">
+                    分析信息：错误率、各分数区间等
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div class="row">
+                <div class="problem">
+                    实际操作题情况
+                </div>
+                <div class="student_answer">
+                    分析信息：错误率、各分数区间等
+                </div>
+            </div>
+        </li>
+
 	</ul>
 	
 	
-  </form></div>		
+  </form>
+</div>
 
-<div class="grade_right">
+<div class="grade_right" style="position: fixed;top: 16%">
     <h4>试卷</h4>
     <ul class="">
-        <li style="margin-bottom: 3%;font-family: Consolas">
-            <a href="#.">2018年数据库期中测试</a>
-        </li>
-        <li style="margin-bottom: 3%;font-family: Consolas">
-            <a href="#.">2018年第一次单元测试</a>
-        </li>
+        {% for paper in papers %}
+            <li style="margin-bottom: 3%;font-family: Consolas;font-size: 17px">
+              <a href="{% url 'ExamApp:考试情况' user.username paper.paper_id %}">{{ paper.paper_name }}</a>
+            </li>
+        {% endfor %}
     </ul>
 
 </div>
@@ -106,7 +236,7 @@
         <div class="col-md-6 col-sm-5 top20 bottom20">
           <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
 		  <a href="{% url 'ExamApp:报告错误' user.username %}">
-              <button type="submit" class="border_radius btn" style="left:200%;" name="commit_bug">
+              <button type="submit" class="border_radius btn" style="left:180%;" name="commit_bug">
                   试卷系统bug提交
               </button>
           </a>
@@ -117,11 +247,11 @@
 
 
 
-<script src="{% static 'others/js/jquery-2.1.4.js"></script>
-<script src="{% static 'others/js/masonry.pkgd.min.js"></script>
-<script src="{% static 'others/js/zelect.js"></script>
-<script src="{% static 'others/js/custom.js"></script>
-<script src="{% static 'others/js/functions.js"></script>
+<script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
+<script src="{% static 'others/js/zelect.js' %}"></script>
+<script src="{% static 'others/js/custom.js' %}"></script>
+<script src="{% static 'others/js/functions.js' %}"></script>
 
 </body>
 </html>
