@@ -116,6 +116,8 @@ def get_choice_situation(paper_id: int) -> list:
     :return: 高频错题对象列表
     """
     problems = []
+    if paper_id == 'all':
+        return problems
     PUs = PaperUser.objects.filter(paper_id=paper_id, is_finished=True)
     sum_answers = len(PUs)
     PBs = PaperProblem.objects.filter(paper_id=paper_id, problem_type="选择题")
@@ -137,6 +139,8 @@ def get_judge_situation(paper_id: int) -> list:
     :return: 高频错题对象列表
     """
     problems = []
+    if paper_id == 'all':
+        return problems
     PUs = PaperUser.objects.filter(paper_id=paper_id, is_finished=True)
     sum_answers = len(PUs)
     PBs = PaperProblem.objects.filter(paper_id=paper_id, problem_type="判断题")
