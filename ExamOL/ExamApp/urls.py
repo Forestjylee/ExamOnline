@@ -18,6 +18,7 @@ urlpatterns = [
     path('exam/<username>/<paper_id>/', views.take_exam, name='考试页面'),
     path('tea_home/<username>/<class_name>/', views.teacher_home_page, name='老师主页'),
     path('create_student/<username>/', views.create_student, name='创建学生'),
+    path('create_many_students/<username>/', views.use_file_to_create_students, name='批量创建学生'),
     path('admin_problems/<username>/<problem_type>/', views.admin_problems, name='管理试题'),
     path('create_problem/<username>/', views.create_problem, name='创建题目'),
     path('create_paper/<username>/', views.create_paper, name='创建试卷'),
