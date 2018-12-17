@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from .app_helper import views_helper
+from .app_helper import views_helper, analyze_helper
 from .app_helper.send_email import send_bug_to_email
 from .models import User, Paper, PaperUser
 
@@ -131,15 +131,18 @@ def take_exam(request, username: str, paper_id: str):
 def teacher_home_page(request, username: str, class_name: str):
     """
     老师主页
+    POST请求有两种可能的操作：
+    1.上传文件
+    2.删除指定的学生
     :param request:
     :param username: 老师的工号
     :param class_name: 展示信息班级名
     """
     user = get_object_or_404(User, username=username, is_teacher=True)
+    class_list = views_helper.get_class_list(teacher_id=user.uid)
+    student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
     if request.method == 'POST':
         result = views_helper.delete_students(students=request.POST)
-        class_list = views_helper.get_class_list(teacher_id=user.uid)
-        student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
         return render_to_response(
             'T_manage_student.html',
             {
@@ -151,8 +154,6 @@ def teacher_home_page(request, username: str, class_name: str):
             }
         )
     else:
-        class_list = views_helper.get_class_list(teacher_id=user.uid)
-        student_list = views_helper.get_student_list(user_id=user.uid, class_name=class_name)
         return render_to_response(
             'T_manage_student.html',
             {
@@ -161,6 +162,47 @@ def teacher_home_page(request, username: str, class_name: str):
                 'class_list': class_list,
                 'class_name': class_name,
             })
+
+
+@login_required
+@csrf_exempt
+def use_file_to_create_students(requests, username: str):
+    """
+    用户通过上传Excel文件
+    批量创建学生
+    :param requests:
+    :param username: 老师的工号
+    """
+    user = get_object_or_404(User, username=username, is_teacher=True)
+    if requests.method == 'POST':
+        if 'create' in requests.POST:
+            result = views_helper.create_many_students(teacher_id=user.uid, file_directory=settings.BASE_DIR)
+            return render_to_response(
+                'T_create_many_students.html',
+                {
+                    'user': user,
+                    'result': result,
+                }
+            )
+        if 'upload' in requests.POST:
+            file_object = requests.FILES.get('students_info')
+            students_info = views_helper.read_uploaded_file(file_object, settings.BASE_DIR, user.uid)
+            result = False if students_info is False else True
+            return render_to_response(
+                'T_create_many_students.html',
+                {
+                    'user': user,
+                    'students_info': students_info,
+                    'result': result,
+                }
+            )
+    else:
+        return render_to_response(
+            'T_create_many_students.html',
+            {
+                'user': user,
+            }
+        )
 
 
 @login_required
@@ -333,10 +375,21 @@ def analyse(request, username: str, paper_id: str):
     :param paper_id: 试卷id
     """
     user = get_object_or_404(User, username=username, is_teacher=True)
+    papers = views_helper.get_paper_list(user=user)
+    paper = views_helper.get_paper(paper_id=paper_id)
+    reference_students = views_helper.get_reference_exam_amount(paper_id)
+    actual_students = views_helper.get_actual_exam_amount(paper_id)
     return render_to_response(
         'T_analyze.html',
         {
             'user': user,
+            'paper': paper,
+            'papers': papers,
+            'reference_students': reference_students,
+            'actual_students': actual_students,
+            'absent_students': 0 if not reference_students else reference_students - actual_students,
+            'answer_situation': analyze_helper.get_answer_situation(paper_id),
+            'scores_situation': analyze_helper.get_scores_situation(paper_id)
         }
     )
 
