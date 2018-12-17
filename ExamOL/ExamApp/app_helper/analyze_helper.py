@@ -9,11 +9,6 @@ from ..models import (PaperUser, PaperProblem, UserJudgeAnswer, UserChoiceAnswer
                       UserTextAnswer, ChoiceProblem, JudgeProblem)
 
 
-class ProblemSituation:
-    problem = None
-    correct_rate = 0
-
-
 def get_right_choice_amount(paper_id: int) -> int:
     """
     所有学生一共答对的选择题数
