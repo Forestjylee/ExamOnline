@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootsnav.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'others/css/search.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'others/css/style.css' %}">
+    <script src="{% static 'others/js/echarts.common.min.js' %}"></script>
 </head>
 <body>               
                
@@ -100,9 +101,10 @@
 	
         <li>
             <div class="row">
-                <div class="problem">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
                     分数区间
                 </div>
+                <div id="scorespie" style="width:70%;height:500px;margin: 4% 4% 2% 13%"></div>
                 <div class="student_answer">
                     90分以上:&nbsp;&nbsp;&nbsp;{{ scores_situation.ninety_plus }}人
                 </div>
@@ -123,10 +125,10 @@
                 </div>
             </div>
         </li>
-
+        <br><br>
         <li>
             <div class="row">
-                <div class="problem">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
                     各题型答题情况
                 </div>
                 <div class="student_answer">
@@ -136,13 +138,13 @@
                     判断题平均答对题数:&nbsp;&nbsp;&nbsp;{{ answer_situation.judge_mean_amount }}道&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;共{{ answer_situation.judge_amount }}道
                 </div>
                 <div class="student_answer">
-                    填空题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.fillblank_mean_scores }}分
+                    填空题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.fillblank_mean_scores }}分
                 </div>
                 <div class="student_answer">
-                    问答题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.QA_mean_scores }}分
+                    问答题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.QA_mean_scores }}分
                 </div>
                 <div class="student_answer">
-                    实际操作题平均分:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ answer_situation.operate_mean_scores }}分
+                    实际操作题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.operate_mean_scores }}分
                 </div>
             </div>
         </li>
@@ -152,59 +154,43 @@
 	<h3>高频错题</h3>
 
 	<ul>
-
         <li>
             <div class="row">
-                <div class="problem">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
                     选择题情况
                 </div>
-                <div class="student_answer">
-                    分析信息：错误率、各分数区间等
+                <br><br>
+                {% for problem in choice_problems %}
+                <div class="reference_answer">
+                    题目内容:&nbsp;&nbsp;&nbsp;{{ problem.content }}
                 </div>
+
+                <div class="student_answer">
+                    正确率:&nbsp;&nbsp;&nbsp;{{ problem.correct_rate }}
+                </div>
+                <br><br>
+                {% endfor %}
             </div>
         </li>
+        <hr>
         <li>
             <div class="row">
-                <div class="problem">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
                     判断题情况
                 </div>
-                <div class="student_answer">
-                    分析信息：错误率、各分数区间等
+                <br><br>
+                {% for problem in judge_problems %}
+                <div class="reference_answer">
+                    题目内容:&nbsp;&nbsp;&nbsp;{{ problem.content }}
                 </div>
-            </div>
-        </li>
-        <li>
-            <div class="row">
-                <div class="problem">
-                    填空题情况
-                </div>
-                <div class="student_answer">
-                    分析信息：错误率、各分数区间等
-                </div>
-            </div>
-        </li>
-        <li>
-            <div class="row">
-                <div class="problem">
-                    问答题情况
-                </div>
-                <div class="student_answer">
-                    分析信息：错误率、各分数区间等
-                </div>
-            </div>
-        </li>
 
-        <li>
-            <div class="row">
-                <div class="problem">
-                    实际操作题情况
-                </div>
                 <div class="student_answer">
-                    分析信息：错误率、各分数区间等
+                    正确率:&nbsp;&nbsp;&nbsp;{{ problem.correct_rate }}
                 </div>
+                <br><br>
+                {% endfor %}
             </div>
         </li>
-
 	</ul>
 	
 	
@@ -246,7 +232,92 @@
 </footer>
 
 
+<script>
+    var myCharts1 = echarts.init(document.getElementById('scorespie'));
+    var option1 = {
+        backgroundColor: 'white',
 
+        title: {
+            text: '考试情况图',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#000000',
+            }
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {d}%"
+        },
+
+        visualMap: {
+            show: false,
+            min: 500,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series : [
+            {
+                name:'考试情况图',
+                type:'pie',
+                clockwise:'true',
+                startAngle:'0',
+                radius : '60%',
+                center: ['50%', '50%'],
+                data:[
+                    {
+                        value:{{ scores_situation.ninety_plus }},
+                        name:'90分以上',
+                        itemStyle:{
+                            normal:{
+                                color:'blue',
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.eighty_ninety }},
+                        name:'80~90分',
+                        itemStyle:{
+                            normal:{
+                                color:'rgb(1,175,80)'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.seventy_eighty }},
+                        name:'70~80分',
+                        itemStyle:{
+                            normal:{
+                                color:'orange'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.sixty_seventy }},
+                        name:'60~70分',
+                        itemStyle:{
+                            normal:{
+                                color:'purple'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.less_sixty }},
+                        name:'60分以下',
+                        itemStyle:{
+                            normal:{
+                                color:'red'
+                            }
+                        }
+                    },
+                ],
+            }
+        ]
+    };
+    myCharts1.setOption(option1);
+</script>
 <script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
 <script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
 <script src="{% static 'others/js/zelect.js' %}"></script>
