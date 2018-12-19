@@ -36,14 +36,17 @@
 			  <li><a href="{% url 'ExamApp:考试页面' user.username paper.paper_id %}">考试</a></li>
               <li><a href="./showgrade.html">成绩分析</a></li>
             </ul>
-          </div></div> </div> </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
 <!--Header Ends-->
 
 <!--Partners-->
-<div style="display:flex;">	
-<div class="grade_left">
+<div style="display:flex;">
+<div class="grade_left" style="margin: 0 auto">
   <form class="callus" method="post">
       {% csrf_token %}
       <h2 class="text-uppercase t_white bottom20 text-center">{{ paper.paper_name }}</h2>
@@ -143,13 +146,13 @@
 
         <div class="row">
           <div class="text-right">
-            <button type="submit" class="border_radius btn-yellow text-uppercase">提交</button>
+            <button type="submit" class="border_radius btn-yellow text-uppercase" onclick="return confirm('确认提交吗?\n提交需要一点时间，请您耐心等待...')">提交</button>
           </div>
         </div>
   </form>
 </div>
 
-<div class="exam_right">
+<div class="exam_right" style="right: 3%;position: fixed;top: 9%;">
     <h4>题目</h4>
     <ul class="">
         {% if choice_problems %}
