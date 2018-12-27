@@ -32,10 +32,10 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
-                <li><a>欢迎您，{{ user.name }}同学！</a></li>
-                <li style="margin-left: -5%"><a>登出</a></li>
+                <li><a>欢迎您，{{ user.real_name }}同学！</a></li>
+                <li style="margin-left: -5%"><a href="{% url 'ExamApp:登出' %}">登出</a></li>
               <li><a href="{% url 'ExamApp:学生主页' user.username %}">主页</a></li>
-              <li><a href="./showgrade.html">成绩分析</a></li>
+              <li><a href="{% url 'ExamApp:学生考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
           </div>
         </div>
