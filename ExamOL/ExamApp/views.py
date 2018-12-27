@@ -37,7 +37,7 @@ def user_login(request):
 
 def user_logout(request):
     """
-    用户登出后展示页面
+    用户登出
     """
     logout(request)
     return redirect('ExamApp:登录')
@@ -97,7 +97,7 @@ def take_exam(request, username: str, paper_id: str):
     """
     user = get_object_or_404(User, username=username)
     paper = get_object_or_404(Paper, paper_id=paper_id)
-    if views_helper.get_object_or_none(PaperUser, paper_id=paper_id, uid=user.uid, is_finished=True):
+    if views_helper.get_object_or_none(PaperUser, paper_id=paper_id, uid=user.uid, is_finished=True, is_delete=False):
         return render_to_response('404.html')
     if request.method == 'POST':
         result = views_helper.save_user_answers(user, paper, request.POST)
@@ -124,6 +124,37 @@ def take_exam(request, username: str, paper_id: str):
                 'operate_problems': exam_problems[4],
             }
         )
+
+
+@login_required
+def stu_analyse(requests, username: str, paper_id: str):
+    """
+    学生可见的考试情况页面
+    包含试卷基本信息(名称..)
+    本人考试成绩
+    全班分数分布
+    :param requests
+    :param username: 学生的学号
+    :param paper_id: 试卷id | 'all'
+    """
+    user = get_object_or_404(User, username=username, is_teacher=False)
+    finished_papers = views_helper.get_finished_papers(user_id=user.uid)
+    scores = get_object_or_404(
+        PaperUser,
+        paper_id=paper_id,
+        uid=user.uid
+    ).answer_situation.sum_scores if paper_id != 'all' else 0
+    return render_to_response(
+        'student_analyse.html',
+        {
+            'user': user,
+            'paper': views_helper.get_paper(paper_id=paper_id),
+            'papers': finished_papers,
+            'scores': scores,
+            'answer_situation': analyze_helper.get_answer_situation(paper_id),
+            'scores_situation': analyze_helper.get_scores_situation(paper_id),
+        }
+    )
 
 
 @login_required
@@ -372,7 +403,7 @@ def analyse(request, username: str, paper_id: str):
     老师查看考试情况页面
     :param request
     :param username: 老师的工号
-    :param paper_id: 试卷id
+    :param paper_id: 试卷id | 'all'
     """
     user = get_object_or_404(User, username=username, is_teacher=True)
     papers = views_helper.get_paper_list(user=user)
@@ -394,4 +425,3 @@ def analyse(request, username: str, paper_id: str):
             'judge_problems': analyze_helper.get_judge_situation(paper_id),
         }
     )
-
