@@ -558,7 +558,7 @@ def save_text_scores(
     PU.answer_situation.save()
 
 
-# @deal_exceptions(return_when_exceptions=False)
+@deal_exceptions(return_when_exceptions=False)
 def save_user_scores(paper_id: int, user_id: int, scores_info: dict) -> bool:
     """
     将老师的评分信息保存到数据库
