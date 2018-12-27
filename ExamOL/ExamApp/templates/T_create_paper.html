@@ -33,6 +33,8 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+                <li><a>欢迎您，{{ user.real_name }}老师！</a></li>
+                <li style="margin-left: -5%"><a href="{% url 'ExamApp:登出' %}">登出</a></li>
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
@@ -142,7 +144,7 @@
 
         <div class="row">
           <div class="text-right ">
-            <button type="submit" class="border_radius btn-yellow text-uppercase">生成试卷</button>
+            <button type="submit" class="border_radius btn-yellow text-uppercase" onclick="return confirm('确认组卷吗?\n组卷需要一点时间，请您耐心等待...')">生成试卷</button>
           </div>
         </div>
   </form>
