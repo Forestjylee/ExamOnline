@@ -108,9 +108,24 @@ def get_user_or_none(request):
     return user
 
 
+def get_finished_papers(user_id: str) -> list:
+    """
+    接收用户id获取完成的考试试卷列表
+    :param user_id: 用户id
+    :return: 已完成的试卷列表
+    """
+    finished_papers = []
+    paper_user_list = PaperUser.objects.filter(uid=user_id, is_delete=False, is_finished=True)
+    for paper_user in paper_user_list:
+        paper = get_object_or_none(Paper, paper_id=paper_user.paper_id, is_delete=False)
+        if paper:
+            finished_papers.append(paper)
+    return finished_papers
+
+
 def get_user_do_and_undo_paper_list(user_id: str) -> tuple:
     """
-    接收用户的id获取完成与未完成的考试列表
+    接收用户的id获取完成与未完成的考试试卷列表
     :param user_id: 用户的id
     :return: 元组(已完成的考试列表，未完成的考试列表)
     """
@@ -540,10 +555,10 @@ def save_text_scores(
             + paper.each_choice_problem_score * PU.answer_situation.correct_choice_problem_amount
             + paper.each_judge_problem_score * PU.answer_situation.correct_judge_problem_amount
     )
-    PU.save()
+    PU.answer_situation.save()
 
 
-@deal_exceptions(return_when_exceptions=False)
+# @deal_exceptions(return_when_exceptions=False)
 def save_user_scores(paper_id: int, user_id: int, scores_info: dict) -> bool:
     """
     将老师的评分信息保存到数据库
@@ -556,6 +571,7 @@ def save_user_scores(paper_id: int, user_id: int, scores_info: dict) -> bool:
     QA_scores = 0
     operate_scores = 0
     for key, value in scores_info.items():
+        value = int(value)
         problem_id, problem_type = key.split("_")
         UTA = UserTextAnswer.objects.get(
             paper_id=paper_id,
