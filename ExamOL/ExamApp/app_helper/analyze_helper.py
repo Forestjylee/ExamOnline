@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-
+考试情况分析页面辅助函数
 @file: analyze_helper.py
 @time: 2018/12/16 21:45
 Created by Junyi.
@@ -87,23 +87,23 @@ def get_answer_situation(paper_id: int):
     AnswerSituation.choice_mean_amount = (
         get_right_choice_amount(paper_id)
         // (sum_answers * AnswerSituation.choice_amount)
-    )
+    ) if sum_answers else 0
     AnswerSituation.judge_mean_amount = (
         get_right_judge_amount(paper_id)
         // (sum_answers * AnswerSituation.judge_amount)
-    )
+    ) if sum_answers else 0
     AnswerSituation.fillblank_mean_scores = (
         get_right_fillblank_scores(paper_id)
         // sum_answers
-    )
+    ) if sum_answers else 0
     AnswerSituation.QA_mean_scores = (
         get_right_QA_scores(paper_id)
         // sum_answers
-    )
+    ) if sum_answers else 0
     AnswerSituation.operate_mean_scores = (
         get_right_operate_scores(paper_id)
         // sum_answers
-    )
+    ) if sum_answers else 0
     return AnswerSituation
 
 
@@ -122,11 +122,15 @@ def get_choice_situation(paper_id: int) -> list:
     sum_answers = len(PUs)
     PBs = PaperProblem.objects.filter(paper_id=paper_id, problem_type="选择题")
     for PB in PBs:
-        correct_amount = len(UserChoiceAnswer.objects.filter(paper_id=paper_id, problem_id=PB.problem_id, is_correct=True))
+        correct_amount = len(UserChoiceAnswer.objects.filter(
+            paper_id=paper_id,
+            problem_id=PB.problem_id,
+            is_correct=True
+        ))
         CP = ChoiceProblem.objects.get(id=PB.problem_id)
-        CP.correct_rate = correct_amount // sum_answers
+        CP.correct_rate = correct_amount // sum_answers if sum_answers else 0
         problems.append(CP)
-        problems = sorted(problems, key=lambda x: x.correct_rate)
+    problems = sorted(problems, key=lambda x: x.correct_rate)
     return problems[:10] if len(problems) > 10 else problems
 
 
@@ -145,11 +149,15 @@ def get_judge_situation(paper_id: int) -> list:
     sum_answers = len(PUs)
     PBs = PaperProblem.objects.filter(paper_id=paper_id, problem_type="判断题")
     for PB in PBs:
-        correct_amount = len(UserJudgeAnswer.objects.filter(paper_id=paper_id, problem_id=PB.problem_id, is_correct=True))
+        correct_amount = len(UserJudgeAnswer.objects.filter(
+            paper_id=paper_id,
+            problem_id=PB.problem_id,
+            is_correct=True
+        ))
         JP = JudgeProblem.objects.get(id=PB.problem_id)
-        JP.correct_rate = correct_amount // sum_answers
+        JP.correct_rate = correct_amount // sum_answers if sum_answers else 0
         problems.append(JP)
-        problems = sorted(problems, key=lambda x: x.correct_rate)
+    problems = sorted(problems, key=lambda x: x.correct_rate)
     return problems[:10] if len(problems) > 10 else problems
 
 
@@ -189,7 +197,7 @@ def _get_detail_scores(paper_id: int) -> tuple:
         sum_scores += temp_scores
     return (
         ninety_plus, eighty_ninety, seventy_eighty,
-        sixty_seventy, less_sixty, round(sum_scores / sum_answers, 3)
+        sixty_seventy, less_sixty, round(sum_scores / sum_answers, 3) if sum_answers else 0
     )
 
 
