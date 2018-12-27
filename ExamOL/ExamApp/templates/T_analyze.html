@@ -33,20 +33,25 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+                <li><a>欢迎您，{{ user.real_name }}老师！</a></li>
+                <li style="margin-left: -5%"><a href="{% url 'ExamApp:登出' %}">登出</a></li>
               <li><a href="{% url 'ExamApp:老师主页' user.username 'all' %}">管理学生</a></li>
               <li><a href="{% url 'ExamApp:管理试题' user.username 'all' %}">管理试题</a></li>
               <li><a href="{% url 'ExamApp:创建试卷' user.username %}">组卷</a></li>
               <li><a href="{% url 'ExamApp:评分' user.username 'all' 'all' %}">评分 </a></li>
               <li><a href="{% url 'ExamApp:考试情况' user.username 'all' %}">考试情况</a></li>
             </ul>
-          </div></div> </div> </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
 <!--Header Ends-->
 
 <!--Partners-->
 <div style="display:flex;">	
-<div class="grade_left" style="margin-left: 22%">
+<div class="grade_left" style="margin-left: 22%;margin-bottom: 13%">
   <form class="callus" style="margin-bottom: 3%;margin-left: 4%;margin-top: 1%">
   <h2 class="text-uppercase t_white bottom20 text-center">
       {% if paper %}
@@ -55,45 +60,44 @@
           <- 请选择您要查看的试卷
       {% endif %}
   </h2>
+    {% if paper %}
     <h3>试卷信息</h3>
-      {% if paper %}
-            <div class="row">
-              <div class="student_answer">
-                试卷名: &nbsp;&nbsp;&nbsp;{{ paper.paper_name }}
-              </div>
-              <div class="student_answer">
-                试卷难度: &nbsp;&nbsp;
-                  {% if paper.level == 1 %}
-                    简单
-                  {% elif paper.level == 2 %}
-                    中等
-                  {% elif paper.level == 3 %}
-                    困难
-                  {% endif %}
-              </div>
-              <div class="student_answer">
-                试卷标签: &nbsp;&nbsp;&nbsp;{{ paper.tag }}
-              </div>
-              <div class="student_answer">
-                开始时间: &nbsp;&nbsp;&nbsp;{{ paper.start_time }}
-              </div>
-              <div class="student_answer">
-                结束时间: &nbsp;&nbsp;&nbsp;{{ paper.end_time }}
-              </div>
-              <div class="student_answer">
-                规定考试人数: &nbsp;&nbsp;
-                  {{ reference_students }}人
-              </div>
-              <div class="student_answer">
-                 实际考试人数: &nbsp;&nbsp;
-                  {{ actual_students }}人
-              </div>
-              <div class="student_answer">
-                 缺考人数: &nbsp;&nbsp;
-                  {{ absent_students }}人
-              </div>
-            </div>
-      {% endif %}
+        <div class="row">
+          <div class="student_answer">
+            试卷名: &nbsp;&nbsp;&nbsp;{{ paper.paper_name }}
+          </div>
+          <div class="student_answer">
+            试卷难度: &nbsp;&nbsp;
+              {% if paper.level == 1 %}
+                简单
+              {% elif paper.level == 2 %}
+                中等
+              {% elif paper.level == 3 %}
+                困难
+              {% endif %}
+          </div>
+          <div class="student_answer">
+            试卷标签: &nbsp;&nbsp;&nbsp;{{ paper.tag }}
+          </div>
+          <div class="student_answer">
+            开始时间: &nbsp;&nbsp;&nbsp;{{ paper.start_time }}
+          </div>
+          <div class="student_answer">
+            结束时间: &nbsp;&nbsp;&nbsp;{{ paper.end_time }}
+          </div>
+          <div class="student_answer">
+            规定考试人数: &nbsp;&nbsp;
+              {{ reference_students }}人
+          </div>
+          <div class="student_answer">
+             实际考试人数: &nbsp;&nbsp;
+              {{ actual_students }}人
+          </div>
+          <div class="student_answer">
+             缺考人数: &nbsp;&nbsp;
+              {{ absent_students }}人
+          </div>
+        </div>
     <hr>
 	<h3>整体情况</h3>
 	
@@ -193,7 +197,7 @@
         </li>
 	</ul>
 	
-	
+  {% endif %}
   </form>
 </div>
 
@@ -201,7 +205,7 @@
     <h4>试卷</h4>
     <ul class="">
         {% for paper in papers %}
-            <li style="margin-bottom: 3%;font-family: Consolas;font-size: 17px">
+            <li style="margin-bottom: 8%;font-family: Consolas;font-size: 17px">
               <a href="{% url 'ExamApp:考试情况' user.username paper.paper_id %}">{{ paper.paper_name }}</a>
             </li>
         {% endfor %}
