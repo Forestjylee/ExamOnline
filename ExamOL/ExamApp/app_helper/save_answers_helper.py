@@ -86,7 +86,7 @@ def _save_choice_judge_correct_amount(
     PU = PaperUser.objects.get(paper_id=paper_id, uid=user_id)
     PU.answer_situation.correct_choice_problem_amount = correct_choice_amount
     PU.answer_situation.correct_judge_problem_amount = correct_judge_amount
-    PU.save()
+    PU.answer_situation.save()
 
 
 def _save_judge_problem_answer(paper_id: int, user_id: int, problem_id: int, answer: str) -> int:
@@ -98,7 +98,7 @@ def _save_judge_problem_answer(paper_id: int, user_id: int, problem_id: int, ans
     :param answers：学生回答
     :return: 是否回答正确(1|0)
     """
-    standard_answer = '1' if JudgeProblem.objects.get(id=problem_id).answer is True else '0'
+    standard_answer = str(JudgeProblem.objects.get(id=problem_id).answer)
     UJA = UserJudgeAnswer()
     UJA.paper_id = paper_id
     UJA.uid = user_id
