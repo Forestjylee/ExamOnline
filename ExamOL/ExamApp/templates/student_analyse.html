@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<!--加载静态文件-->
+{% load static %}
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>考试主页</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/bootsnav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'others/css/style.css' %}">
+    <script src="{% static 'others/js/echarts.common.min.js' %}"></script>
+</head>
+<body>               
+               
+
+<!--Header-->
+<div id="mainMenuBarAnchor"></div>
+<header class="white_header">
+  <nav class="navbar navbar-default bootsnav">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="{% url 'ExamApp:学生主页' user.username %}">
+                <img src="{% static 'others/images/logo.png' %}" class="logo" alt="">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeIn" data-out="fadeOut">
+                <li><a>欢迎您，{{ user.real_name }}同学！</a></li>
+                <li style="margin-left: -5%"><a href="{% url 'ExamApp:登出' %}">登出</a></li>
+              <li>
+                  <a href="{% url 'ExamApp:学生主页' user.username %}">主页</a>
+              </li>
+              <li>
+                  <a href="{% url 'ExamApp:学生考试情况' user.username 'all' %}">考试情况</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<!--Header Ends-->
+
+<!--Partners-->
+<div style="display:flex;">
+<div class="grade_left" style="margin-left: 22%;margin-bottom: 13%">
+  <form class="callus" style="margin-bottom: 3%;margin-left: 4%;margin-top: 1%">
+  <h2 class="text-uppercase t_white bottom20 text-center">
+      {% if paper %}
+          {{ paper.paper_name }}
+      {% else %}
+          <- 请选择您要查看的试卷
+      {% endif %}
+  </h2>
+    {% if paper %}
+    <h3>试卷信息</h3>
+        <div class="row">
+          <div class="student_answer">
+            试卷名: &nbsp;&nbsp;&nbsp;{{ paper.paper_name }}
+          </div>
+          <div class="student_answer">
+            试卷难度: &nbsp;&nbsp;
+              {% if paper.level == 1 %}
+                简单
+              {% elif paper.level == 2 %}
+                中等
+              {% elif paper.level == 3 %}
+                困难
+              {% endif %}
+          </div>
+          <div class="student_answer">
+            试卷标签: &nbsp;&nbsp;&nbsp;{{ paper.tag }}
+          </div>
+          <div class="student_answer">
+            开始时间: &nbsp;&nbsp;&nbsp;{{ paper.start_time }}
+          </div>
+          <div class="student_answer">
+            结束时间: &nbsp;&nbsp;&nbsp;{{ paper.end_time }}
+          </div>
+          <div class="student_answer">
+            你的成绩: &nbsp;&nbsp;&nbsp;{{ scores }}分
+          </div>
+        </div>
+    <hr>
+	<h3>整体情况</h3>
+
+	<ul>
+
+        <li>
+            <div class="row">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
+                    分数区间
+                </div>
+                <div id="scorespie" style="width:70%;height:500px;margin: 4% 4% 2% 13%"></div>
+                <div class="student_answer">
+                    90分以上:&nbsp;&nbsp;&nbsp;{{ scores_situation.ninety_plus }}人
+                </div>
+                <div class="student_answer">
+                    80~90分:&nbsp;&nbsp;&nbsp;{{ scores_situation.eighty_ninety }}人
+                </div>
+                <div class="student_answer">
+                    70~80分:&nbsp;&nbsp;&nbsp;{{ scores_situation.seventy_eighty }}人
+                </div>
+                <div class="student_answer">
+                    60~70分:&nbsp;&nbsp;&nbsp;{{ scores_situation.sixty_seventy }}人
+                </div>
+                <div class="student_answer">
+                    60分以下:&nbsp;&nbsp;&nbsp;{{ scores_situation.less_sixty }}人
+                </div>
+                <div class="student_answer">
+                    整体平均分:&nbsp;&nbsp;&nbsp;{{ scores_situation.mean_scores }}分
+                </div>
+            </div>
+        </li>
+        <br><br>
+        <li>
+            <div class="row">
+                <div class="problem" style="font-weight: bolder;font-size: 18px">
+                    各题型答题情况
+                </div>
+                <div class="student_answer">
+                    选择题平均答对题数:&nbsp;&nbsp;&nbsp;{{ answer_situation.choice_mean_amount }}道&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;共{{ answer_situation.choice_amount }}道
+                </div>
+                <div class="student_answer">
+                    判断题平均答对题数:&nbsp;&nbsp;&nbsp;{{ answer_situation.judge_mean_amount }}道&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;共{{ answer_situation.judge_amount }}道
+                </div>
+                <div class="student_answer">
+                    填空题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.fillblank_mean_scores }}分
+                </div>
+                <div class="student_answer">
+                    问答题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.QA_mean_scores }}分
+                </div>
+                <div class="student_answer">
+                    实际操作题平均分:&nbsp;&nbsp;&nbsp;{{ answer_situation.operate_mean_scores }}分
+                </div>
+            </div>
+        </li>
+
+	</ul>
+    {% endif %}
+  </form>
+</div>
+
+<div class="grade_right" style="position: fixed;top: 16%">
+    <h4>试卷</h4>
+    <ul class="">
+        {% for paper in papers %}
+            <li style="margin-bottom: 8%;font-family: Consolas;font-size: 17px">
+              <a href="{% url 'ExamApp:学生考试情况' user.username paper.paper_id %}">{{ paper.paper_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+</div>
+<!--Partners Ends-->
+
+
+
+<!--Footer-->
+<footer class="footer_third">
+  <div class="container padding_top">
+    <!--CopyRight-->
+    <div class="copyright_simple">
+        <div class="col-md-6 col-sm-5 top20 bottom20">
+          <p>数据库课设——数据库试卷管理系统——2018.12.01 </p>
+		  <a href="{% url 'ExamApp:报告错误' user.username %}">
+		  <button type="submit" class="border_radius btn" style="left:180%;">试卷系统bug提交</button></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+    var myCharts2 = echarts.init(document.getElementById('scorespie'));
+    var option2 = {
+        backgroundColor: 'white',
+
+        title: {
+            text: '考试情况图',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#000000',
+            }
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {d}%"
+        },
+
+        visualMap: {
+            show: false,
+            min: 500,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series : [
+            {
+                name:'考试情况图',
+                type:'pie',
+                clockwise:'true',
+                startAngle:'0',
+                radius : '60%',
+                center: ['50%', '50%'],
+                data:[
+                    {
+                        value:{{ scores_situation.ninety_plus }},
+                        name:'90分以上',
+                        itemStyle:{
+                            normal:{
+                                color:'blue',
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.eighty_ninety }},
+                        name:'80~90分',
+                        itemStyle:{
+                            normal:{
+                                color:'rgb(1,175,80)'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.seventy_eighty }},
+                        name:'70~80分',
+                        itemStyle:{
+                            normal:{
+                                color:'orange'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.sixty_seventy }},
+                        name:'60~70分',
+                        itemStyle:{
+                            normal:{
+                                color:'purple'
+                            }
+                        }
+                    },
+                    {
+                        value:{{ scores_situation.less_sixty }},
+                        name:'60分以下',
+                        itemStyle:{
+                            normal:{
+                                color:'red'
+                            }
+                        }
+                    },
+                ],
+            }
+        ]
+    };
+    myCharts2.setOption(option2);
+</script>
+<script src="{% static 'others/js/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'others/js/masonry.pkgd.min.js' %}"></script>
+<script src="{% static 'others/js/zelect.js' %}"></script>
+<script src="{% static 'others/js/custom.js' %}"></script>
+<script src="{% static 'others/js/functions.js' %}"></script>
+
+</body>
+</html>
