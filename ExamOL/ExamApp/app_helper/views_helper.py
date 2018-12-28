@@ -269,20 +269,28 @@ def create_student(teacher_id: int, student_info: dict) -> bool:
         ]
     ):
         return False
-    if User.objects.filter(username=student_id):
+    user = get_object_or_none(User, username=student_id)
+    if user:
+        user.real_name = student_info["student_name"]
+        user.class_name = student_info["student_class"]
+        user.save()
+        ts = TeacherStudent.objects.get(student_id=user.uid)
+        ts.is_delete = False
+        ts.save()
         return True
-    password = f"scut{student_id[-6:]}"
-    user = User.objects.create_user(
-        username=student_id,
-        password=password,
-        real_name=student_info["student_name"],
-        class_name=student_info["student_class"],
-    )
-    ts = TeacherStudent()
-    ts.student_id = user.uid
-    ts.teacher_id = teacher_id
-    ts.save()
-    return True
+    else:
+        password = f"scut{student_id[-6:]}"
+        user = User.objects.create_user(
+            username=student_id,
+            password=password,
+            real_name=student_info["student_name"],
+            class_name=student_info["student_class"],
+        )
+        ts = TeacherStudent()
+        ts.student_id = user.uid
+        ts.teacher_id = teacher_id
+        ts.save()
+        return True
 
 
 @deal_exceptions(return_when_exceptions=False)
@@ -300,7 +308,7 @@ def delete_students(students: dict) -> bool:
         ts = TeacherStudent.objects.get(student_id=uid)
         ts.is_delete = True
         ts.save()
-        pu = get_object_or_none(PaperUser, student_id=uid)
+        pu = get_object_or_none(PaperUser, uid=uid)
         if pu:
             pu.is_delete = True
     return True
